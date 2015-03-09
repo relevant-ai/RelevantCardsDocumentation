@@ -1,6 +1,8 @@
 # Relevant Cards Documentation
 This document explains how to create relevant.ai cards to be hosted on the web.
 
+## Basic Structure
+
 A card is just a JSON object with the following structure:
 
 ```json
