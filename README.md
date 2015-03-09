@@ -192,7 +192,7 @@ A *path* is an object of the form `{"_PATH":[...]}` where `[...]` is an array wh
                     "foot": "My Footer 2"
                 }
             ]
-        }
+        },
         "_RETURN": [
             {
                 "headline": {"_PATH":["info","important_stuff",0,"head"]},
