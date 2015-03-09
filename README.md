@@ -1,5 +1,5 @@
 # Relevant Cards Documentation
-This document explains how to create relevant.ai cards to be hosted on the web.
+This document explains how to create relevant.ai cards.
 
 ## Basic Structure
 
