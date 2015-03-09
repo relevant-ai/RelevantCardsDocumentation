@@ -54,3 +54,38 @@ Every key in this object is the name of a variable. For example:
     }
 }
 ```
+
+The value of a variable may be any JSON object.
+
+## The `"_RETURN"` Key
+
+The `_LOAD` object needs to have a `"_RETURN"` key, which holds the object that contains all the information for skinning the card. The following is the first complete example of a card in this document. It is a card with a headline and a footer. It has two static pages reading "Header 1", "Footer 1" and "Header 2", "Footer 2" respectively.
+
+```json
+{
+    "id": "card-id-string",
+    "title": "My Card's Title",
+    "icon_url": "https://url/to/icon.png",
+    "summary": "My card's description.",
+    "credits": "Some Website or Source",
+    "templates": [
+                  "headline",
+                  "footer"
+                  ],
+    "settings_type": "NONE",
+    "_LOAD": {
+        "_RETURN": {
+            [
+                {
+                    "headline": {"text": "Header 1"},
+                    "footer": {"text": "Footer 1"}
+                },
+                {
+                    "headline": {"text": "Header 2"},
+                    "footer": {"text": "Footer 2"}
+                }
+            ]
+        }
+    }
+}
+```
