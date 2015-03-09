@@ -23,3 +23,5 @@ A card is just a JSON object with the following structure:
     }
 }
 ```
+
+All keys, except for `"_LOAD"` represent the card's metadata. The `"settings_type"` may also be `"SELECT"` or `"TEXT"` but we will discuss that later.
