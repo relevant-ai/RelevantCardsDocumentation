@@ -74,18 +74,16 @@ The `_LOAD` object needs to have a `"_RETURN"` key, which holds the object that 
                   ],
     "settings_type": "NONE",
     "_LOAD": {
-        "_RETURN": {
-            [
-                {
-                    "headline": {"text": "Header 1"},
-                    "footer": {"text": "Footer 1"}
-                },
-                {
-                    "headline": {"text": "Header 2"},
-                    "footer": {"text": "Footer 2"}
-                }
-            ]
-        }
+        "_RETURN": [
+            {
+                "headline": {"text": "Header 1"},
+                "footer": {"text": "Footer 1"}
+            },
+            {
+                "headline": {"text": "Header 2"},
+                "footer": {"text": "Footer 2"}
+            }
+        ]
     }
 }
 ```
