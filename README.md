@@ -59,7 +59,7 @@ The value of a variable may be any JSON object.
 
 ## The `"_RETURN"` Key
 
-The `_LOAD` object needs to have a `"_RETURN"` key, which holds the object that contains all the information for skinning the card. The following is the first complete example of a card in this document. It is a card with a headline and a footer. It has two static pages reading "Header 1", "Footer 1" and "Header 2", "Footer 2" respectively.
+The `_LOAD` object needs to have a `"_RETURN"` key, which holds the object that contains all the information for skinning the card. The following is the first complete example of a card in this document. It is a card with a headline and a footer. It has two static pages reading "My Header 1", "My Footer 1" and "My Header 2", "My Footer 2" respectively.
 
 ```json
 {
@@ -76,14 +76,94 @@ The `_LOAD` object needs to have a `"_RETURN"` key, which holds the object that 
     "_LOAD": {
         "_RETURN": [
             {
-                "headline": {"text": "Header 1"},
-                "footer": {"text": "Footer 1"}
+                "headline": {"text": "My Header 1"},
+                "footer": {"text": "My Footer 1"}
             },
             {
-                "headline": {"text": "Header 2"},
-                "footer": {"text": "Footer 2"}
+                "headline": {"text": "My Header 2"},
+                "footer": {"text": "My Footer 2"}
             }
         ]
     }
 }
 ```
+
+## Using Variables
+
+You can reference a variable `var` in a value as `"{var}"`. For example, the following card looks exactly the same as the one above:
+
+```json
+{
+    /*...
+    METADATA
+    ...*/
+    "_LOAD": {
+        "header_1": "My Header 1",
+        "_RETURN": [
+            {
+                "headline": {"text": "{header_1}"},
+                "footer": {"text": "My Footer 1"}
+            },
+            {
+                "headline": {"text": "My Header 2"},
+                "footer": {"text": "My Footer 2"}
+            }
+        ]
+    }
+}
+```
+
+A more complex example (that also looks the same):
+
+```json
+{
+    /*...
+    METADATA
+    ...*/
+    "_LOAD": {
+        "page_1": {
+            "headline": {"text": "My Header 1"},
+            "footer": {"text": "My Footer 1"}
+        },
+        "page_2": {
+            "headline": {"text": "My Header 2"},
+            "footer": {"text": "My Footer 2"}
+        },
+        "_RETURN": [
+            "{page_1}",
+            "{page_2}"
+        ]
+    }
+}
+```
+
+**Remark:** The keys of the `_LOAD` object are variables. However, the keys of any child object are **NOT**. For example, `"headline"` is not a variable in the example above, and so it cannot be referenced as `"{headline}"`.
+
+## Inserting/Concatenating String Variables
+
+The syntax `"{var}"` can also be used within a bigger string when `var` is a string variable. For example:
+
+```json
+{
+    /*...
+    METADATA
+    ...*/
+    "_LOAD": {
+        "header_word": "Header",
+        "footer_word": "Footer",
+        "first_number": 1,
+        "second_number": 2,
+        "_RETURN": [
+            {
+                "headline": {"text": "My {header_word} {first_number}"},
+                "footer": {"text": "My {footer_word} {first_number}"}
+            },
+            {
+                "headline": {"text": "My {header_word} {second_number}"},
+                "footer": {"text":  "My {footer_word} {second_number}"}
+            }
+        ]
+    }
+}
+```
+
