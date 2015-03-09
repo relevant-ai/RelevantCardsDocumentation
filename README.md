@@ -16,6 +16,10 @@ A card is just a JSON object with the following structure:
                   "footer"
                   ],
     "settings_type": "NONE",
-    "_LOAD": {/* Code goes here */}
+    "_LOAD": {
+        /*
+        CODE
+        */
+    }
 }
 ```
