@@ -167,3 +167,7 @@ The syntax `"{var}"` can also be used within a bigger string when `var` is a str
 }
 ```
 
+## Paths
+
+A *path* is an object of the form `{"_PATH":[...]}` where `[...]` is an array whose first (0-th) element is a variable name, and each subsequent element is either a **string key** or an **int index**. For example `{"_PATH":["my_rainbow","colors",3,"red"]}`
+
