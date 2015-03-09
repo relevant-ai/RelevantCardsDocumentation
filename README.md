@@ -90,7 +90,7 @@ The `_LOAD` object needs to have a `"_RETURN"` key, which holds the object that 
 
 ## Using Variables
 
-You can reference a variable `var` in a value as `"{var}"`. For example, the following card looks exactly the same as the one above:
+You can refer to a variable `var` in a value as `"{var}"`. For example, the following card looks exactly the same as the one above:
 
 ```json
 {
@@ -169,5 +169,41 @@ The syntax `"{var}"` can also be used within a bigger string when `var` is a str
 
 ## Paths
 
-A *path* is an object of the form `{"_PATH":[...]}` where `[...]` is an array whose first (0-th) element is a variable name, and each subsequent element is either a **string key** or an **int index**. For example `{"_PATH":["my_rainbow","colors",3,"red"]}`
+A *path* is an object of the form `{"_PATH":[...]}` where `[...]` is an array whose first (0-th) element is a variable name, and each subsequent element is either a **string key** or an **int index**. For example `{"_PATH":["my_rainbow","colors",3,"red"]}`. Paths can be used to fetch children of JSON objects. For example:
+
+```json
+{
+    /*...
+    METADATA
+    ...*/
+    "_LOAD": {
+        "info": {
+            "useless_stuff": {
+                "a": ["x","y","z"],
+                "b": "c"
+            },
+            "important_stuff": [
+                {
+                    "head": "My Header 1",
+                    "foot": "My Footer 1"
+                },
+                {
+                    "head": "My Header 2",
+                    "foot": "My Footer 2"
+                }
+            ]
+        }
+        "_RETURN": [
+            {
+                "headline": {"_PATH":["info","important_stuff",0,"head"]},
+                "footer": {"_PATH":["info","important_stuff",0,"foot"]}
+            },
+            {
+                "headline": {"_PATH":["info","important_stuff",1,"head"]},
+                "footer": {"_PATH":["info","important_stuff",1,"foot"]}
+            }
+        ]
+    }
+}
+```
 
