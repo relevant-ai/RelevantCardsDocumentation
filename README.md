@@ -207,3 +207,27 @@ A *path* is an object of the form `{"_PATH":[...]}` where `[...]` is an array wh
 }
 ```
 
+## Built-In Functions
+
+The keyword `"_PATH"` introduced above is just a function that's built into the language. These functions are usually invoked using objects of the form `{"_FUNCTION_NAME":{"_PARAM_NAME":...,"_ANOTHER_PARAM_NAME":...,...}}`. The exact syntax of a built-in function varies accross functions. These are some of the built in functions that are currently available:
+
+**`_MERGE`**: Takes an array of objects, strings, or arrays, and returns an array containing each of those objects, strings, and array elements. The syntax is as in the following example:
+
+```json
+{
+    "_MERGE":[
+        "String 1",
+        [
+            "String 3",
+            "String 4",
+            "String 5"
+        ],
+        "String 6",
+        "String 7",
+        [
+            "String 8",
+            "String 9"
+        ]
+    ]
+}
+```
