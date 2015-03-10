@@ -331,3 +331,5 @@ The `_EACH` object may contain variables itself, as long as it has a `"_RETURN"`
 }
 ```
 ### String Functions
+
+String functions are built in functions that take a string and return a string.
