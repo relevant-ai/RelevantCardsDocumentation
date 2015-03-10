@@ -169,7 +169,7 @@ The syntax `"{var}"` can also be used within a bigger string when `var` is a str
 
 ## Paths
 
-A *path* is an object of the form `{"_PATH":[...]}` where `[...]` is an array whose first (0-th) element is a variable name, and each subsequent element is either a **string key** or an **int index**. For example `{"_PATH":["my_rainbow","colors",3,"red"]}`. Paths can be used to fetch children of JSON objects. For example:
+A *path* is an object of the form `{"_PATH":[...]}` where `[...]` is an array whose first (0-th) element is a variable name, and each subsequent element is either a **string key** or an **integer index**. For example `{"_PATH":["my_rainbow","colors",3,"red"]}`. Paths can be used to fetch children of JSON objects. For example:
 
 ```json
 {
@@ -211,6 +211,40 @@ A *path* is an object of the form `{"_PATH":[...]}` where `[...]` is an array wh
 
 The keyword `"_PATH"` introduced above is just a function that's built into the language. These functions are usually invoked using objects of the form `{"_FUNCTION_NAME":{"_PARAM_NAME":...,"_ANOTHER_PARAM_NAME":...,...}}`. The exact syntax of a built-in function varies accross functions. These are some of the built in functions that are currently available:
 
+**`_URL`**: Allows you to make a call to an web address that returns a JSON object. You can then access that data using `_PATH` or the `"{var}"` syntax. The following example assumes that `http://path/to/my/json.html` loads a json object containing a `"results"` key.
+
+```json
+{
+    /*...
+    METADATA
+    ...*/
+    "_LOAD": {
+        "json_info": {
+            "_URL":"http://path/to/my/json.html"
+        },
+        "_RETURN": {
+            "_PATH":["json_info","results"]
+        }
+    }
+}
+```
+
+You can also make richer requests. For example:
+
+```json
+{
+    "_URL":{
+        "_ADDRESS":"http://some/web/address.html",
+        "_METHOD":"POST",
+        "_BODY":"a=something&b=something%20else",
+        "_HEADERS": {
+            "Some Header": "Some Value",
+            "Another Header": "Another Value"
+        }
+    }
+}
+```
+
 **`_MERGE`**: Takes an array of objects, strings, or arrays, and returns an array containing each of those objects, strings, and array elements. The syntax is as in the following example:
 
 ```json
@@ -229,5 +263,64 @@ The keyword `"_PATH"` introduced above is just a function that's built into the 
             "String 9"
         ]
     ]
+}
+```
+
+**`_LOOP`**: Allows you to loop an array to get a new array of the same size but with modified contents. Its parameter keys are `"_ARRAY"` and `"_EACH"`. The first one is the array that is to be looped (you can make a reference to it using `_PATH`, the `"{var}"` syntax, or any other function). Inside the `"_EACH"` object you can use the local variables `"{_ITEM}"` and `"{_INDEX}"` representing the current array element and its index respectively. For example:
+
+```json
+{
+    /*...
+    METADATA
+    ...*/
+    "_LOAD": {
+        "info": {
+            "useless_stuff": {
+                "a": ["x","y","z"],
+                "b": "c"
+            },
+            "important_stuff": [
+                {
+                    "head": "My Header 1",
+                    "foot": "My Footer 1"
+                },
+                {
+                    "head": "My Header 2",
+                    "foot": "My Footer 2"
+                },
+                {
+                    "head": "My Header 3",
+                    "foot": "My Footer 3"
+                }
+            ]
+        },
+        "_RETURN": {
+            "_LOOP": {
+                "_ARRAY": {"_PATH":["info","important_stuff"]},
+                "_EACH": {
+                    "headline": {"_PATH":["_ITEM","head"]},
+                    "footer": {"_PATH":["_ITEM","foot"]}
+                }
+            }
+        }
+    }
+}
+```
+
+**Remark:** The example above would make a lot more sense, of course, if the variable `"info"` came for a web service (`_URL`).
+
+The `_EACH` object may contain variables itself, as long as it has a `"_RETURN"` key. For example, the `_EACH` object above may be replaced with:
+
+```json
+{
+    "_ARRAY": {"_PATH":["info","important_stuff"]},
+    "_EACH": {
+        "h": {"_PATH":["_ITEM","head"]},
+        "f": {"_PATH":["_ITEM","foot"]},
+        "_RETURN": {
+            "headline": "{h}",
+            "footer": "{f}"
+        }
+    }
 }
 ```
