@@ -211,7 +211,7 @@ A *path* is an object of the form `{"_PATH":[...]}` where `[...]` is an array wh
 
 The keyword `"_PATH"` introduced above is just a function that's built into the language. These functions are usually invoked using objects of the form `{"_FUNCTION_NAME":{"_PARAM_NAME":...,"_ANOTHER_PARAM_NAME":...,...}}`. The exact syntax of a built-in function varies accross functions. These are some of the built in functions that are currently available:
 
-### `_URL`
+### The `_URL` Function
 
 Allows you to make a call to an web address that returns a JSON object. You can then access that data using `_PATH` or the `"{var}"` syntax. The following example assumes that `http://path/to/my/json.html` loads a json object containing a `"results"` key.
 
@@ -247,7 +247,7 @@ You can also make richer requests. For example:
 }
 ```
 
-### `_MERGE`
+### The `_MERGE` Function
 
 Takes an array of objects, strings, or arrays, and returns an array containing each of those objects, strings, and array elements. The syntax is as in the following example:
 
@@ -270,7 +270,7 @@ Takes an array of objects, strings, or arrays, and returns an array containing e
 }
 ```
 
-### `_LOOP`
+### The `_LOOP` Function
 
 Allows you to loop an array to get a new array of the same size but with modified contents. Its parameter keys are `"_ARRAY"` and `"_EACH"`. The first one is the array that is to be looped (you can make a reference to it using `_PATH`, the `"{var}"` syntax, or any other function). Inside the `"_EACH"` object you can use the local variables `"{_ITEM}"` and `"{_INDEX}"` representing the current array element and its index respectively. For example:
 
@@ -330,3 +330,4 @@ The `_EACH` object may contain variables itself, as long as it has a `"_RETURN"`
     }
 }
 ```
+### String Functions
