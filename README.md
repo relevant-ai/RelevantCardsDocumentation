@@ -211,9 +211,42 @@ A *path* is an object of the form `{"_PATH":[...]}` where `[...]` is an array wh
 
 The keyword `"_PATH"` introduced above is just a function that's built into the language. These functions are usually invoked using objects of the form `{"_FUNCTION_NAME":{"_PARAM_NAME":...,"_ANOTHER_PARAM_NAME":...,...}}`. The exact syntax of a built-in function varies accross functions. These are some of the built in functions that are currently available:
 
+### The `_CONDITIONAL` Function
+
+Allows you to return two possible values depending on whether a condition is `true` (`>0`) or `false` (`0`). It's parameter keys are `"_IF"`, `"_THEN"` and `"_ELSE"`. For example:
+
+```json
+{
+    /*...
+    METADATA
+    ...*/
+    "_LOAD": {
+        "something": false,
+        "sentence": "something is {something}",
+        "_RETURN": {
+            "_CONDITIONAL": {
+                "_IF":"{something}",
+                "_THEN":[
+                    {
+                        "headline": {"text":"Good!"},
+                        "footer": "{sentence}",
+                    }
+                ],
+                "_ELSE":[
+                    {
+                        "headline": {"text":"Bad!"},
+                        "footer": "{sentence}",
+                    }
+                ]
+            }
+        }
+    }
+}
+```
+
 ### The `_URL` Function
 
-Allows you to make a call to an web address that returns a JSON object. You can then access that data using `_PATH` or the `"{var}"` syntax. The following example assumes that `http://path/to/my/json.html` loads a json object containing a `"results"` key.
+Allows you to make a call to a web address that returns a JSON object. You can then access that data using `_PATH` or the `"{var}"` syntax. The following example assumes that `http://path/to/my/json.html` loads a json object containing a `"results"` key.
 
 ```json
 {
