@@ -330,6 +330,22 @@ The `_EACH` object may contain variables itself, as long as it has a `"_RETURN"`
     }
 }
 ```
-### String Functions
+### Basic string Functions
 
-String functions are built in functions that take a string and return a string.
+Basic string functions are built in functions that take a string and return a string. Some available basic string functions are listed below:
+
+**`_URL_ENCODE`:** Percent encoding for URL parameters.
+
+**`_URL_DECODE`:** Inverse of above.
+
+**`_HTML_ENCODE`:** HTML special characters encoding.
+
+**`_HTML_DECODE`:** Inverse of above.
+
+**`_UPPERCASE`:** Convert a String to uppercase.
+
+
+
+
+
+
