@@ -244,6 +244,51 @@ Allows you to return two possible values depending on whether a condition is `tr
 }
 ```
 
+### The `_PATH_EXISTS` Function
+
+Returns `true` (`1`) if an array of keys or indexes represents a path that exists, and `false` (`0`) otherwise. For example:
+
+```json
+{
+    /*...
+    METADATA
+    ...*/
+    "_LOAD": {
+        "object": {
+            "key_1": [
+                "element #1",
+                [
+                    "element",
+                    "#",
+                    "2"
+                ]
+            ],
+            "key_2": {
+                "red": 255,
+                "green": 255
+            }
+        },
+        "another_object": {
+            "something": "{object}"
+        },
+        "a": {
+            "_PATH_EXISTS":["another_object","something","key_1",1,1]
+        },
+        "b": {
+            "_PATH_EXISTS":["another_object","something","key_1",1,2]
+        },
+        "c": {
+            "_PATH_EXISTS":["another_object","something","key_2","blue"]
+        }
+        "_RETURN": {
+            /* ... */
+        }
+    }
+}
+```
+
+In the code above, the variables `"a"` and `"b"` are `1` (`true`), and the variable `"c"` is `0` (`false`).
+
 ### The `_URL` Function
 
 Allows you to make a call to a web address that returns a JSON object. You can then access that data using `_PATH` or the `"{var}"` syntax. The following example assumes that `http://path/to/my/json.html` loads a json object containing a `"results"` key.
@@ -376,7 +421,6 @@ Basic string functions are built in functions that take a string and return a st
 **`_HTML_DECODE`:** Inverse of above.
 
 **`_UPPERCASE`:** Convert a String to uppercase.
-
 
 
 
