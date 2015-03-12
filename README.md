@@ -207,7 +207,7 @@ A *path* is an object of the form `{"_PATH":[...]}` where `[...]` is an array wh
 }
 ```
 
-## Built-In Functions
+## Some Built-In Functions
 
 The keyword `"_PATH"` introduced above is just a function that's built into the language. These functions are usually invoked using objects of the form `{"_FUNCTION_NAME":{"_PARAM_NAME":...,"_ANOTHER_PARAM_NAME":...,...}}`. The exact syntax of a built-in function varies accross functions. These are some of the built in functions that are currently available:
 
