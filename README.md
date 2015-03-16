@@ -422,6 +422,113 @@ Basic string functions are built in functions that take a string and return a st
 
 **`_UPPERCASE`:** Convert a String to uppercase.
 
+### The `_REPLACE` Function
+
+This function allows you to replace all ocurrences of the string parameter keyed by `"_SEARCH"` with the string parameters keyed by `"_REPLACEMENT"` in the string parameters keyed by `"_STRING"`. You can also perform regular expressions replacements by having a parameter `"_REGEX"` equal `true` or `1`. For example:
+
+```json
+{
+    "_REPLACE": {
+        "_STRING":"03/17/2015",
+        "_SEARCH":"/",
+        "_REPLACEMENT":"-"
+    }
+}
+```
+
+### The `_DATE` Function
+
+This function always returns a string representing a date in a given format. The only required parameter is `"_FORMAT_OUT"`. The example below returns today's date in the format yyyy-MM-dd:
+
+```json
+{
+    "_DATE": {
+        "_FORMAT_OUT":"yyyy-MM-dd",
+    }
+}
+```
+
+[Click here for a list of all available formats](http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns).
+
+You can use the parameter `"_OFFSET"` to offset the current date by any number of seconds. This example returns yesterday's date:
+
+```json
+{
+    "_DATE": {
+        "_OFFSET": -86400,
+        "_FORMAT_OUT": "yyyy-MM-dd",
+    }
+}
+```
+
+Instead of using today's date, you can also input a fixed date using the parameter "`_VALUE`", which is either a timestamp (seconds since 1970), or a formatted date string. In the latter case, it is also necessary to have a parameter "`_FORMAT_IN`". For example:
+
+```json
+{
+    "_DATE": {
+        "_VALUE": "01-11-2022",
+        "_FORMAT_IN": "MM-dd-yyyy",
+        "_FORMAT_OUT": "yyyy-MM-dd",
+    }
+}
+```
+
+### The `_SPLIT` Function
+
+This function takes a string `"_STRING"` and a separator string `"_SEPARATOR"`. It returns the array that results from splitting the string by the separator. For example
+
+```json
+{
+    "_SPLIT": {
+        "_STRING": "a,b,c,d",
+        "_SEPARATOR": ",",
+    }
+}
+```
+
+### The `_SORT` Function
+
+This function sorts an array parameter keyed by `"_ARRAY"` by either a path or a function. Ordering by path is simpler, as you just write an array of keys or indexes that represents a path, and the array is sorted either alphabetically or numerically. For example:
+
+```json
+{
+    "_SORT": {
+        "_ARRAY": [{"info":{"number":5}},{"info":{"number":3}},{"info":{"number":8}}],
+        "_BY_PATH": ["info","number"]
+    }
+}
+```
+
+You can also reverse the order as follows:
+
+```json
+{
+    "_SORT": {
+        "_ARRAY": [{"info":{"number":5}},{"info":{"number":3}},{"info":{"number":8}}],
+        "_BY_PATH": ["info","number"],
+        "_REVERSE": true
+    }
+}
+```
+
+Sorting by function is just as easy, except the key is now `"_BY_FUNCTION"` and it holds a function (see User Defined Functions below), i.e., an expression depending on two local parameters. The local parameters are keyed `"_A"` and `"_B"` and represent two arbitrary items in the `"_ARRAY"`. The function/expression must return `1` (`true`) if the items should be ordered `"_A","_B"` and `0` (`false`) if they should be ordered `"_A","_B"`
+
+```json
+{
+    "_SORT": {
+        "_ARRAY": [{"info":{"number":5}},{"info":{"number":3}},{"info":{"number":8}}],
+        "_BY_FUNCTION": {
+            "_MATH":{
+                "_CONCAT":[
+                    {"_PATH":["_A","info","number"]},
+                    "<",
+                    {"_PATH":["_B","info","number"]}
+                ]
+            }
+        }
+    }
+}
+```
 
 
 
