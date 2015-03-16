@@ -408,7 +408,7 @@ The `_EACH` object may contain variables itself, as long as it has a `"_RETURN"`
     }
 }
 ```
-### Basic string Functions
+### Basic String Functions
 
 Basic string functions are built in functions that take a string and return a string. Some available basic string functions are listed below:
 
@@ -421,6 +421,15 @@ Basic string functions are built in functions that take a string and return a st
 **`_HTML_DECODE`:** Inverse of above.
 
 **`_UPPERCASE`:** Convert a String to uppercase.
+
+### Logic/Boolean Functions
+
+These are functions that take the role of common logic operators, returning a boolean (`true` or `false`). Some of these are listed below:
+
+**`_NOT`:** Takes a boolean and returs its opposite.
+**`_AND`:** Takes an array and returns whether all of its elements are `true`.
+**`_OR`:** Takes an array and returns whether any of its elements are `true`.
+**`_EQUAL`:** Takes an array of two elements and returns whether they are equal.
 
 ### The `_REPLACE` Function
 
@@ -486,6 +495,22 @@ This function takes a string `"_STRING"` and a separator string `"_SEPARATOR"`. 
 }
 ```
 
+### The `_MATH` function
+
+This function allows you to parse mathematical expressions from a string. For example:
+
+```json
+{
+    "_MATH": "5*2^10 + 1"
+}
+```
+
+```json
+{
+    "_MATH": "5*2^10 + {some_var}^{another_var}"
+}
+```
+
 ### The `_SORT` Function
 
 This function sorts an array parameter keyed by `"_ARRAY"` by either a path or a function. Ordering by path is simpler, as you just write an array of keys or indexes that represents a path, and the array is sorted either alphabetically or numerically. For example:
@@ -511,7 +536,7 @@ You can also reverse the order as follows:
 }
 ```
 
-Sorting by function is just as easy, except the key is now `"_BY_FUNCTION"` and it holds a function (see User Defined Functions below), i.e., an expression depending on two local parameters. The local parameters are keyed `"_A"` and `"_B"` and represent two arbitrary items in the `"_ARRAY"`. The function/expression must return `1` (`true`) if the items should be ordered `"_A","_B"` and `0` (`false`) if they should be ordered `"_A","_B"`
+Sorting by function is just as easy, except the key is now `"_BY_FUNCTION"` and it holds a function (see User Defined Functions), i.e., an expression depending on two local parameters. The local parameters are keyed `"_A"` and `"_B"` and represent two arbitrary items in the `"_ARRAY"`. The function/expression must return `1` (`true`) if the items should be ordered `"_A","_B"` and `0` (`false`) if they should be ordered `"_A","_B"`
 
 ```json
 {
@@ -529,6 +554,164 @@ Sorting by function is just as easy, except the key is now `"_BY_FUNCTION"` and 
     }
 }
 ```
+
+### Filtering Arrays Using `_LOOP`
+
+It is important to know that `null` values get removed entirely from computed objects. Thus one could for example filter out every other element of an array by simply doing:
+
+```json
+{
+    "_LOOP": {
+        "_ARRAY": /* ... */,
+        "_EACH" : {
+            "_CONDITIONAL": {
+                "_IF":{"_MATH":"{_INDEX}%2==0"}
+                "_THEN":null
+                "_ELSE":"{_ITEM}"
+            }
+        }
+    }
+}
+```
+
+### The `_WEB_CALLBACK` Function (Web View for User Input or Authentication)
+
+It is possible to pop up a webview when a relevant card is loaded, be it for user authentication, or any other form of user input. This is achieved with the `_WEB_CALLBACK` function. This function will return either when the user dismisses the webview manually, or when a certain base URL is loaded as a result of navigation. This functions looks like this:
+
+```json
+{
+    "_WEB_CALLBACK": {
+        "_ADDRESS":"http://relevant.ai/",
+        "_CALLBACK_BASE":"relevant.ai/callback"
+    }
+}
+```
+
+Notice that the callback base URL **does not contain the protocol http://**. If the user dismisses the webview, then the function returns `null`. Otherwise it returs an object of the form:
+
+```json
+{
+    "url":/* URL ABSOLUTE STRING */,
+    "body":{
+        /* URL PARAMETERS AND VALUES */
+    },
+    "method":/* "GET" OR "POST" OR OTHER */,
+    "headers":{
+        /* HEADER TITLES AND VALUES */
+    }
+}
+```
+
+Notice that this return only contains information about the request that was made. This is because the webview is dismissed before its content is loaded.
+
+## Templates (Card Appearance):
+
+Let us go back to the first example of a fully functional card:
+
+```json
+{
+    "id": "card-id-string",
+    "title": "My Card's Title",
+    "icon_url": "https://url/to/icon.png",
+    "summary": "My card's description.",
+    "credits": "Some Website or Source",
+    "templates": [
+                  "headline",
+                  "footer"
+                  ],
+    "settings_type": "NONE",
+    "_LOAD": {
+        "_RETURN": [
+            {
+                "headline": {"text": "My Header 1"},
+                "footer": {"text": "My Footer 1"}
+            },
+            {
+                "headline": {"text": "My Header 2"},
+                "footer": {"text": "My Footer 2"}
+            }
+        ]
+    }
+}
+```
+
+This card has two templates `headline` and `footer`, in that order. This is why the `_LOAD` object returns an array of objects of the form `{"headline":{...},"footer":{...}}`. In general, if a card is using templates `template_1`, `template_2`, ..., `template_n`, then the `_LOAD` object must return an array of objects of the form `{"template_1":{...},...,"template_n":{...}}`, where the `{...}`'s hold parameters that skin each template's labels and images. Below is a list of all available templates and their parameters:
+
+```json
+{
+    "title":{"text":/*...*/},
+    "footer":{"text":/*...*/},
+    "large-image-square":{"image":/*...*/},
+    "description":{"title":/*...*/,"subtitle":/*...*/,"thumb":/*...*/},
+    "title-two-lines":{"text":/*...*/},
+    "profile":{"title":/*...*/,"subtitle":/*...*/},
+    "banner":{"image":/*...*/},
+    "headline":{"text":/*...*/},
+    "large-stats":{
+        "title-1":/*...*/,
+        "title-2":/*...*/,
+        "title-3":/*...*/,
+        "title-4":/*...*/,
+        "title-5":/*...*/,
+        "value-1":/*...*/,
+        "value-2":/*...*/,
+        "value-3":/*...*/,
+        "value-4":/*...*/,
+        "value-5":/*...*/
+    },
+    "stats":{
+        "title-1":/*...*/,
+        "title-2":/*...*/,
+        "title-3":/*...*/,
+        "value-1":/*...*/,
+        "value-2":/*...*/,
+        "value-3":/*...*/
+    },
+    "transit":{
+        "number":/*...*/,
+        "place":/*...*/,
+        "address":/*...*/,
+        "time-1":/*...*/,
+        "time-2":/*...*/,
+        "time-3":/*...*/
+    },
+    "image-stats":{"stats":/*...*/,"image":/*...*/},
+    "large-image-3x4":{"image":/*...*/},
+    "short-description":{"text":/*...*/},
+    "profile-image":{"image":/*...*/},
+    "match":{
+        "team1": {
+            "image":/*...*/,
+            "name":/*...*/,
+            "score":/*...*/
+        },
+        "team2": {
+            "image":/*...*/,
+            "name":/*...*/,
+            "score":/*...*/
+        },
+        "middle":/*...*/,
+        "time":/*...*/
+    },
+    "thumbnail":{"image":/*...*/},
+    "long-description":{"text":/*...*/},
+    "nearby":{
+        "image":/*...*/,
+        "place":/*...*/,
+        "address":/*...*/,
+        "latitude":/*...*/,
+        "longitude":/*...*/
+    },
+    "thumb-scalar":{
+        "number":/*...*/,
+        "units":/*...*/,
+        "title":/*...*/,
+        "subtitle":/*...*/,
+        "image":/*...*/
+    }
+}
+```
+
 
 
 
