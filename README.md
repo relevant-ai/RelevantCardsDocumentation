@@ -712,6 +712,35 @@ This card has two templates `headline` and `footer`, in that order. This is why 
 }
 ```
 
+## Actions:
+
+Relevant cards allow you to perform actions by holding down your finger on the card. The default actions are *refresh*, *share* and *zoom-in*. You can add more actions to the library using the `actions` template. For this you don't need to add `"actions"` to your `"templates metadata"`. You simply need to add an `"actions"` key to each element of the array returned by the `_LOAD` object. The value of this key will be an array of added actions. All of the elements of this array look as follows:
+
+```json
+{
+    "_ACTION":/*...*/,
+    "_ICON":/*...*/
+}
+```
+
+The value of `"_ICON"` can be `"done-icon"`, `"eye-icon"`, `"fav-icon"`, `"heart-icon"`, `"repost-icon"`, `"source-icon"`, `"downvote-icon"`, `"map-icon"`, or `"upvote-icon"`. The action must be one of the following currently available functions:
+
+```json
+{
+    "_WEBVIEW":/* SOME SOURCE URL */
+}
+```
+
+```json
+{
+    "_MAPVIEW":{
+        "title":/*...*/,
+        "latitude":/*...*/,
+        "longitude":/*...*/
+    }
+}
+```
+
 
 
 
