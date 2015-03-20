@@ -235,7 +235,7 @@ Allows you to return two possible values depending on whether a condition is `tr
                 "_ELSE":[
                     {
                         "headline": {"text":"Bad!"},
-                        "footer": "{sentence}",
+                        "footer": "{sentence}"
                     }
                 ]
             }
@@ -565,8 +565,8 @@ It is important to know that `null` values get removed entirely from computed ob
         "_ARRAY": /* ... */,
         "_EACH" : {
             "_CONDITIONAL": {
-                "_IF":{"_MATH":"{_INDEX}%2==0"}
-                "_THEN":null
+                "_IF":{"_MATH":"{_INDEX}%2==0"},
+                "_THEN":null,
                 "_ELSE":"{_ITEM}"
             }
         }
@@ -740,6 +740,7 @@ The value of `"_ICON"` can be `"done-icon"`, `"eye-icon"`, `"fav-icon"`, `"heart
     }
 }
 ```
+
 
 
 
