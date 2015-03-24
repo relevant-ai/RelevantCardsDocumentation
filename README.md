@@ -635,7 +635,7 @@ Let us go back to the first example of a fully functional card:
 }
 ```
 
-This card has two templates `headline` and `footer`, in that order. This is why the `_LOAD` object returns an array of objects of the form `{"headline":{...},"footer":{...}}`. In general, if a card is using templates `template_1`, `template_2`, ..., `template_n`, then the `_LOAD` object must return an array of objects of the form `{"template_1":{...},...,"template_n":{...}}`, where the `{...}`'s hold parameters that skin each template's labels and images. Below is a list of all available templates and their parameters:
+This card has two templates `headline` and `footer`, in that order. This is why the `_LOAD` object returns an array of objects of the form `{"headline":{...},"footer":{...}}`. In general, if a card is using templates `template_1`, `template_2`, ..., `template_n`, then the `_LOAD` object must return an array of objects of the form `{"template_1":{...},...,"template_n":{...}}`, where the `{...}`'s hold parameters that skin each template's labels and images. Below is a list of all available templates and their parameters: (Check out Template-Structures)
 
 ```json
 {
