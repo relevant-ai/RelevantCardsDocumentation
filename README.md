@@ -596,7 +596,7 @@ Notice that the callback base URL **does not contain the protocol http://**. If 
         /* URL PARAMETERS AND VALUES */
     },
     "method":/* "GET" OR "POST" OR OTHER */,
-    "headers":{
+    "headers":{ 
         /* HEADER TITLES AND VALUES */
     }
 }
@@ -616,9 +616,9 @@ Let us go back to the first example of a fully functional card:
     "summary": "My card's description.",
     "credits": "Some Website or Source",
     "templates": [
-                  "headline",
-                  "footer"
-                  ],
+        "headline",
+        "footer"
+    ],
     "settings_type": "NONE",
     "_LOAD": {
         "_RETURN": [
@@ -640,13 +640,29 @@ This card has two templates `headline` and `footer`, in that order. This is why 
 ```json
 {
     "title":{"text":/*...*/},
-    "footer":{"text":/*...*/},
-    "large-image-square":{"image":/*...*/},
-    "description":{"title":/*...*/,"subtitle":/*...*/,"thumb":/*...*/},
     "title-two-lines":{"text":/*...*/},
-    "profile":{"title":/*...*/,"subtitle":/*...*/},
-    "banner":{"image":/*...*/},
     "headline":{"text":/*...*/},
+    
+    "short-description":{"text":/*...*/},
+    "long-description":{"text":/*...*/},
+    
+    "large-image-square":{"image":/*...*/},
+    "large-image-3x4":{"image":/*...*/},
+    "banner":{"image":/*...*/},
+    "thumbnail":{"image":/*...*/},
+    "profile-image":{"image":/*...*/},
+    
+    "footer":{"text":/*...*/},
+    
+    "description":{
+        "title":/*...*/,
+        "subtitle":/*...*/,
+        "thumb":/*...*/
+    },
+    "profile":{
+        "title":/*...*/,
+        "subtitle":/*...*/
+    },
     "large-stats":{
         "title-1":/*...*/,
         "title-2":/*...*/,
@@ -667,18 +683,10 @@ This card has two templates `headline` and `footer`, in that order. This is why 
         "value-2":/*...*/,
         "value-3":/*...*/
     },
-    "transit":{
-        "number":/*...*/,
-        "place":/*...*/,
-        "address":/*...*/,
-        "time-1":/*...*/,
-        "time-2":/*...*/,
-        "time-3":/*...*/
+    "image-stats":{
+        "stats":/*...*/,
+        "image":/*...*/
     },
-    "image-stats":{"stats":/*...*/,"image":/*...*/},
-    "large-image-3x4":{"image":/*...*/},
-    "short-description":{"text":/*...*/},
-    "profile-image":{"image":/*...*/},
     "match":{
         "team1": {
             "image":/*...*/,
@@ -693,8 +701,6 @@ This card has two templates `headline` and `footer`, in that order. This is why 
         "middle":/*...*/,
         "time":/*...*/
     },
-    "thumbnail":{"image":/*...*/},
-    "long-description":{"text":/*...*/},
     "nearby":{
         "image":/*...*/,
         "place":/*...*/,
@@ -708,6 +714,14 @@ This card has two templates `headline` and `footer`, in that order. This is why 
         "title":/*...*/,
         "subtitle":/*...*/,
         "image":/*...*/
+    },
+    "transit":{
+        "number":/*...*/,
+        "place":/*...*/,
+        "address":/*...*/,
+        "time-1":/*...*/,
+        "time-2":/*...*/,
+        "time-3":/*...*/
     }
 }
 ```
