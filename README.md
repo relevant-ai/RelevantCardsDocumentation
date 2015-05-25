@@ -52,7 +52,9 @@ You should see the following card:
 
 Think of the object `_LOAD` as a function that is called every time the card needs to refresh. The `_RETURN` of this function is an array with **only one element**. That means this card has **only one page** (swiping left and right will do nothing). This page is itself an array of **templates**: A `description` template with parameters `title` and `body`, and a `footer` template with parameter `caption`.
 
-**REMARK:** The `_RETURN` of the `_LOAD` function must always be an array of arrays. Each element of the outer array is a *page* and each element of the inner array is a *template*.
+**Remark:** The `_RETURN` of the `_LOAD` function must always be an array of arrays. Each element of the outer array is a *page* and each element of the inner array is a *template*.
+
+**Remark:** As of Relevant 1.0, cards **do not update automatically** when you change the code. After making changes to your hosted JSON, you need to delete the current card (tap the "i" button, then REMOVE) and then add it again by shaking the device.
 
 ## The Rel Language
 
@@ -203,12 +205,12 @@ In the code above, the variables `a` and `b` are `1` (`true`), and the variable 
 
 ### The `_IF`, `_THEN`, `_ELSE` Function
 
-Unlike other built-in functions, this one is represented by an object with three keys. It works just as you would expect it in any programming language. In the example below, the variable `city` takes the value `"Montreal"`.
+Unlike other built-in functions, this one is represented by an object with three keys, rather than one. It works just as you would expect it in any programming language. In the example below, the variable `city` takes the value `"Montreal"`.
 
 ```json
 "foo":true,
 "cities":["Montreal","Toronto"],
-"var":{
+"city":{
     "_IF":"{foo}",
     "_THEN":{"_PATH":["cities",0]},
     "_ELSE":{"_PATH":["cities",1]}
@@ -222,7 +224,7 @@ However, you may still wish to use intermediate variables inside `_THEN` and `_E
 ```json
 "foo":true,
 "cities":["Montreal","Toronto"],
-"var":{
+"city":{
     "_IF":"{foo}",
     "_THEN":{
         "city":{"_PATH":["cities",0]},
@@ -232,32 +234,88 @@ However, you may still wish to use intermediate variables inside `_THEN` and `_E
 }
 ```
 
-**Remark for scope geeks:** Rel uses block dynamic scope. In particular that means that the variable `city` is accessible only inside `_THEN`, and the variable `cities` is accessible everywhere in the code above.
+**Remark for scope geeks:** Rel uses block dynamic scope, and all variables are set only once (this is called *inmutability*). In particular that means that the variable `city` inside `_THEN` is a local variable, and does not overwrite the other equally named variable.
 
 ### The `_URL` Function
 
-Allows you to make a call to a web address that returns a JSON object. You can then access that data using `_PATH` or the `"{var}"` syntax. The following example assumes that `http://path/to/my/json.html` loads a json object containing a `"results"` key.
+Allows you to make a call to a web service that returns a JSON object. To test this function we're using the JSON from this URL:
+
+`https://gist.githubusercontent.com/wircho/d6c606350f8a6dca29ee/raw/b7872ecebfcc868ff825c88fe1c5e06d13ad618c/cities`
 
 ```json
 {
-    /*...
-    METADATA
-    ...*/
-    "_LOAD": {
-        "json_info": {
-            "_URL":"http://path/to/my/json.html"
+    "cities":[
+        {
+            "picture":"http://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/df/montreal.jpg",
+            "name":"Montreal",
+            "nickname":"The City Of Saints",
+            "province":"Quebec"
         },
-        "_RETURN": {
-            "_PATH":["json_info","results"]
+        {
+            "picture":"http://images.hellobc.com/mgen/tbccw/production/TBCCWDisplay.ms?img=/getmedia/4149a8de-fc5d-4e54-b659-5282486fa973/2-200291313-001-Vancouver-skyline.jpg.aspx&tl=1&sID=1&c=public,max-age=172802,post-check=7200,pre-check=43200&bid=4_5",
+            "name":"Vancouver",
+            "nickname":"Hollywood North",
+            "province":"British Columbia"
+        },
+        {
+            "picture":"http://www.seetorontonow.com/App_Themes/tourismtoronto/images/about-tourism-toronto.jpg",
+            "name":"Toronto",
+            "nickname":"T-Dot",
+            "province":"Ontario"
         }
+    ]
+}
+```
+
+The card below exemplifies the use of the `_URL` function. You can test it by shaking your phone and adding the card `https://gist.githubusercontent.com/wircho/327fef8392c1865dec5e/raw/5aa7e97fa166888c3bd8d0f38c4b062deebc6819/city_card`
+
+```json
+{
+    "id": "city-card",
+    "title": "City",
+    "icon_url": "http://relevant.ai/city.png",
+    "summary": "Card's summary for the library.",
+    "credits": "The Web",
+    "settings_type": "NONE",
+    "_LOAD": {
+        "json_info":{
+            "_URL":"https://gist.githubusercontent.com/wircho/d6c606350f8a6dca29ee/raw/b7872ecebfcc868ff825c88fe1c5e06d13ad618c/cities"
+        },
+        "first_city":{
+            "_PATH": ["json_info","cities",0]
+        },
+        "_RETURN":[
+            [
+                {
+                    "banner":{
+                        "image": {"_PATH":["first_city","picture"]}
+                    }
+                },
+                {
+                    "description":{
+                        "title": {"_PATH":["first_city","name"]},
+                        "body": {"_PATH":["first_city","nickname"]}
+                    }
+                },
+                {
+                    "footer":{
+                        "caption": {"_PATH":["first_city","province"]}
+                    }
+                }
+            ]
+        ]
     }
 }
 ```
 
-You can also make richer requests. For example:
+![City Sample Card](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/montreal_card.png)
+
+As the Hello World card, this card has only one page. See the `_LOOP` function below to learn how to display all cities from the web service.
+
+You can also make richer requests using `_URL`, as exemplified below:
 
 ```json
-{
+"var":{
     "_URL":{
         "_ADDRESS":"http://some/web/address.html",
         "_METHOD":"POST",
@@ -269,6 +327,85 @@ You can also make richer requests. For example:
     }
 }
 ```
+
+### The `_LOOP` Function
+
+This function loops an array and processes each of its items to produce a new array. For example, the variable `var` below takes the value `[1,2,3,4]`:
+
+```json
+"foo":[{"num":1,"name":"one"},{"num":2,"name":"two"},{"num":3,"name":"three"},{"num":4,"name":"four"}],
+"var":{
+    "_LOOP":{
+        "_ARRAY":"{foo}",
+        "_EACH":{"_PATH":["_ITEM","num"]}
+    }
+}
+```
+
+`_ARRAY` and `_EACH` are the parameter names of the function `_LOOP`, and must always be present. The implicit variable `_ITEM` exists only within the `_EACH` object, and represents the current element of the array. You may also use the implicit variable `_INDEX`, which is the current index between `0` and the array's length.
+
+You may use intermediate variables inside `_EACH` as long as there is a `_RETURN` key. In the example below, the variable `var` takes the value `["1 is one","2 is two","3 is three","4 is four"]`:
+
+```json
+"foo":[{"num":1,"name":"one"},{"num":2,"name":"two"},{"num":3,"name":"three"},{"num":4,"name":"four"}],
+"var":{
+    "_LOOP":{
+        "_ARRAY":"{foo}",
+        "_EACH":{
+            "num":{"_PATH":["_ITEM","num"]},
+            "name":{"_PATH":["_ITEM","name"]},
+            "_RETURN":"{num} is {name}"
+        }
+    }
+}
+```
+
+We may use `_LOOP` to improve upon the card exemplifying the `_URL` function above. Test this improved card by shaking your phone and inputing this URL: `https://gist.githubusercontent.com/wircho/c8f4f5b0ce440b8edd83/raw/8ef09440e96322e75220ff1470fbc4c65d76e6c2/cities_card`
+
+```json
+{
+    "id": "cities-card",
+    "title": "Cities",
+    "icon_url": "http://relevant.ai/cities.png",
+    "summary": "Card's summary for the library.",
+    "credits": "The Web",
+    "settings_type": "NONE",
+    "_LOAD": {
+        "json_info":{
+            "_URL":"https://gist.githubusercontent.com/wircho/d6c606350f8a6dca29ee/raw/b7872ecebfcc868ff825c88fe1c5e06d13ad618c/cities"
+        },
+        "_RETURN":{
+            "_LOOP":{
+                "_ARRAY":{"_PATH":["json_info","cities"]},
+                "_EACH":[
+                    {
+                        "banner":{
+                            "image": {"_PATH":["_ITEM","picture"]}
+                        }
+                    },
+                    {
+                        "description":{
+                            "title": {"_PATH":["_ITEM","name"]},
+                            "body": {"_PATH":["_ITEM","nickname"]}
+                        }
+                    },
+                    {
+                        "footer":{
+                            "caption": {"_PATH":["_ITEM","province"]}
+                        }
+                    }
+                ]
+            }
+        }
+        
+    }
+}
+```
+
+This is how the card above looks like after scrolling all the way to the right:
+
+![Cities Sample Card](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/cities_card.png)
+
 
 ### The `_MERGE` Function
 
