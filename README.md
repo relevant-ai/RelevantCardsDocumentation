@@ -4,7 +4,7 @@
 
 This document explains how to create cards for the [Relevant iOS app](http://relevant.ai).
 
-A card is just a JSON file hosted somewhere on the web. This JSON file contains directions on how to gather the data and display it using templates such as banner images, footers, etc.
+A card is just a JSON file hosted somewhere on the web. This JSON file directs the Relevant servers on how to gather the data and display it using templates such as banner images, footers, etc.
 
 Here is a sample "Hello World" card:
 
@@ -12,9 +12,9 @@ Here is a sample "Hello World" card:
 {
     "id": "hello-world",
     "title": "Hello World Card",
-    "icon_url": "",
-    "summary": "",
-    "credits": "",
+    "icon_url": "http://relevant.ai/hello_world.png",
+    "summary": "Card's summary for the library.",
+    "credits": "Relevant",
     "settings_type": "NONE",
     "_LOAD": [
         [
@@ -34,7 +34,15 @@ Here is a sample "Hello World" card:
 }
 ```
 
-The first keys `id`, `title`, `icon_url`, `summary`, `credits`, and `settings-type` are metadata. The `"_LOAD"` key represents the appearance of the card.
+The first keys `id`, `title`, `icon_url`, `summary`, `credits`, and `settings-type` are metadata. Of these, only the `title` value is visible on the card itself.
+
+The `"_LOAD"` key represents the content and appearance of the card.
+
+**To test this card;** launch the [Relevant iOS app](http://relevant.ai), shake your device, and when prompted, insert the following URL into the input box: `https://gist.githubusercontent.com/wircho/f250e0ae9f818637c9c5/raw/d2ebeb8306f7520f60f5f318bc721eb378dd4fe1/card`
+
+You should see the following card:
+
+
 
 ## Basic Structure
 
