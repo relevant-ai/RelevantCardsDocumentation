@@ -404,7 +404,7 @@ We may use `_LOOP` to improve upon the card exemplifying the `_URL` function abo
 
 This is how the card above looks like after scrolling all the way to the right:
 
-![Cities Sample Card](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/cities_card.png)
+![Cities Sample Card](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/toronto_card.png)
 
 
 ### The `_MERGE` Function
