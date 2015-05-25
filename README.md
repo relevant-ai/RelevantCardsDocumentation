@@ -1,12 +1,14 @@
 # Relevant Cards Documentation
 
-## Intro and First Sample
-
 This document explains how to create cards for the [Relevant iOS app](http://relevant.ai).
 
-A card is just a JSON file hosted somewhere on the web. This JSON file directs the Relevant servers on how to gather the data and display it using templates such as banner images, footers, etc.
+A *card* is just a JSON file hosted somewhere on the web. This JSON file directs the Relevant servers on how to gather the data and display it using templates such as banner images, footers, etc.
 
-Here is a sample "Hello World" card:
+A great way to host a card is using Dropbox.
+
+## Intro and Hello World
+
+Here is a sample *"Hello World"* card:
 
 ```json
 {
@@ -16,321 +18,221 @@ Here is a sample "Hello World" card:
     "summary": "Card's summary for the library.",
     "credits": "Relevant",
     "settings_type": "NONE",
-    "_LOAD": [
-        [
-            {
-                "description":{
-                    "title": "Hello World",
-                    "body": "Hello World? There's a card for that."
+    "_LOAD": {
+        "_RETURN":[
+            [
+                {
+                    "description":{
+                        "title": "Hello World",
+                        "body": "Hello World? There's a card for that."
+                    }
+                },
+                {
+                    "footer":{
+                        "caption": "Relevant - The Missing Home Screen"
+                    }
                 }
-            },
-            {
-                "footer":{
-                    "caption": "Relevant - The Missing Home Screen"
-                }
-            }
+            ]
         ]
-    ]
+    }
 }
 ```
 
-The first keys `id`, `title`, `icon_url`, `summary`, `credits`, and `settings-type` are metadata. Of these, only the `title` value is visible on the card itself.
+The keys `id`, `title`, `icon_url`, `summary`, `credits`, and `settings-type` are metadata. Of these, only the `title` value is visible on the card itself.
 
 The `"_LOAD"` key represents the content and appearance of the card.
 
-**To test this card;** launch the [Relevant iOS app](http://relevant.ai), shake your device, and when prompted, insert the following URL into the input box: `https://gist.githubusercontent.com/wircho/f250e0ae9f818637c9c5/raw/d2ebeb8306f7520f60f5f318bc721eb378dd4fe1/card`
+**To test this card;** launch the [Relevant iOS app](http://relevant.ai), shake your device, and when prompted, insert the following URL into the input box:
+
+`https://gist.githubusercontent.com/wircho/f250e0ae9f818637c9c5/raw/d2ebeb8306f7520f60f5f318bc721eb378dd4fe1/card`
 
 You should see the following card:
 
+![Hello World Sample Card](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/hello_world_card.png)
 
+Think of the object `_LOAD` as a function that is called every time the card needs to refresh. The `_RETURN` of this function is an array with **only one element**. That means this card has **only one page** (swiping left and right will do nothing). This page is itself an array of **templates**: A `description` template with parameters `title` and `body`, and a `footer` template with parameter `caption`.
 
-## Basic Structure
+**REMARK:** The `_RETURN` of the `_LOAD` function must always be an array of arrays. Each element of the outer array is a *page* and each element of the inner array is a *template*.
 
-A card is just a JSON object with the following structure:
+## The Rel Language
+
+Everything inside the `_LOAD` function must follow the syntax of the Rel language. Reserved words/keys for the Rel language are uppercase and preceded by an *underscore* (`_`). Everything else is what it looks like: a JSON object, array, string, or number.
+
+### Variables
+
+You can define variables inside the `_LOAD` function as follows:
+
+```json
+"_LOAD":{
+    "foo":5,
+    "var":[1,"a",{"b":"c"}],
+    "norf":{"x":50.1,"y":-70},
+    "_RETURN": ...
+}
+```
+
+Normally, unless used somewhere in `_RETURN`, these variables will be ignored. This makes Rel *lazy*; it only does things if needed and when needed.
+
+The easiest way to use a variable is using the syntax `"{variable_name}"`. For example, the Hello World card from before is equivalent to the one below:
 
 ```json
 {
-    "id": "card-id-string",
-    "title": "My Card's Title",
-    "icon_url": "https://url/to/icon.png",
-    "summary": "My card's description.",
-    "credits": "Some Website or Source",
-    "templates": [
-                  "thumbnail",
-                  "headline",
-                  "footer"
-                  ],
+    "id": "hello-world",
+    "title": "Hello World Card",
+    "icon_url": "http://relevant.ai/hello_world.png",
+    "summary": "Card's summary for the library.",
+    "credits": "Relevant",
     "settings_type": "NONE",
     "_LOAD": {
-        /*
-        CODE
-        */
-    }
-}
-```
-
-All keys, except for `"_LOAD"` represent the card's metadata. `"settings_type"` may also be `"SELECT"` or `"TEXT"` but we will discuss that later.
-
-The `"templates"` key represents the appearance of the card from top to bottom. The example above consists of a thumbnail, a headline, and a footer. These are all currently available templates: `title, footer, large-image-square, description, title-two-lines, profile, banner, headline, large-stats, stats, transit, image-stats, large-image-3x4, short-description, profile-image, match, covering-button, thumbnail, long-description, nearby, thumb-scalar`
-
-`"_LOAD"` is the *code* of the card.
-
-## The `"_LOAD"` Code
-
-The value of the `"_LOAD"` key is an object that represents code which is executed every time the card is refreshed.
-
-Every key in this object is the name of a variable. For example:
-
-```json
-{
-    /*...
-    METADATA
-    ...*/
-    "_LOAD": {
-        "var1": "value of variable 1",
-        "var2": {
-            "value": ["of","variable",2]
-        }
-        /*...
-        MORE CODE
-        ...*/
-    }
-}
-```
-
-The value of a variable may be any JSON object.
-
-## The `"_RETURN"` Key
-
-The `_LOAD` object needs to have a `"_RETURN"` key, which holds the object that contains all the information for skinning the card. The following is the first complete example of a card in this document. It is a card with a headline and a footer. It has two static pages reading "My Header 1", "My Footer 1" and "My Header 2", "My Footer 2" respectively.
-
-```json
-{
-    "id": "card-id-string",
-    "title": "My Card's Title",
-    "icon_url": "https://url/to/icon.png",
-    "summary": "My card's description.",
-    "credits": "Some Website or Source",
-    "templates": [
-                  "headline",
-                  "footer"
-                  ],
-    "settings_type": "NONE",
-    "_LOAD": {
-        "_RETURN": [
-            {
-                "headline": {"text": "My Header 1"},
-                "footer": {"text": "My Footer 1"}
-            },
-            {
-                "headline": {"text": "My Header 2"},
-                "footer": {"text": "My Footer 2"}
+        "hello":"Hello World",
+        "foo":{
+            "description":{
+                "title": "{hello}",
+                "body": "{hello}? There's a card for that."
             }
-        ]
-    }
-}
-```
-
-## Using Variables
-
-You can refer to a variable `var` in a value as `"{var}"`. For example, the following card looks exactly the same as the one above:
-
-```json
-{
-    /*...
-    METADATA
-    ...*/
-    "_LOAD": {
-        "header_1": "My Header 1",
-        "_RETURN": [
-            {
-                "headline": {"text": "{header_1}"},
-                "footer": {"text": "My Footer 1"}
-            },
-            {
-                "headline": {"text": "My Header 2"},
-                "footer": {"text": "My Footer 2"}
-            }
-        ]
-    }
-}
-```
-
-A more complex example (that also looks the same):
-
-```json
-{
-    /*...
-    METADATA
-    ...*/
-    "_LOAD": {
-        "page_1": {
-            "headline": {"text": "My Header 1"},
-            "footer": {"text": "My Footer 1"}
         },
-        "page_2": {
-            "headline": {"text": "My Header 2"},
-            "footer": {"text": "My Footer 2"}
-        },
-        "_RETURN": [
-            "{page_1}",
-            "{page_2}"
-        ]
-    }
-}
-```
-
-**Remark:** The keys of the `_LOAD` object are variables. However, the keys of any child object are **NOT**. For example, `"headline"` is not a variable in the example above, and so it cannot be referenced as `"{headline}"`.
-
-## Inserting/Concatenating String Variables
-
-The syntax `"{var}"` can also be used within a bigger string when `var` is a string variable. For example:
-
-```json
-{
-    /*...
-    METADATA
-    ...*/
-    "_LOAD": {
-        "header_word": "Header",
-        "footer_word": "Footer",
-        "first_number": 1,
-        "second_number": 2,
-        "_RETURN": [
-            {
-                "headline": {"text": "My {header_word} {first_number}"},
-                "footer": {"text": "My {footer_word} {first_number}"}
-            },
-            {
-                "headline": {"text": "My {header_word} {second_number}"},
-                "footer": {"text":  "My {footer_word} {second_number}"}
+        "var":{
+            "footer":{
+                "caption": "Relevant - The Missing Home Screen"
             }
-        ]
-    }
-}
-```
-
-## Paths
-
-A *path* is an object of the form `{"_PATH":[...]}` where `[...]` is an array whose first (0-th) element is a variable name, and each subsequent element is either a **string key** or an **integer index**. For example `{"_PATH":["my_rainbow","colors",3,"red"]}`. Paths can be used to fetch children of JSON objects. For example:
-
-```json
-{
-    /*...
-    METADATA
-    ...*/
-    "_LOAD": {
-        "info": {
-            "useless_stuff": {
-                "a": ["x","y","z"],
-                "b": "c"
-            },
-            "important_stuff": [
-                {
-                    "head": "My Header 1",
-                    "foot": "My Footer 1"
-                },
-                {
-                    "head": "My Header 2",
-                    "foot": "My Footer 2"
-                }
+        },
+        "_RETURN":[
+            [
+                "{foo}",
+                "{var}"
             ]
-        },
-        "_RETURN": [
-            {
-                "headline": {"_PATH":["info","important_stuff",0,"head"]},
-                "footer": {"_PATH":["info","important_stuff",0,"foot"]}
-            },
-            {
-                "headline": {"_PATH":["info","important_stuff",1,"head"]},
-                "footer": {"_PATH":["info","important_stuff",1,"foot"]}
-            }
         ]
     }
 }
 ```
 
-## Some Built-In Functions
+In this card the `_LOAD` function has three intermediate variables, named `hello`, `foo`, and `var`.
 
-The keyword `"_PATH"` introduced above is just a function that's built into the language. These functions are usually invoked using objects of the form `{"_FUNCTION_NAME":{"_PARAM_NAME":...,"_ANOTHER_PARAM_NAME":...,...}}`. The exact syntax of a built-in function varies accross functions. These are some of the built in functions that are currently available:
+### Inserting/Concatenating String Variables
 
-### The `_CONDITIONAL` Function
+As in the previous example, it is possible to insert a string-valued variable into another string using the syntax `"... {variable_name} ..."`. For example `"The value of the variable foo is {foo}"`.
 
-Allows you to return two possible values depending on whether a condition is `true` (`>0`) or `false` (`0`). It's parameter keys are `"_IF"`, `"_THEN"` and `"_ELSE"`. For example:
+This is only possible when `foo` is a string, and will not work otherwise.
+
+### Built-In Functions
+
+The Rel language comes packaged with a set of built-in functions to help you easily manipulate JSON objects. All built-in function names follow the *underscore uppercase* syntax (e.g. `_CONCAT`) to differentiate it from your own variables and JSON objects.
+
+A built-in function call is usually represented by a one-key object whose only key is the function name. For example:
 
 ```json
 {
-    /*...
-    METADATA
-    ...*/
-    "_LOAD": {
-        "something": false,
-        "sentence": "something is {something}",
-        "_RETURN": {
-            "_CONDITIONAL": {
-                "_IF":"{something}",
-                "_THEN":[
-                    {
-                        "headline": {"text":"Good!"},
-                        "footer": "{sentence}",
-                    }
-                ],
-                "_ELSE":[
-                    {
-                        "headline": {"text":"Bad!"},
-                        "footer": "{sentence}"
-                    }
-                ]
-            }
-        }
+    "_FUNC_NAME": ...
+}
+```
+
+The value of the key is the parameter of the function. This could be a string, an array, an object, or in some cases a set of parameters with specific names, as follows:
+
+```json
+{
+    "_FUNC_NAME": {
+        "_FIRST_PARAM_NAME": ...,
+        "_SECOND_PARAM_NAME": ...,
+        "_THIRD_PARAM_NAME": ...
     }
 }
 ```
+
+Most of the rest of this documentation is devoted to introducing Rel's built in functions.
+
+### The `_PATH` function
+
+We often need to dig deep inside a JSON object or array, in order to fetch a specific value. This will be more useful when we get JSON objects following all kinds of different standards from web services (See the `_URL` function below).
+
+The `_PATH` function takes an array of strings and integers. The first string is the name of a variable. Every subsequent string or integer represents either an object's key, or an array's index. The result of the function call is obtained by recursively looking up these keys and indices into the variable.
+
+In the example bellow, the variable `var` takes the value `"Hello World"`
+
+```json
+"foo":{
+    "byes":[
+        {"value":"Adios Mundo","language":"Spanish"},
+        {"value":"Bye World","language":"English"}
+    ],
+    "hellos":[
+        {"value":"Hola Mundo","language":"Spanish"},
+        {"value":"Hello World","language":"English"}
+    ]
+},
+"var":{
+    "_PATH":["foo","hellos",0,"value"]
+}
+```
+
+**Remark:** Observe that `{"_PATH":["variable_name"]}` is equivalent to `"{variable_name}"`.
 
 ### The `_PATH_EXISTS` Function
 
-Returns `true` (`1`) if an array of keys or indexes represents a path that exists, and `false` (`0`) otherwise. For example:
+Like `_PATH`, this function takes an array of strings and integers. It returns `true` (`1`) if this array represents a path that exists, and `false` (`0`) otherwise. For example:
 
 ```json
-{
-    /*...
-    METADATA
-    ...*/
-    "_LOAD": {
-        "object": {
-            "key_1": [
-                "element #1",
-                [
-                    "element",
-                    "#",
-                    "2"
-                ]
-            ],
-            "key_2": {
-                "red": 255,
-                "green": 255
-            }
-        },
-        "another_object": {
-            "something": "{object}"
-        },
-        "a": {
-            "_PATH_EXISTS":["another_object","something","key_1",1,1]
-        },
-        "b": {
-            "_PATH_EXISTS":["another_object","something","key_1",1,2]
-        },
-        "c": {
-            "_PATH_EXISTS":["another_object","something","key_2","blue"]
-        }
-        "_RETURN": {
-            /* ... */
-        }
+"object": {
+    "key_1": [
+        "element #1",
+        [
+            "element",
+            "#",
+            "2"
+        ]
+    ],
+    "key_2": {
+        "red": 255,
+        "green": 255
     }
+},
+"another_object": {
+    "something": "{object}"
+},
+"a": {
+    "_PATH_EXISTS":["another_object","something","key_1",1,1]
+},
+"b": {
+    "_PATH_EXISTS":["another_object","something","key_1",1,2]
+},
+"c": {
+    "_PATH_EXISTS":["another_object","something","key_2","blue"]
 }
 ```
 
-In the code above, the variables `"a"` and `"b"` are `1` (`true`), and the variable `"c"` is `0` (`false`).
+In the code above, the variables `a` and `b` are `1` (`true`), and the variable `c` is `0` (`false`).
+
+### The `_IF`, `_THEN`, `_ELSE` Function
+
+Unlike other built-in functions, this one is represented by an object with three keys. It works just as you would expect it in any programming language. In the example below, the variable `city` takes the value `"Montreal"`.
+
+```json
+"foo":true,
+"cities":["Montreal","Toronto"],
+"var":{
+    "_IF":"{foo}",
+    "_THEN":{"_PATH":["cities",0]},
+    "_ELSE":{"_PATH":["cities",1]}
+}
+```
+
+It is important to keep in mind that `_IF,_THEN,_ELSE` is a function, and not a construct, as in other programming languages. That means `_THEN` and `_ELSE` contain **values** to be *returned*, rather than **statements** to be *executed*.
+
+However, you may still wish to use intermediate variables inside `_THEN` and `_ELSE`. This is possible as long as they have a `_RETURN` key, as in the example below:
+
+```json
+"foo":true,
+"cities":["Montreal","Toronto"],
+"var":{
+    "_IF":"{foo}",
+    "_THEN":{
+        "city":{"_PATH":["cities",0]},
+        "_RETURN":"{city}"
+    },
+    "_ELSE":{"_PATH":["cities",1]}
+}
+```
+
+**Remark for scope geeks:** Rel uses block dynamic scope. In particular that means that the variable `city` is accessible only inside `_THEN`, and the variable `cities` is accessible everywhere in the code above.
 
 ### The `_URL` Function
 
