@@ -4,6 +4,8 @@ This document explains how to create cards for the [Relevant iOS app](http://rel
 
 A *card* is just a JSON file hosted somewhere on the web. This JSON file directs the Relevant servers on how to gather the data and display it using templates such as banner images, footers, etc.
 
+A great way to host a card is using Dropbox.
+
 ## Intro and Hello World
 
 Here is a sample *"Hello World"* card:
@@ -48,7 +50,7 @@ You should see the following card:
 
 ![Hello World Sample Card](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/hello_world_card.png)
 
-Think of the object `_LOAD` as a function that is called every time the card needs to refresh. The `_RETURN` of this function is an array with **only one element**. That means this card has **only one page** (swiping left and right will do something). This page is itself an array of **templates**: A `description` template with parameters `title` and `body`, and a `footer` template with parameter `caption`.
+Think of the object `_LOAD` as a function that is called every time the card needs to refresh. The `_RETURN` of this function is an array with **only one element**. That means this card has **only one page** (swiping left and right will do nothing). This page is itself an array of **templates**: A `description` template with parameters `title` and `body`, and a `footer` template with parameter `caption`.
 
 **REMARK:** The `_RETURN` of the `_LOAD` function must always be an array of arrays. Each element of the outer array is a *page* and each element of the inner array is a *template*.
 
@@ -106,169 +108,32 @@ The easiest way to use a variable is using the syntax `"{variable_name}"`. For e
 
 In this card the `_LOAD` function has three intermediate variables, named `hello`, `foo`, and `var`.
 
+### Inserting/Concatenating String Variables
 
-## Basic Structure
+As in the previous example, it is possible to insert a string-valued variable into another string using the syntax `"... {variable_name} ..."`. For example `"The value of the variable foo is {foo}"`.
 
-A card is just a JSON object with the following structure:
+This is only possible when `foo` is a string, and will not work otherwise.
+
+### Built-In Functions
+
+The Rel language comes packaged with a set of built-in functions to help you easily manipulate JSON objects. All built-in function names follow the *underscore uppercase* syntax (e.g. `_CONCAT`) to differentiate it from your own variables and JSON objects.
+
+A built-in function call is usually represented by a one-key object whose only key is the function name. For example:
 
 ```json
 {
-    "id": "card-id-string",
-    "title": "My Card's Title",
-    "icon_url": "https://url/to/icon.png",
-    "summary": "My card's description.",
-    "credits": "Some Website or Source",
-    "templates": [
-                  "thumbnail",
-                  "headline",
-                  "footer"
-                  ],
-    "settings_type": "NONE",
-    "_LOAD": {
-        /*
-        CODE
-        */
-    }
+    "_FUNC_NAME": ...
 }
 ```
 
-All keys, except for `"_LOAD"` represent the card's metadata. `"settings_type"` may also be `"SELECT"` or `"TEXT"` but we will discuss that later.
-
-The `"templates"` key represents the appearance of the card from top to bottom. The example above consists of a thumbnail, a headline, and a footer. These are all currently available templates: `title, footer, large-image-square, description, title-two-lines, profile, banner, headline, large-stats, stats, transit, image-stats, large-image-3x4, short-description, profile-image, match, covering-button, thumbnail, long-description, nearby, thumb-scalar`
-
-`"_LOAD"` is the *code* of the card.
-
-## The `"_LOAD"` Code
-
-The value of the `"_LOAD"` key is an object that represents code which is executed every time the card is refreshed.
-
-Every key in this object is the name of a variable. For example:
+The value of the key is the parameter of the function. This could be a string, an array, an object, or in some cases a set of parameters with specific names, as follows:
 
 ```json
 {
-    /*...
-    METADATA
-    ...*/
-    "_LOAD": {
-        "var1": "value of variable 1",
-        "var2": {
-            "value": ["of","variable",2]
-        }
-        /*...
-        MORE CODE
-        ...*/
-    }
-}
-```
-
-The value of a variable may be any JSON object.
-
-## The `"_RETURN"` Key
-
-The `_LOAD` object needs to have a `"_RETURN"` key, which holds the object that contains all the information for skinning the card. The following is the first complete example of a card in this document. It is a card with a headline and a footer. It has two static pages reading "My Header 1", "My Footer 1" and "My Header 2", "My Footer 2" respectively.
-
-```json
-{
-    "id": "card-id-string",
-    "title": "My Card's Title",
-    "icon_url": "https://url/to/icon.png",
-    "summary": "My card's description.",
-    "credits": "Some Website or Source",
-    "templates": [
-                  "headline",
-                  "footer"
-                  ],
-    "settings_type": "NONE",
-    "_LOAD": {
-        "_RETURN": [
-            {
-                "headline": {"text": "My Header 1"},
-                "footer": {"text": "My Footer 1"}
-            },
-            {
-                "headline": {"text": "My Header 2"},
-                "footer": {"text": "My Footer 2"}
-            }
-        ]
-    }
-}
-```
-
-## Using Variables
-
-You can refer to a variable `var` in a value as `"{var}"`. For example, the following card looks exactly the same as the one above:
-
-```json
-{
-    /*...
-    METADATA
-    ...*/
-    "_LOAD": {
-        "header_1": "My Header 1",
-        "_RETURN": [
-            {
-                "headline": {"text": "{header_1}"},
-                "footer": {"text": "My Footer 1"}
-            },
-            {
-                "headline": {"text": "My Header 2"},
-                "footer": {"text": "My Footer 2"}
-            }
-        ]
-    }
-}
-```
-
-A more complex example (that also looks the same):
-
-```json
-{
-    /*...
-    METADATA
-    ...*/
-    "_LOAD": {
-        "page_1": {
-            "headline": {"text": "My Header 1"},
-            "footer": {"text": "My Footer 1"}
-        },
-        "page_2": {
-            "headline": {"text": "My Header 2"},
-            "footer": {"text": "My Footer 2"}
-        },
-        "_RETURN": [
-            "{page_1}",
-            "{page_2}"
-        ]
-    }
-}
-```
-
-**Remark:** The keys of the `_LOAD` object are variables. However, the keys of any child object are **NOT**. For example, `"headline"` is not a variable in the example above, and so it cannot be referenced as `"{headline}"`.
-
-## Inserting/Concatenating String Variables
-
-The syntax `"{var}"` can also be used within a bigger string when `var` is a string variable. For example:
-
-```json
-{
-    /*...
-    METADATA
-    ...*/
-    "_LOAD": {
-        "header_word": "Header",
-        "footer_word": "Footer",
-        "first_number": 1,
-        "second_number": 2,
-        "_RETURN": [
-            {
-                "headline": {"text": "My {header_word} {first_number}"},
-                "footer": {"text": "My {footer_word} {first_number}"}
-            },
-            {
-                "headline": {"text": "My {header_word} {second_number}"},
-                "footer": {"text":  "My {footer_word} {second_number}"}
-            }
-        ]
+    "_FUNC_NAME": {
+        "_FIRST_PARAM_NAME": ...,
+        "_SECOND_PARAM_NAME": ...,
+        "_THIRD_PARAM_NAME": ...
     }
 }
 ```
