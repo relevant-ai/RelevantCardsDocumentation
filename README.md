@@ -328,6 +328,85 @@ You can also make richer requests using `_URL`, as exemplified below:
 }
 ```
 
+### The `_LOOP` Function
+
+This function loops an array and processes each of its items to produce a new array. For example, the variable `var` below takes the value `[1,2,3,4]`:
+
+```json
+"foo":[{"num":1,"name":"one"},{"num":2,"name":"two"},{"num":3,"name":"three"},{"num":4,"name":"four"}],
+"var":{
+    "_LOOP":{
+        "_ARRAY":"{foo}",
+        "_EACH":{"_PATH":["_ITEM","num"]}
+    }
+}
+```
+
+`_ARRAY` and `_EACH` are the parameter names of the function `_LOOP`, and must always be present. The implicit variable `_ITEM` exists only within the `_EACH` object, and represents the current element of the array. You may also use the implicit variable `_INDEX`, which is the current index between `0` and the array's length.
+
+You may use intermediate variables inside `_EACH` as long as there is a `_RETURN` key. In the example below, the variable `var` takes the value `["1 is one","2 is two","3 is three","4 is four"]`:
+
+```json
+"foo":[{"num":1,"name":"one"},{"num":2,"name":"two"},{"num":3,"name":"three"},{"num":4,"name":"four"}],
+"var":{
+    "_LOOP":{
+        "_ARRAY":"{foo}",
+        "_EACH":{
+            "num":{"_PATH":["_ITEM","num"]},
+            "name":{"_PATH":["_ITEM","name"]},
+            "_RETURN":"{num} is {name}"
+        }
+    }
+}
+```
+
+We may use `_LOOP` to improve upon the card exemplifying the `_URL` function above. Test this improved card by shaking your phone and inputing this URL: `https://gist.githubusercontent.com/wircho/c8f4f5b0ce440b8edd83/raw/8ef09440e96322e75220ff1470fbc4c65d76e6c2/cities_card`
+
+```json
+{
+    "id": "cities-card",
+    "title": "Cities",
+    "icon_url": "http://relevant.ai/cities.png",
+    "summary": "Card's summary for the library.",
+    "credits": "The Web",
+    "settings_type": "NONE",
+    "_LOAD": {
+        "json_info":{
+            "_URL":"https://gist.githubusercontent.com/wircho/d6c606350f8a6dca29ee/raw/b7872ecebfcc868ff825c88fe1c5e06d13ad618c/cities"
+        },
+        "_RETURN":{
+            "_LOOP":{
+                "_ARRAY":{"_PATH":["json_info","cities"]},
+                "_EACH":[
+                    {
+                        "banner":{
+                            "image": {"_PATH":["_ITEM","picture"]}
+                        }
+                    },
+                    {
+                        "description":{
+                            "title": {"_PATH":["_ITEM","name"]},
+                            "body": {"_PATH":["_ITEM","nickname"]}
+                        }
+                    },
+                    {
+                        "footer":{
+                            "caption": {"_PATH":["_ITEM","province"]}
+                        }
+                    }
+                ]
+            }
+        }
+        
+    }
+}
+```
+
+This is how the card above looks like after scrolling all the way to the right:
+
+![Cities Sample Card](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/cities_card.png)
+
+
 ### The `_MERGE` Function
 
 Takes an array of objects, strings, or arrays, and returns an array containing each of those objects, strings, and array elements. The syntax is as in the following example:
