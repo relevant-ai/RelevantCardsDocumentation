@@ -406,6 +406,37 @@ This is how the card above looks like after scrolling all the way to the right:
 
 ![Cities Sample Card](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/toronto_card.png)
 
+### The `_MATH` Function
+
+This function takes a string representing a mathematical expression, and returns the resulting number. In the example below, the variable `var` takes the value `2015`:
+
+```json
+"x":1000,
+"y":1,
+"z":1,
+"var":{"_MATH":"{x}+{x}+({y}+{z})*7.5"}
+```
+
+### Basic String Functions
+
+Basic string functions are built in functions that take a string and return a string. Some available basic string functions are listed below:
+
+**`_URL_ENCODE`:** Percent encoding for URL parameters.
+
+**`_URL_DECODE`:** Inverse of above.
+
+**`_UPPERCASE`:** Convert a String to uppercase.
+
+**`_LOWERCASE`:** Convert a String to lowercase.
+
+### Logic/Boolean Functions
+
+These are functions that take the role of common logic operators, returning a boolean (`true` or `false`). Some of these are listed below:
+
+**`_NOT`:** Takes a boolean and returs its opposite.
+**`_AND`:** Takes an array and returns whether all of its elements are `true`.
+**`_OR`:** Takes an array and returns whether any of its elements is `true`.
+**`_EQUAL`:** Takes an array of two JSON values and returns whether they are equal.
 
 ### The `_MERGE` Function
 
@@ -429,89 +460,6 @@ Takes an array of objects, strings, or arrays, and returns an array containing e
     ]
 }
 ```
-
-### The `_LOOP` Function
-
-Allows you to loop an array to get a new array of the same size but with modified contents. Its parameter keys are `"_ARRAY"` and `"_EACH"`. The first one is the array that is to be looped (you can make a reference to it using `_PATH`, the `"{var}"` syntax, or any other function). Inside the `"_EACH"` object you can use the local variables `"{_ITEM}"` and `"{_INDEX}"` representing the current array element and its index respectively. For example:
-
-```json
-{
-    /*...
-    METADATA
-    ...*/
-    "_LOAD": {
-        "info": {
-            "useless_stuff": {
-                "a": ["x","y","z"],
-                "b": "c"
-            },
-            "important_stuff": [
-                {
-                    "head": "My Header 1",
-                    "foot": "My Footer 1"
-                },
-                {
-                    "head": "My Header 2",
-                    "foot": "My Footer 2"
-                },
-                {
-                    "head": "My Header 3",
-                    "foot": "My Footer 3"
-                }
-            ]
-        },
-        "_RETURN": {
-            "_LOOP": {
-                "_ARRAY": {"_PATH":["info","important_stuff"]},
-                "_EACH": {
-                    "headline": {"_PATH":["_ITEM","head"]},
-                    "footer": {"_PATH":["_ITEM","foot"]}
-                }
-            }
-        }
-    }
-}
-```
-
-**Remark:** The example above would make a lot more sense, of course, if the variable `"info"` came for a web service (`_URL`).
-
-The `_EACH` object may contain variables itself, as long as it has a `"_RETURN"` key. For example, the `_EACH` object above may be replaced with:
-
-```json
-{
-    "_ARRAY": {"_PATH":["info","important_stuff"]},
-    "_EACH": {
-        "h": {"_PATH":["_ITEM","head"]},
-        "f": {"_PATH":["_ITEM","foot"]},
-        "_RETURN": {
-            "headline": "{h}",
-            "footer": "{f}"
-        }
-    }
-}
-```
-### Basic String Functions
-
-Basic string functions are built in functions that take a string and return a string. Some available basic string functions are listed below:
-
-**`_URL_ENCODE`:** Percent encoding for URL parameters.
-
-**`_URL_DECODE`:** Inverse of above.
-
-**`_HTML_ENCODE`:** HTML special characters encoding.
-
-**`_HTML_DECODE`:** Inverse of above.
-
-**`_UPPERCASE`:** Convert a String to uppercase.
-
-### Logic/Boolean Functions
-
-These are functions that take the role of common logic operators, returning a boolean (`true` or `false`). Some of these are listed below:
-
-**`_NOT`:** Takes a boolean and returs its opposite.
-**`_AND`:** Takes an array and returns whether all of its elements are `true`.
-**`_OR`:** Takes an array and returns whether any of its elements are `true`.
-**`_EQUAL`:** Takes an array of two elements and returns whether they are equal.
 
 ### The `_REPLACE` Function
 
@@ -574,22 +522,6 @@ This function takes a string `"_STRING"` and a separator string `"_SEPARATOR"`. 
         "_STRING": "a,b,c,d",
         "_SEPARATOR": ",",
     }
-}
-```
-
-### The `_MATH` function
-
-This function allows you to parse mathematical expressions from a string. For example:
-
-```json
-{
-    "_MATH": "5*2^10 + 1"
-}
-```
-
-```json
-{
-    "_MATH": "5*2^10 + {some_var}^{another_var}"
 }
 ```
 
