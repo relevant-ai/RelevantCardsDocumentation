@@ -1,5 +1,40 @@
 # Relevant Cards Documentation
-This document explains how to create relevant.ai cards.
+
+## Intro and First Sample
+
+This document explains how to create cards for the [Relevant iOS app](http://relevant.ai).
+
+A card is just a JSON file hosted somewhere on the web. This JSON file contains directions on how to gather the data and display it using templates such as banner images, footers, etc.
+
+Here is a sample "Hello World" card:
+
+```json
+{
+    "id": "hello-world",
+    "title": "Hello World Card",
+    "icon_url": "",
+    "summary": "",
+    "credits": "",
+    "settings_type": "NONE",
+    "_LOAD": [
+        [
+            {
+                "description":{
+                    "title": "Hello World",
+                    "body": "Hello World? There's a card for that."
+                }
+            },
+            {
+                "footer":{
+                    "caption": "Relevant - The Missing Home Screen"
+                }
+            }
+        ]
+    ]
+}
+```
+
+The first keys `id`, `title`, `icon_url`, `summary`, `credits`, and `settings-type` are metadata. The `"_LOAD"` key represents the appearance of the card.
 
 ## Basic Structure
 
