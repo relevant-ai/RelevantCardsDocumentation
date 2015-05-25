@@ -95,7 +95,7 @@ The easiest way to use a variable is using the syntax `"{variable_name}"`. For e
             "footer":{
                 "caption": "Relevant - The Missing Home Screen"
             }
-        }
+        },
         "_RETURN":[
             [
                 "{foo}",
@@ -138,127 +138,101 @@ The value of the key is the parameter of the function. This could be a string, a
 }
 ```
 
-## Paths
+Most of the rest of this documentation is devoted to introducing Rel's built in functions.
 
-A *path* is an object of the form `{"_PATH":[...]}` where `[...]` is an array whose first (0-th) element is a variable name, and each subsequent element is either a **string key** or an **integer index**. For example `{"_PATH":["my_rainbow","colors",3,"red"]}`. Paths can be used to fetch children of JSON objects. For example:
+### The `_PATH` function
+
+We often need to dig deep inside a JSON object or array, in order to fetch a specific value. This will be more useful when we get JSON objects following all kinds of different standards from web services (See the `_URL` function below).
+
+The `_PATH` function takes an array of strings and integers. The first string is the name of a variable. Every subsequent string or integer represents either an object's key, or an array's index. The result of the function call is obtained by recursively looking up these keys and indices into the variable.
+
+In the example bellow, the variable `var` takes the value `"Hello World"`
 
 ```json
-{
-    /*...
-    METADATA
-    ...*/
-    "_LOAD": {
-        "info": {
-            "useless_stuff": {
-                "a": ["x","y","z"],
-                "b": "c"
-            },
-            "important_stuff": [
-                {
-                    "head": "My Header 1",
-                    "foot": "My Footer 1"
-                },
-                {
-                    "head": "My Header 2",
-                    "foot": "My Footer 2"
-                }
-            ]
-        },
-        "_RETURN": [
-            {
-                "headline": {"_PATH":["info","important_stuff",0,"head"]},
-                "footer": {"_PATH":["info","important_stuff",0,"foot"]}
-            },
-            {
-                "headline": {"_PATH":["info","important_stuff",1,"head"]},
-                "footer": {"_PATH":["info","important_stuff",1,"foot"]}
-            }
-        ]
-    }
+"foo":{
+    "byes":[
+        {"value":"Adios Mundo","language":"Spanish"},
+        {"value":"Bye World","language":"English"}
+    ],
+    "hellos":[
+        {"value":"Hola Mundo","language":"Spanish"},
+        {"value":"Hello World","language":"English"}
+    ]
+},
+"var":{
+    "_PATH":["foo","hellos",0,"value"]
 }
 ```
 
-## Some Built-In Functions
-
-The keyword `"_PATH"` introduced above is just a function that's built into the language. These functions are usually invoked using objects of the form `{"_FUNCTION_NAME":{"_PARAM_NAME":...,"_ANOTHER_PARAM_NAME":...,...}}`. The exact syntax of a built-in function varies accross functions. These are some of the built in functions that are currently available:
-
-### The `_CONDITIONAL` Function
-
-Allows you to return two possible values depending on whether a condition is `true` (`>0`) or `false` (`0`). It's parameter keys are `"_IF"`, `"_THEN"` and `"_ELSE"`. For example:
-
-```json
-{
-    /*...
-    METADATA
-    ...*/
-    "_LOAD": {
-        "something": false,
-        "sentence": "something is {something}",
-        "_RETURN": {
-            "_CONDITIONAL": {
-                "_IF":"{something}",
-                "_THEN":[
-                    {
-                        "headline": {"text":"Good!"},
-                        "footer": "{sentence}",
-                    }
-                ],
-                "_ELSE":[
-                    {
-                        "headline": {"text":"Bad!"},
-                        "footer": "{sentence}"
-                    }
-                ]
-            }
-        }
-    }
-}
-```
+**Remark:** Observe that `{"_PATH":["variable_name"]}` is equivalent to `"{variable_name}"`.
 
 ### The `_PATH_EXISTS` Function
 
-Returns `true` (`1`) if an array of keys or indexes represents a path that exists, and `false` (`0`) otherwise. For example:
+Like `_PATH`, this function takes an array of strings and integers. It returns `true` (`1`) if this array represents a path that exists, and `false` (`0`) otherwise. For example:
 
 ```json
-{
-    /*...
-    METADATA
-    ...*/
-    "_LOAD": {
-        "object": {
-            "key_1": [
-                "element #1",
-                [
-                    "element",
-                    "#",
-                    "2"
-                ]
-            ],
-            "key_2": {
-                "red": 255,
-                "green": 255
-            }
-        },
-        "another_object": {
-            "something": "{object}"
-        },
-        "a": {
-            "_PATH_EXISTS":["another_object","something","key_1",1,1]
-        },
-        "b": {
-            "_PATH_EXISTS":["another_object","something","key_1",1,2]
-        },
-        "c": {
-            "_PATH_EXISTS":["another_object","something","key_2","blue"]
-        }
-        "_RETURN": {
-            /* ... */
-        }
+"object": {
+    "key_1": [
+        "element #1",
+        [
+            "element",
+            "#",
+            "2"
+        ]
+    ],
+    "key_2": {
+        "red": 255,
+        "green": 255
     }
+},
+"another_object": {
+    "something": "{object}"
+},
+"a": {
+    "_PATH_EXISTS":["another_object","something","key_1",1,1]
+},
+"b": {
+    "_PATH_EXISTS":["another_object","something","key_1",1,2]
+},
+"c": {
+    "_PATH_EXISTS":["another_object","something","key_2","blue"]
 }
 ```
 
-In the code above, the variables `"a"` and `"b"` are `1` (`true`), and the variable `"c"` is `0` (`false`).
+In the code above, the variables `a` and `b` are `1` (`true`), and the variable `c` is `0` (`false`).
+
+### The `_IF`, `_THEN`, `_ELSE` Function
+
+Unlike other built-in functions, this one is represented by an object with three keys. It works just as you would expect it in any programming language. In the example below, the variable `city` takes the value `"Montreal"`.
+
+```json
+"foo":true,
+"cities":["Montreal","Toronto"],
+"var":{
+    "_IF":"{foo}",
+    "_THEN":{"_PATH":["cities",0]},
+    "_ELSE":{"_PATH":["cities",1]}
+}
+```
+
+It is important to keep in mind that `_IF,_THEN,_ELSE` is a function, and not a construct, as in other programming languages. That means `_THEN` and `_ELSE` contain **values** to be *returned*, rather than **statements** to be *executed*.
+
+However, you may still wish to use intermediate variables inside `_THEN` and `_ELSE`. This is possible as long as they have a `_RETURN` key, as in the example below:
+
+```json
+"foo":true,
+"cities":["Montreal","Toronto"],
+"var":{
+    "_IF":"{foo}",
+    "_THEN":{
+        "city":{"_PATH":["cities",0]},
+        "_RETURN":"{city}"
+    },
+    "_ELSE":{"_PATH":["cities",1]}
+}
+```
+
+**Remark for scope geeks:** Rel uses block dynamic scope. In particular that means that the variable `city` is accessible only inside `_THEN`, and the variable `cities` is accessible everywhere in the code above.
 
 ### The `_URL` Function
 
