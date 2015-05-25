@@ -1,12 +1,12 @@
 # Relevant Cards Documentation
 
-## Intro and First Sample
-
 This document explains how to create cards for the [Relevant iOS app](http://relevant.ai).
 
-A card is just a JSON file hosted somewhere on the web. This JSON file directs the Relevant servers on how to gather the data and display it using templates such as banner images, footers, etc.
+A *card* is just a JSON file hosted somewhere on the web. This JSON file directs the Relevant servers on how to gather the data and display it using templates such as banner images, footers, etc.
 
-Here is a sample "Hello World" card:
+## Intro and Hello World
+
+Here is a sample *"Hello World"* card:
 
 ```json
 {
@@ -16,32 +16,95 @@ Here is a sample "Hello World" card:
     "summary": "Card's summary for the library.",
     "credits": "Relevant",
     "settings_type": "NONE",
-    "_LOAD": [
-        [
-            {
-                "description":{
-                    "title": "Hello World",
-                    "body": "Hello World? There's a card for that."
+    "_LOAD": {
+        "_RETURN":[
+            [
+                {
+                    "description":{
+                        "title": "Hello World",
+                        "body": "Hello World? There's a card for that."
+                    }
+                },
+                {
+                    "footer":{
+                        "caption": "Relevant - The Missing Home Screen"
+                    }
                 }
-            },
-            {
-                "footer":{
-                    "caption": "Relevant - The Missing Home Screen"
-                }
-            }
+            ]
         ]
-    ]
+    }
 }
 ```
 
-The first keys `id`, `title`, `icon_url`, `summary`, `credits`, and `settings-type` are metadata. Of these, only the `title` value is visible on the card itself.
+The keys `id`, `title`, `icon_url`, `summary`, `credits`, and `settings-type` are metadata. Of these, only the `title` value is visible on the card itself.
 
 The `"_LOAD"` key represents the content and appearance of the card.
 
-**To test this card;** launch the [Relevant iOS app](http://relevant.ai), shake your device, and when prompted, insert the following URL into the input box: `https://gist.githubusercontent.com/wircho/f250e0ae9f818637c9c5/raw/d2ebeb8306f7520f60f5f318bc721eb378dd4fe1/card`
+**To test this card;** launch the [Relevant iOS app](http://relevant.ai), shake your device, and when prompted, insert the following URL into the input box:
+
+`https://gist.githubusercontent.com/wircho/f250e0ae9f818637c9c5/raw/d2ebeb8306f7520f60f5f318bc721eb378dd4fe1/card`
 
 You should see the following card:
 
+![Hello World Sample Card](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/hello_world_card.png)
+
+Think of the object `_LOAD` as a function that is called every time the card needs to refresh. The `_RETURN` of this function is an array with only one element. That means this card has only one *page* (swiping left and right will do something). This page is itself an array of *templates*: A `description` template with parameters `title` and `body`, and a `footer` template with parameter `caption`.
+
+**REMARK:** The `_RETURN` of the `_LOAD` function must always be an array of arrays. Each element of the outer array is a *page* and each element of the inner array is a *template*.
+
+## The Rel Language
+
+Everything inside the `_LOAD` function must follow the syntax of the Rel language. Reserved words/keys for the Rel language are usually uppercase and preceded by an *underscore* (`_`).
+
+### Variables
+
+You can define variables inside the `_LOAD` function as follows:
+
+```json
+"_LOAD":{
+    "foo":5,
+    "var":[1,"a",{"b":"c"}],
+    "norf":{"x":50.1,"y":-70},
+    "_RETURN": ...
+}
+```
+
+Normally, unless used somewhere in `_RETURN`, these variables will be ignored. This makes Rel *lazy*; it only does things if needed and when needed.
+
+The easiest way to use a variable is using the syntax `"{variable_name}"`. For example, the Hello World card from before is equivalent to the one below:
+
+```json
+{
+    "id": "hello-world",
+    "title": "Hello World Card",
+    "icon_url": "http://relevant.ai/hello_world.png",
+    "summary": "Card's summary for the library.",
+    "credits": "Relevant",
+    "settings_type": "NONE",
+    "_LOAD": {
+        "hello":"Hello World",
+        "foo":{
+            "description":{
+                "title": "{hello}",
+                "body": "{hello}? There's a card for that."
+            }
+        },
+        "var":{
+            "footer":{
+                "caption": "Relevant - The Missing Home Screen"
+            }
+        }
+        "_RETURN":[
+            [
+                "{foo}",
+                "{var}"
+            ]
+        ]
+    }
+}
+```
+
+In this card the `_LOAD` function has three intermediate variables, named `hello`, `foo`, and `var`.
 
 
 ## Basic Structure
