@@ -48,13 +48,13 @@ You should see the following card:
 
 ![Hello World Sample Card](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/hello_world_card.png)
 
-Think of the object `_LOAD` as a function that is called every time the card needs to refresh. The `_RETURN` of this function is an array with only one element. That means this card has only one *page* (swiping left and right will do something). This page is itself an array of *templates*: A `description` template with parameters `title` and `body`, and a `footer` template with parameter `caption`.
+Think of the object `_LOAD` as a function that is called every time the card needs to refresh. The `_RETURN` of this function is an array with **only one element**. That means this card has **only one page** (swiping left and right will do something). This page is itself an array of **templates**: A `description` template with parameters `title` and `body`, and a `footer` template with parameter `caption`.
 
 **REMARK:** The `_RETURN` of the `_LOAD` function must always be an array of arrays. Each element of the outer array is a *page* and each element of the inner array is a *template*.
 
 ## The Rel Language
 
-Everything inside the `_LOAD` function must follow the syntax of the Rel language. Reserved words/keys for the Rel language are usually uppercase and preceded by an *underscore* (`_`).
+Everything inside the `_LOAD` function must follow the syntax of the Rel language. Reserved words/keys for the Rel language are uppercase and preceded by an *underscore* (`_`). Everything else is what it looks like: a JSON object, array, string, or number.
 
 ### Variables
 
