@@ -434,9 +434,15 @@ Basic string functions are built in functions that take a string and return a st
 These are functions that take the role of common logic operators, returning a boolean (`true` or `false`). Some of these are listed below:
 
 **`_NOT`:** Takes a boolean and returs its opposite.
+
 **`_AND`:** Takes an array and returns whether all of its elements are `true`.
+
 **`_OR`:** Takes an array and returns whether any of its elements is `true`.
+
 **`_EQUAL`:** Takes an array of two JSON values and returns whether they are equal.
+
+
+# NEW DOCUMENTATION HAS BEEN EDITED UNTIL THIS POINT!
 
 ### The `_MERGE` Function
 
