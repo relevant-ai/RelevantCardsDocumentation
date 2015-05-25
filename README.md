@@ -238,9 +238,34 @@ However, you may still wish to use intermediate variables inside `_THEN` and `_E
 
 ### The `_URL` Function
 
-Allows you to make a call to a web service that returns a JSON object. To test this function we're using this JSON file:
+Allows you to make a call to a web service that returns a JSON object. To test this function we're using the JSON from this URL:
 
 `https://gist.githubusercontent.com/wircho/d6c606350f8a6dca29ee/raw/b7872ecebfcc868ff825c88fe1c5e06d13ad618c/cities`
+
+```json
+{
+    "cities":[
+        {
+            "picture":"http://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/df/montreal.jpg",
+            "name":"Montreal",
+            "nickname":"The City Of Saints",
+            "province":"Quebec"
+        },
+        {
+            "picture":"http://images.hellobc.com/mgen/tbccw/production/TBCCWDisplay.ms?img=/getmedia/4149a8de-fc5d-4e54-b659-5282486fa973/2-200291313-001-Vancouver-skyline.jpg.aspx&tl=1&sID=1&c=public,max-age=172802,post-check=7200,pre-check=43200&bid=4_5",
+            "name":"Vancouver",
+            "nickname":"Hollywood North",
+            "province":"British Columbia"
+        },
+        {
+            "picture":"http://www.seetorontonow.com/App_Themes/tourismtoronto/images/about-tourism-toronto.jpg",
+            "name":"Toronto",
+            "nickname":"T-Dot",
+            "province":"Ontario"
+        }
+    ]
+}
+```
 
 The card below exemplifies the use of the `_URL` function. You can test it by shaking your phone and adding the card `https://gist.githubusercontent.com/wircho/327fef8392c1865dec5e/raw/5aa7e97fa166888c3bd8d0f38c4b062deebc6819/city_card`
 
