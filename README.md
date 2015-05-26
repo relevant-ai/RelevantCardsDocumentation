@@ -829,8 +829,10 @@ Each page of this card contains the templates `banner` (the city's picture), `de
 | **`double-profile`** (two circle images side by side)   | **`image-i`** (`i=1,2`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image. <br/><br/> **`caption-i`** (`i=1,2`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;Caption under image <br/><br/> **`border-color-i`** (`i=1,2`) <br/> &nbsp;&nbsp;&nbsp;&nbsp; Border color of image |
 | **`stats`** (one, two, or three stats)   | **`type`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"single"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"double"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"triple"` (default) <br/><br/> **`value-i`** (`i=1,2,3`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;Stats value (e.g. `"200"`) <br/><br/> **`title-i`** (`i=1,2,3`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;Caption under stats value (e.g. `"visitors"`) |
 | **`scalar`** (value and image)   | **`value`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Value on the left <br/><br/> **`image`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image on the right |
-| **`buttons`** (one, two, or three buttons) | This template does not take an object of parameters<br/><br/> Instead it takes an array of one, two, or three<br/> **REL Actions** to be executed on tap<br/> (See **REL Actions** below)|
-| **`sectional`** (light gray background for last template)<br/><br/> When used it should be the **last visible template** of a card. | This template does not take parameters<br/><br/> Simply use `{"sectional":true}` |
+| **`buttons`** (one, two, or three buttons) | This template does not take an object of parameters<br/><br/> Instead it takes an array of one, two, or three **REL Actions** to be executed on tap (See **REL Actions** below)|
+| **`sectional`** (light gray background for last template)<br/><br/> When used it should be the **last visible template** of a card. | This template does not take parameters. Simply use `{"sectional":true}` |
+
+
 
 ## Actions:
 
