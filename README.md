@@ -146,7 +146,7 @@ Most of the rest of this documentation is devoted to introducing REL's built in 
 
 We often need to dig deep inside a JSON object or array, in order to fetch a specific value. This will be more useful when we get JSON objects following all kinds of different standards from web services (See the `_URL` function below).
 
-The `_PATH` function takes an array of strings and integers. The first string is the name of a variable. Every subsequent string or integer represents either an object's key, or an array's index. The result of the function call is obtained by recursively looking up these keys and indices into the variable.
+The `_PATH` function takes an array of strings and integers. The first string is the name of a variable. Every subsequent string or integer represents either an object's key, or an array's index. The result of the function call is obtained by recursively looking up these keys and indices into the variable. Whenever a look up fails, the function `_PATH` returns `null`.
 
 In the example bellow, the variable `var` takes the value `"Hello World"`
 
@@ -468,7 +468,7 @@ It is possible to reverse the ordering using `"_REVERSE":true`:
 
 Sorting by a comparison function is just as easy, except the key is now `_BY_FUNCTION` and it holds an expression depending on two implicit local parameters. The local parameters are keyed `"_A"` and `"_B"` and represent two arbitrary items in the `"_ARRAY"`. The function/expression must return `1` (`true`) if the items should be ordered `"_A","_B"` and `0` (`false`) if they should be ordered `"_A","_B"`
 
-See the `_MATH` function below to understand this example.
+See the `_MATH` and `_CONCAT` functions to understand this example.
 
 ```json
 "var":{
@@ -490,6 +490,8 @@ See the `_MATH` function below to understand this example.
 ### Other Array Functions
 
 **`_COUNT`** Takes an array and returns its number of elements. All throughout REL, null elements are ignored from computed objects and arrays, and so they don't count towards an array's `_COUNT`.
+
+**`_FOR`** (for loop) Similar to `_LOOP` but with parameters `_FOR,_TO,_EACH`, and implicit variable `_INDEX` within `_EACH`. For example, `{"_FOR":{"_FROM":0,"_TO":10,"_EACH":"{_INDEX}"}}` returns the array `[0,1,2,3,4,5,6,7,8,9,10]`. You can use the optional parameter `_STEP` as well.
 
 **`_MERGE`:** Takes an array of objects, strings, or arrays, and returns an array containing each of those objects, strings, and array elements. For example, the variable `var` below takes the value `[1,2,3,4,5,6,7,8,9]`
 
@@ -608,11 +610,15 @@ These are functions that take the role of common logic operators, returning a bo
 
 ### Number Functions
 
-Some functions to format and manipulate numbers.
+Some functions to format and manipulate numbers (also see **The `_MATH` Function** above).
+
+**`_RANDOM`** `{"_RANDOM":100}`, for example, returns a random integer between 0 and 99.
 
 **`_ROUND`:** Rounds a number to its closest integer.
 
 **`_FLOOR`:** Rounds **down** a number to its closest integer.
+
+**`_DECIMAL`:** Displays a number using the standard format used for currency in the English language, with comma-separated thousands, e.g. `1,000.02` or `1,000`. Support for other locales will become available in future versions of Relevant.
 
 ### The `_DATE` Function
 
@@ -883,6 +889,8 @@ The following *error handling* functions may be used to stop errors from propaga
 
 **`_ERROR_CODE`:** Returns an error's numeric error code. This is useful when handling http request errors from `_URL` calls.
 
+**`_IS_NULL_OR_ERROR`** Returns whether the passed object is `null` or an error.
+
 **`_FIRST_NOT_ERROR`** Returns the first element of an array which is neither `null` nor an error.
 
 ### REL Actions
@@ -910,6 +918,15 @@ The complete list of `_ICON`s available on Relevant 1.0 is: `"done_icon"`, `"eye
     "_WEBVIEW":"http://github.com"
 }
 ```
+
+**Open External URL or Deeplink** (Open URL or iOS Deeplink)
+```json
+"_DO":{
+    "_DEEPLINK":"http://github.com"
+}
+```
+
+**Remark:** You may wish to wrap the function `_DEEPLINK` inside an `_IF,_THEN,_ELSE` conditioning on `{"_CAN_DEEPLINK":"http://github.com"}` to make sure you're not calling an URL that cannot be opened by the device.
 
 **Show MapView** (MapView with directions to a given latitude and longitude)
 ```json
