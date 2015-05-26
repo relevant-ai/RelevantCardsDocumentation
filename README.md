@@ -776,7 +776,7 @@ Once this card is loaded, a webview pops up with the content shown below. Swipe 
 
 ![Logs](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/cities_logs.png)
 
-## Using Templates:
+### Using Templates:
 
 Let us take another look at the cities card (`https://gist.githubusercontent.com/wircho/c8f4f5b0ce440b8edd83/raw/8ef09440e96322e75220ff1470fbc4c65d76e6c2/cities_card`):
 
@@ -829,9 +829,17 @@ Each page of this card contains the templates `banner` (the city's picture), `de
 | **`double-profile`** (two circle images side by side)   | **`image-i`** (`i=1,2`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image. <br/><br/> **`caption-i`** (`i=1,2`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;Caption under image <br/><br/> **`border-color-i`** (`i=1,2`) <br/> &nbsp;&nbsp;&nbsp;&nbsp; Border color of image |
 | **`stats`** (one, two, or three stats)   | **`type`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"single"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"double"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"triple"` (default) <br/><br/> **`value-i`** (`i=1,2,3`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;Stats value (e.g. `"200"`) <br/><br/> **`title-i`** (`i=1,2,3`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;Caption under stats value (e.g. `"visitors"`) |
 | **`scalar`** (value and image)   | **`value`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Value on the left <br/><br/> **`image`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image on the right |
-| **`buttons`** (one, two, or three buttons) | This template does not take an object of parameters<br/><br/> Instead it takes an array of one, two, or three **REL Actions** to be executed on tap (See **REL Actions** below)|
+| **`buttons`** (one, two, or three buttons) | This template does not take an object of parameters<br/><br/> Instead it takes an array of one, two, or three **REL Actions** to be performed on tap (See **REL Actions** below)|
 | **`sectional`** (light gray background for last template)<br/><br/> When used it should be the **last visible template** of a card. | This template does not take parameters. Simply use `{"sectional":true}` |
 
+### Advanced Templates (`actions` and `handler`):
+
+`actions` and `handler` are templates which may be inserted **at the beginning of each page's array**, and are not part of the card content. However they may be essential to the functionality of some cards.
+
+| Advanced Template        | Parameters <br/> Possible Values + Notes 
+| ------------- |-------------|
+| **`actions`** (touch down actions)  | Just like the **`buttons`** template, it takes an array of **REL Actions** (See **REL Actions** below), to be performed when the card is held down and the corresponding action is selected. |
+| **`handler`** (touch down actions)  | This template allows you to customize the text on the card's title (top left) for each page of the card. For example, the following `handler` template could be added to the cities card (`https://gist.githubusercontent.com/wircho/c8f4f5b0ce440b8edd83/raw/8ef09440e96322e75220ff1470fbc4c65d76e6c2/cities_card`) to display the name of each city on the card's title<br/><br/> `{"handler":{"_PATH":["_ITEM","name"]}}` |
 
 
 ## Actions:
