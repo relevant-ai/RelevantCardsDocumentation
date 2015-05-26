@@ -680,7 +680,7 @@ It is possible get the distance between two coordinates using `{"_COORDIST":[...
         "{_LOCATION}",
         {
             "latitude":37.797929,
-            "longitude:"-122.428931
+            "longitude:-122.428931
         }
     ]
 }
