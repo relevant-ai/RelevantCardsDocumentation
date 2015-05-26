@@ -1097,7 +1097,7 @@ Occassianally you may wish to have some variables which are only computed once, 
 
 The functions `_SMALL,_BOLD,_RED,_PINK,_PURPLE,_GREEN,_YELLOW,_ORANGE,_BLUE,_CYAN,_GRAY,_DARKGRAY,_WHITE` allow you to enhance the text in card templates by resizing or coloring fonts. All of these functions take a string (or a rich text) and return rich text. You may use `_CONCAT` with rich text.
 
-These functions should only be used at last to populate templates, in order to prevent passing rich text to functions such as `_MATH`, which will silently fail.
+These functions should only be used at the end to populate templates, in order to prevent passing rich text to functions such as `_MATH`, which would silently fail.
 
 
 
