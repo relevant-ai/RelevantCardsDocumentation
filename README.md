@@ -839,7 +839,7 @@ Each page of this card contains the templates `banner` (the city's picture), `de
 | Advanced Template        | Parameters <br/> Possible Values + Notes 
 | ------------- |-------------|
 | **`actions`** (touch down actions)  | Just like the **`buttons`** template, it takes an array of **REL Actions** (See **REL Actions** below), to be performed when the card is held down and the corresponding action is selected. |
-| **`handler`** (touch down actions)  | This template allows you to customize the text on the card's title (top left) for each page of the card. For example, the following `handler` template could be added to the cities card (`https://gist.githubusercontent.com/wircho/c8f4f5b0ce440b8edd83/raw/8ef09440e96322e75220ff1470fbc4c65d76e6c2/cities_card`) to display the name of each city on the card's title<br/><br/> `{"handler":{"_PATH":["_ITEM","name"]}}` |
+| **`handler`** (card's title)  | This template allows you to customize the text on the card's title (top left) for each page of the card.<br/><br/>For example, the following `handler` template could be added to the cities card (`https://gist.githubusercontent.com/wircho/c8f4f5b0ce440b8edd83/raw/8ef09440e96322e75220ff1470fbc4c65d76e6c2/cities_card`) to display the name of each city on the card's title:<br/><br/> `{"handler":{"_PATH":["_ITEM","name"]}}` |
 
 
 ## Actions:
