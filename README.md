@@ -406,6 +406,94 @@ This is how the card above looks like after scrolling all the way to the right:
 
 ![Cities Sample Card](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/toronto_card.png)
 
+### Filtering Arrays Using `_LOOP`
+
+The example below shows that it is possible to filter out some elements of an array using `_LOOP`, simply by returning `null` in `_EACH`. The variable `var` takes the value `[1,3,4,5]`.
+
+```json
+"foo":[true,false,true,true,true,false],
+"var":{
+    "_LOOP": {
+        "_ARRAY": [1,2,3,4,5,6],
+        "_EACH" : {
+            "_IF":{"_PATH":["foo","{_INDEX}"]},
+            "_THEN":"{_ITEM}",
+            "_ELSE":null
+        }
+    }
+}
+```
+
+### The `_SORT` Function
+
+This function sorts an `_ARRAY` parameter. The parameter `_BY` defines the sorting condition. As in `_LOOP`, the elements of the array are represented by the implicit local variable `_ITEM` inside `_BY`.
+
+```json
+"var":{
+    "_SORT": {
+        "_ARRAY": [{"info":{"number":5}},{"info":{"number":3}},{"info":{"number":8}}],
+        "_BY": {"_PATH":["_ITEM","info","number"]}
+    }
+}
+```
+
+It is possible to reverse the ordering using `"_REVERSE":true`:
+
+```json
+"var":{
+    "_SORT": {
+        "_ARRAY": [{"info":{"number":5}},{"info":{"number":3}},{"info":{"number":8}}],
+        "_BY": {"_PATH":["_ITEM","info","number"]},
+        "_REVERSE":true
+    }
+}
+```
+
+Sorting by a comparison function is just as easy, except the key is now `_BY_FUNCTION` and it holds an expression depending on two implicit local parameters. The local parameters are keyed `"_A"` and `"_B"` and represent two arbitrary items in the `"_ARRAY"`. The function/expression must return `1` (`true`) if the items should be ordered `"_A","_B"` and `0` (`false`) if they should be ordered `"_A","_B"`
+
+See the `_MATH` function below to understand this example.
+
+```json
+"var":{
+    "_SORT": {
+        "_ARRAY": [{"info":{"number":5}},{"info":{"number":3}},{"info":{"number":8}}],
+        "_BY_FUNCTION": {
+            "_MATH":{
+                "_CONCAT":[
+                    {"_PATH":["_A","info","number"]},
+                    "<",
+                    {"_PATH":["_B","info","number"]}
+                ]
+            }
+        }
+    }
+}
+```
+
+### Other Array Functions
+
+**`_MERGE`:** Takes an array of objects, strings, or arrays, and returns an array containing each of those objects, strings, and array elements. For example, the variable `var` below takes the value `[1,2,3,4,5,6,7,8,9]`
+
+```json
+"var":{
+    "_MERGE":[
+        1,
+        [
+            2,
+            3,
+            4,
+            5
+        ],
+        6,
+        7,
+        [
+            8,
+            9
+        ]
+    ]
+}
+```
+
 ### The `_MATH` Function
 
 This function takes a string representing a mathematical expression, and returns the resulting number. In the example below, the variable `var` takes the value `2015`:
@@ -429,6 +517,58 @@ Basic string functions are built in functions that take a string and return a st
 
 **`_LOWERCASE`:** Convert a String to lowercase.
 
+### Other String Functions
+
+**`_CONCAT`:** Takes an array of strings (or numbers) and concatenates them to form a string.
+
+**`_JOIN`:** Takes an array of strings (or numbers) and joins them by a given string. For example, the variable `var` below takes the value `"a-b-c"`:
+
+```json
+"foo":["a","b","c"],
+"var":{
+    "_JOIN":{
+        "_ARRAY":"{foo}",
+        "_WITH":"-"
+    }
+}
+```
+
+**`_SPLIT`:** This function takes a string `_STRING` and a separator string `_SEPARATOR`. It returns the array that results from splitting the string by the separator. For example, the variable `var` below takes the value `[a,b,c,d]`:
+
+```json
+"var":{
+    "_SPLIT": {
+        "_STRING": "a, b, c, d",
+        "_SEPARATOR": ", ",
+    }
+}
+```
+
+**`_REPLACE`:** Takes parameters `_STRING`, `_SEARCH` and `_REPLACEMENT`. `_STRING` is a string. `_SEARCH` and `_REPLACEMENT` must be strings or equally long arrays of strings. Returns a string that results from replacing each ocurrence of a string from `_SEARCH` in `_STRING` with the corresponding element in `_REPLACEMENT`. An optional parameters `"_REGEX":true` may be used for regular expression search. In both examples below, the variable `var` takes the value `"ABC"`:
+
+```json
+"foo":"A123B123C123",
+"var":{
+    "_REPLACE":{
+        "_STRING":"{foo}",
+        "_SEARCH":["12","3"],
+        "_REPLACEMENT":["",""]
+    }
+}
+```
+
+```json
+"foo":"A123B45C6789",
+"var":{
+    "_REPLACE":{
+        "_STRING":"{foo}",
+        "_SEARCH":"[1-9]",
+        "_REPLACEMENT":"",
+        "_REGEX":true
+    }
+}
+```
+
 ### Logic/Boolean Functions
 
 These are functions that take the role of common logic operators, returning a boolean (`true` or `false`). Some of these are listed below:
@@ -441,64 +581,26 @@ These are functions that take the role of common logic operators, returning a bo
 
 **`_EQUAL`:** Takes an array of two JSON values and returns whether they are equal.
 
-
-# NEW DOCUMENTATION HAS BEEN EDITED UNTIL THIS POINT!
-
-### The `_MERGE` Function
-
-Takes an array of objects, strings, or arrays, and returns an array containing each of those objects, strings, and array elements. The syntax is as in the following example:
-
-```json
-{
-    "_MERGE":[
-        "String 1",
-        [
-            "String 3",
-            "String 4",
-            "String 5"
-        ],
-        "String 6",
-        "String 7",
-        [
-            "String 8",
-            "String 9"
-        ]
-    ]
-}
-```
-
-### The `_REPLACE` Function
-
-This function allows you to replace all ocurrences of the string parameter keyed by `"_SEARCH"` with the string parameters keyed by `"_REPLACEMENT"` in the string parameters keyed by `"_STRING"`. You can also perform regular expressions replacements by having a parameter `"_REGEX"` equal `true` or `1`. For example:
-
-```json
-{
-    "_REPLACE": {
-        "_STRING":"03/17/2015",
-        "_SEARCH":"/",
-        "_REPLACEMENT":"-"
-    }
-}
-```
-
 ### The `_DATE` Function
 
 This function always returns a string representing a date in a given format. The only required parameter is `"_FORMAT_OUT"`. The example below returns today's date in the format yyyy-MM-dd:
 
 ```json
-{
+"todays_date":{
     "_DATE": {
         "_FORMAT_OUT":"yyyy-MM-dd",
     }
 }
 ```
 
-[Click here for a list of all available formats](http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns).
+You may also include hours, minutes, seconds, and milliseconds. [Click here for a list of all available formats](http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns).
 
-You can use the parameter `"_OFFSET"` to offset the current date by any number of seconds. This example returns yesterday's date:
+Besides these formats, you could also use `"<<timestamp>>"` (return a [UNIX timestamp, i.e. seconds since 1970](http://en.wikipedia.org/wiki/Unix_time)), `"<<ago>>"` (string such as `"11 minutes ago"`), `"<<fb-ago>>"` (facebook style), or `"<<min-ago>>"` (string such as `"11m"`).
+
+You can use the parameter `"_OFFSET"` to offset the current time by any number of seconds. This example produces yesterday's date:
 
 ```json
-{
+"yesterdays_date":{
     "_DATE": {
         "_OFFSET": -86400,
         "_FORMAT_OUT": "yyyy-MM-dd",
@@ -506,100 +608,24 @@ You can use the parameter `"_OFFSET"` to offset the current date by any number o
 }
 ```
 
-Instead of using today's date, you can also input a fixed date using the parameter "`_VALUE`", which is either a timestamp (seconds since 1970), or a formatted date string. In the latter case, it is also necessary to have a parameter "`_FORMAT_IN`". For example:
+Instead of using today's date, you can also input a fixed date using the parameter "`_VALUE`", which is either a [UNIX timestamp (seconds since 1970)](http://en.wikipedia.org/wiki/Unix_time), or a formatted date string. In the latter case, it is also necessary to include a parameter "`_FORMAT_IN`". For example:
 
 ```json
-{
+"some_date":{
     "_DATE": {
-        "_VALUE": "01-11-2022",
-        "_FORMAT_IN": "MM-dd-yyyy",
+        "_VALUE": "01/11/2022",
+        "_FORMAT_IN": "MM/dd/yyyy",
         "_FORMAT_OUT": "yyyy-MM-dd",
     }
 }
 ```
 
-### The `_SPLIT` Function
+### The `_WEB_CALLBACK` Function (Web View for User Input)
 
-This function takes a string `"_STRING"` and a separator string `"_SEPARATOR"`. It returns the array that results from splitting the string by the separator. For example
-
-```json
-{
-    "_SPLIT": {
-        "_STRING": "a,b,c,d",
-        "_SEPARATOR": ",",
-    }
-}
-```
-
-### The `_SORT` Function
-
-This function sorts an array parameter keyed by `"_ARRAY"` by either a path or a function. Ordering by path is simpler, as you just write an array of keys or indexes that represents a path, and the array is sorted either alphabetically or numerically. For example:
+It is possible to pop up a webview while a relevant card is being loaded, be it for user authentication, or any other form of user input. This is achieved with the `_WEB_CALLBACK` function. This function will return either when the user dismisses the webview manually, or when a certain base URL is loaded as a result of navigation. This functions looks like this:
 
 ```json
-{
-    "_SORT": {
-        "_ARRAY": [{"info":{"number":5}},{"info":{"number":3}},{"info":{"number":8}}],
-        "_BY_PATH": ["info","number"]
-    }
-}
-```
-
-You can also reverse the order as follows:
-
-```json
-{
-    "_SORT": {
-        "_ARRAY": [{"info":{"number":5}},{"info":{"number":3}},{"info":{"number":8}}],
-        "_BY_PATH": ["info","number"],
-        "_REVERSE": true
-    }
-}
-```
-
-Sorting by function is just as easy, except the key is now `"_BY_FUNCTION"` and it holds a function (see User Defined Functions), i.e., an expression depending on two local parameters. The local parameters are keyed `"_A"` and `"_B"` and represent two arbitrary items in the `"_ARRAY"`. The function/expression must return `1` (`true`) if the items should be ordered `"_A","_B"` and `0` (`false`) if they should be ordered `"_A","_B"`
-
-```json
-{
-    "_SORT": {
-        "_ARRAY": [{"info":{"number":5}},{"info":{"number":3}},{"info":{"number":8}}],
-        "_BY_FUNCTION": {
-            "_MATH":{
-                "_CONCAT":[
-                    {"_PATH":["_A","info","number"]},
-                    "<",
-                    {"_PATH":["_B","info","number"]}
-                ]
-            }
-        }
-    }
-}
-```
-
-### Filtering Arrays Using `_LOOP`
-
-It is important to know that `null` values get removed entirely from computed objects. Thus one could for example filter out every other element of an array by simply doing:
-
-```json
-{
-    "_LOOP": {
-        "_ARRAY": /* ... */,
-        "_EACH" : {
-            "_CONDITIONAL": {
-                "_IF":{"_MATH":"{_INDEX}%2==0"},
-                "_THEN":null,
-                "_ELSE":"{_ITEM}"
-            }
-        }
-    }
-}
-```
-
-### The `_WEB_CALLBACK` Function (Web View for User Input or Authentication)
-
-It is possible to pop up a webview when a relevant card is loaded, be it for user authentication, or any other form of user input. This is achieved with the `_WEB_CALLBACK` function. This function will return either when the user dismisses the webview manually, or when a certain base URL is loaded as a result of navigation. This functions looks like this:
-
-```json
-{
+"var":{
     "_WEB_CALLBACK": {
         "_ADDRESS":"http://relevant.ai/",
         "_CALLBACK_BASE":"relevant.ai/callback"
@@ -607,7 +633,7 @@ It is possible to pop up a webview when a relevant card is loaded, be it for use
 }
 ```
 
-Notice that the callback base URL **does not contain the protocol http://**. If the user dismisses the webview, then the function returns `null`. Otherwise it returs an object of the form:
+The parameter `_ADDRESS` is the initial URL of the webview. The webview will dismiss automatically once it reaches a URL prefixed by the `_CALLBACK_BASE`. **Remember not to include the protocol http:// in the `_CALLBACK_BASE`**. If the user dismisses the webview manually, then this function returns `null`. Otherwise it returs an object of the form:
 
 ```json
 {
@@ -622,7 +648,25 @@ Notice that the callback base URL **does not contain the protocol http://**. If 
 }
 ```
 
-Notice that this return only contains information about the request that was made. This is because the webview is dismissed before its content is loaded.
+This object contains information about the request that was made by the webview upon dismissing. This request is never actually made.
+
+### User-Defined Functions (`_FUNCTION` and `_APPLY`)
+
+It is possible to define your own functions. In the example below we define a function `increment` which takes numbers `X`,`Y` and returns `X+Y+1`:
+
+```json
+"increment":{
+    "_FUNCTION":{"_MATH":"{X}+{Y}+1"}
+}
+```
+
+To apply this function you use `_APPLY` on a dictionary whose only key is the name of the function. The value of this key represents the parameters that are passed to the function, as in the following example, in which `var` takes the value `101`:
+
+```json
+"var":{
+    "_APPLY":{"increment":{"X":45,"Y":55}}
+}
+```
 
 ## Templates (Card Appearance):
 
