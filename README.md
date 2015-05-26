@@ -668,6 +668,19 @@ To apply this function you use `_APPLY` on a dictionary whose only key is the na
 }
 ```
 
+A function's body may contain intermediate variables, as long as it has a `_RETURN` key. The function `increment_1` below is equivalent to `increment` above.
+
+```json
+"increment_1":{
+    "_FUNCTION":{
+        "Z":{"_MATH":"{X}+{Y}"},
+        "_RETURN":{"_MATH":"{Z}+1"}
+    }
+}
+```
+
+
+
 ## Templates (Card Appearance):
 
 Let us go back to the first example of a fully functional card:
