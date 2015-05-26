@@ -645,13 +645,16 @@ The parameter `_ADDRESS` is the initial URL of the webview. The webview will dis
 
 ```json
 {
-    "url":/* URL ABSOLUTE STRING */,
+    "url":"http://url/absolute/string",
     "body":{
-        /* URL PARAMETERS AND VALUES */
+        "param1":"value1",
+        "param2":"value2"
     },
-    "method":/* "GET" OR "POST" OR OTHER */,
+    "method":"GET or POST or any other method",
     "headers":{ 
-        /* HEADER TITLES AND VALUES */
+        "Header One":"value of header one",
+        "Header Two":"value of header two",
+        "Header Three":"value of header three"
     }
 }
 ```
@@ -726,7 +729,7 @@ Because of the simplicity and readability of REL, as long as variables are conve
 }
 ```
 
-### Logging (The `_LOG` Function):
+### Logging (The `_LOG` Function)
 
 The `_LOG` function takes any string, number, array, or object, and returns that same string, number, array, or object. However, it also writes this value into a *logs* document. Every time a card containing `_LOG` is refreshed, this document pops up. You can also show the logs of a card without refreshing it, by holding down on the card and selecting the *logs* (console) icon.
 
@@ -776,7 +779,7 @@ Once this card is loaded, a webview pops up with the content shown below. Swipe 
 
 ![Logs](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/cities_logs.png)
 
-### Using Templates:
+### Using Templates
 
 Let us take another look at the cities card (`https://gist.githubusercontent.com/wircho/c8f4f5b0ce440b8edd83/raw/8ef09440e96322e75220ff1470fbc4c65d76e6c2/cities_card`):
 
@@ -832,7 +835,7 @@ Each page of this card contains the templates `banner` (the city's picture), `de
 | **`buttons`** (one, two, or three buttons) | This template does not take an object of parameters<br/><br/> Instead it takes an array of one, two, or three **REL Actions** to be performed on tap (See **REL Actions** below)|
 | **`sectional`** (light gray background for last template)<br/><br/> When used it should be the **last visible template** of a card. | This template does not take parameters. Simply use `{"sectional":true}` |
 
-### Advanced Templates (`actions` and `handler`):
+### Advanced Templates (`actions` and `handler`)
 
 `actions` and `handler` are templates which may be inserted **at the beginning of each page's array**, and are not part of the card content. However they may be essential to the functionality of some cards.
 
@@ -842,35 +845,18 @@ Each page of this card contains the templates `banner` (the city's picture), `de
 | **`handler`** (card's title)  | This template allows you to customize the text on the card's title (top left) for each page of the card.<br/><br/>For example, the following `handler` template could be added to the cities card (`https://gist.githubusercontent.com/wircho/c8f4f5b0ce440b8edd83/raw/8ef09440e96322e75220ff1470fbc4c65d76e6c2/cities_card`) to display the name of each city on the card's title:<br/><br/> `{"handler":{"_PATH":["_ITEM","name"]}}` |
 
 
-## Actions:
+### REL Actions
 
-Relevant cards allow you to perform actions by holding down your finger on the card. The default actions are *refresh*, *share* and *zoom-in*. You can add more actions to the library using the `actions` template. For this you don't need to add `"actions"` to your `"templates metadata"`. You simply need to add an `"actions"` key to each element of the array returned by the `_LOAD` object. The value of this key will be an array of added actions. All of the elements of this array look as follows:
-
-```json
-{
-    "_ACTION":/*...*/,
-    "_ICON":/*...*/
-}
-```
-
-The value of `"_ICON"` can be `"done-icon"`, `"eye-icon"`, `"fav-icon"`, `"heart-icon"`, `"repost-icon"`, `"source-icon"`, `"downvote-icon"`, `"map-icon"`, or `"upvote-icon"`. The action must be one of the following currently available functions:
+REL Actions and similar to user-defined functions. However, they are supposed to be used only in the `buttons` and `actions` template, and they include a button's icon, color, and caption within their syntax. Each REL Action is an object of this form:
 
 ```json
 {
-    "_WEBVIEW":/* SOME SOURCE URL */
+    "_DO":...,
+    "_ICON":"icon_name",
+    "_CAPTION":"Button's caption",
+    "_COLOR":"Button's color"
 }
 ```
-
-```json
-{
-    "_MAPVIEW":{
-        "title":/*...*/,
-        "latitude":/*...*/,
-        "longitude":/*...*/
-    }
-}
-```
-
 
 
 
