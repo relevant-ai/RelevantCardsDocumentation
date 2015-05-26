@@ -659,6 +659,33 @@ Instead of using today's date, you can also input a fixed date using the paramet
 }
 ```
 
+### Getting User Location / Coordinate Distance
+
+User location may be accessed through the `_LOCATION` implicit variable, which comes in the format:
+
+```json
+{
+    "latitude":...,
+    "longitude":...
+}
+```
+
+For example, one may get the user's latitude using `{"_PATH":["_LOCATION","latitude"]}`.
+
+It is possible get the distance between two coordinates using `{"_COORDIST":[...,...]}`. For example, the following returns the distance between the current user location and some place in San Francisco:
+
+```json
+{
+    "_COORDIST":[
+        "{_LOCATION}",
+        {
+            "latitude":37.797929,
+            "longitude:"-122.428931
+        }
+    ]
+}
+```
+
 ### The `_WEB_CALLBACK` Function (Web View for User Input)
 
 It is possible to pop up a webview while a relevant card is being loaded, be it for user authentication, or any other form of user input. This is achieved with the `_WEB_CALLBACK` function. This function will return either when the user dismisses the webview manually, or when a certain base URL is loaded as a result of navigation. This functions looks like this:
@@ -692,7 +719,7 @@ The parameter `_ADDRESS` is the initial URL of the webview. The webview will dis
 
 This object contains information about the url request that was created by the webview before dismissing. This request is never actually called.
 
-### User-Defined Functions (`_FUNCTION` and `_APPLY`)
+### Inline Functions (`_FUNCTION` and `_APPLY`)
 
 It is possible to define your own functions. In the example below we define a function `increment` which takes numbers `X`,`Y` and returns `X+Y+1`:
 
@@ -895,7 +922,7 @@ The following *error handling* functions may be used to stop errors from propaga
 
 ### REL Actions
 
-REL Actions and similar to user-defined functions. However, they are supposed to be used only in the `buttons` and `actions` template, and they include a button's icon, color, and caption within their syntax. Each REL Action is an object of this form:
+REL Actions and similar to Inline functions. However, they are supposed to be used only in the `buttons` and `actions` template, and they include a button's icon, color, and caption within their syntax. Each REL Action is an object of this form:
 
 ```json
 {
@@ -947,6 +974,17 @@ The complete list of `_ICON`s available on Relevant 1.0 is: `"done_icon"`, `"eye
 ```
 
 The `_REFRESH` action may be passed any string, number, array, or object input value. When a card is refreshed from this action, it loads with an implicit variable `_INPUT` having this value.
+
+As always, it is possible to have intermediate variables inside `_DO` as long as there is a `_RETURN` key. For example:
+
+```json
+"_DO":{
+    "url":"http://github.com",
+    "_RETURN":{"_WEBVIEW":"{url}"}
+}
+```
+
+
 
 
 
