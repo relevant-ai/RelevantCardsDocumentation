@@ -730,7 +730,7 @@ Because of the simplicity and readability of REL, as long as variables are conve
 
 The `_LOG` function takes any string, number, array, or object, and returns that same string, number, array, or object. However, it also writes this value into a *logs* document. Every time a card containing `_LOG` is refreshed, this document pops up. You can also show the logs of a card without refreshing it, by holding down on the card and selecting the *logs* (console) icon.
 
-You may try the following variation of the cities card using `_LOG` by shaking your phone and adding the card `https://gist.githubusercontent.com/wircho/110b521e5870cec835d3/raw/2d4c89397f14e3581ed56b9bf34edf38bb886df6/cities_logs_card`.
+You may try the following variation of the cities card (see the `_LOOP` function section above) by shaking your phone and adding the card `https://gist.githubusercontent.com/wircho/110b521e5870cec835d3/raw/2d4c89397f14e3581ed56b9bf34edf38bb886df6/cities_logs_card`.
 
 ```json
 {
@@ -772,131 +772,63 @@ You may try the following variation of the cities card using `_LOG` by shaking y
 }
 ```
 
-Once this card is loaded, a webview pops up with the content below. Swipe right from the left end to dismiss it.
+Once this card is loaded, a webview pops up with the content shown below. Swipe right from the left end to dismiss it.
 
 ![Logs](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/cities_logs.png)
 
-## Templates (Card Appearance):
+## Using Templates:
 
-Let us go back to the first example of a fully functional card:
+Let us take another look at the cities card (`https://gist.githubusercontent.com/wircho/c8f4f5b0ce440b8edd83/raw/8ef09440e96322e75220ff1470fbc4c65d76e6c2/cities_card`):
 
 ```json
 {
-    "id": "card-id-string",
-    "title": "My Card's Title",
-    "icon_url": "https://url/to/icon.png",
-    "summary": "My card's description.",
-    "credits": "Some Website or Source",
-    "templates": [
-        "headline",
-        "footer"
-    ],
+    "id": "cities-card",
+    "title": "Cities",
+    "icon_url": "http://relevant.ai/cities.png",
+    "summary": "Card's summary for the library.",
+    "credits": "The Web",
     "settings_type": "NONE",
     "_LOAD": {
-        "_RETURN": [
-            {
-                "headline": {"text": "My Header 1"},
-                "footer": {"text": "My Footer 1"}
-            },
-            {
-                "headline": {"text": "My Header 2"},
-                "footer": {"text": "My Footer 2"}
+        "json_info":{
+            "_URL":"https://gist.githubusercontent.com/wircho/d6c606350f8a6dca29ee/raw/b7872ecebfcc868ff825c88fe1c5e06d13ad618c/cities"
+        },
+        "_RETURN":{
+            "_LOOP":{
+                "_ARRAY":{"_PATH":["json_info","cities"]},
+                "_EACH":[
+                    {
+                        "banner":{
+                            "image": {"_PATH":["_ITEM","picture"]}
+                        }
+                    },
+                    {
+                        "description":{
+                            "title": {"_PATH":["_ITEM","name"]},
+                            "body": {"_PATH":["_ITEM","nickname"]}
+                        }
+                    },
+                    {
+                        "footer":{
+                            "caption": {"_PATH":["_ITEM","province"]}
+                        }
+                    }
+                ]
             }
-        ]
+        }
+        
     }
 }
 ```
 
-This card has two templates `headline` and `footer`, in that order. This is why the `_LOAD` object returns an array of objects of the form `{"headline":{...},"footer":{...}}`. In general, if a card is using templates `template_1`, `template_2`, ..., `template_n`, then the `_LOAD` object must return an array of objects of the form `{"template_1":{...},...,"template_n":{...}}`, where the `{...}`'s hold parameters that skin each template's labels and images. Below is a list of all available templates and their parameters: (Check out Template-Structures)
+Each page of this card contains the templates `banner` (the city's picture), `description` (the city's name and nickname), and `footer` (the city's province). Below is a list of available templates with their parameters and possible values:
 
-```json
-{
-    "title":{"text":/*...*/},
-    "title-two-lines":{"text":/*...*/},
-    "headline":{"text":/*...*/},
-    
-    "short-description":{"text":/*...*/},
-    "long-description":{"text":/*...*/},
-    
-    "large-image-square":{"image":/*...*/},
-    "large-image-3x4":{"image":/*...*/},
-    "banner":{"image":/*...*/},
-    "thumbnail":{"image":/*...*/},
-    "profile-image":{"image":/*...*/},
-    
-    "footer":{"text":/*...*/},
-    
-    "description":{
-        "title":/*...*/,
-        "subtitle":/*...*/,
-        "thumb":/*...*/
-    },
-    "profile":{
-        "title":/*...*/,
-        "subtitle":/*...*/
-    },
-    "large-stats":{
-        "title-1":/*...*/,
-        "title-2":/*...*/,
-        "title-3":/*...*/,
-        "title-4":/*...*/,
-        "title-5":/*...*/,
-        "value-1":/*...*/,
-        "value-2":/*...*/,
-        "value-3":/*...*/,
-        "value-4":/*...*/,
-        "value-5":/*...*/
-    },
-    "stats":{
-        "title-1":/*...*/,
-        "title-2":/*...*/,
-        "title-3":/*...*/,
-        "value-1":/*...*/,
-        "value-2":/*...*/,
-        "value-3":/*...*/
-    },
-    "image-stats":{
-        "stats":/*...*/,
-        "image":/*...*/
-    },
-    "match":{
-        "team1": {
-            "image":/*...*/,
-            "name":/*...*/,
-            "score":/*...*/
-        },
-        "team2": {
-            "image":/*...*/,
-            "name":/*...*/,
-            "score":/*...*/
-        },
-        "middle":/*...*/,
-        "time":/*...*/
-    },
-    "nearby":{
-        "image":/*...*/,
-        "place":/*...*/,
-        "address":/*...*/,
-        "latitude":/*...*/,
-        "longitude":/*...*/
-    },
-    "thumb-scalar":{
-        "number":/*...*/,
-        "units":/*...*/,
-        "title":/*...*/,
-        "subtitle":/*...*/,
-        "image":/*...*/
-    },
-    "transit":{
-        "number":/*...*/,
-        "place":/*...*/,
-        "address":/*...*/,
-        "time-1":/*...*/,
-        "time-2":/*...*/,
-        "time-3":/*...*/
-    }
-}
-```
+| Template        | Parameters <br/> Possible Values + Notes 
+| ------------- |-------------|
+| **`banner`** (banner image)<br/> When used it should be the first template of a card.   | **`type`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"narrow"` (default) <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"short"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"medium"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"square"` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"tall"` <br/><br/> **`image`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image. <br/><br/> **`title`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Image title (displayed in large font) <br/><br/> **`caption`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Image caption (displayed in small font) <br/><br/> **`align`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Alignment of `title` and `caption` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"left"` (default) <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"center"` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"right"` <br/><br/> **`color`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Background color (e.g. `"white"` (default)) |
+| **`profile`** (circle image + caption)   | **`type`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"small"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"medium"` (default) <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"large"` (centered image only, no caption) <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"cell"` <br/><br/> **`image`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image. <br/><br/> **`caption`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Caption beside image <br/><br/> **`border-color`** <br/> &nbsp;&nbsp;&nbsp;&nbsp; Image border color (e.g. `"white"` (default)) |
+| **`double-profile`** (two circle images side by side)   | **`image-1`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of left image. <br/><br/> **`image-2`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of right image <br/><br/> **`caption-1`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Caption under left image <br/><br/> **`caption-2`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Caption under right image <br/><br/> **`border-color-1`** <br/> &nbsp;&nbsp;&nbsp;&nbsp; Border color of left image <br/><br/> **`border-color-2`** <br/> &nbsp;&nbsp;&nbsp;&nbsp; Border color of right image |
+| col 2 is      | centered      |
+| zebra stripes | are neat      |
 
 ## Actions:
 
