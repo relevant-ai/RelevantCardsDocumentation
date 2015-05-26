@@ -328,6 +328,8 @@ You can also make richer requests using `_URL`, as exemplified below:
 }
 ```
 
+**Remark:** The `_URL` function may return an error object if, for example, there is no internet connection. In most cases you can safely ignore this, and the card will just display the error. Read **Error Handling** below to learn how to handle errors.
+
 ### The `_LOOP` Function
 
 This function loops an array and processes each of its items to produce a new array. For example, the variable `var` below takes the value `[1,2,3,4]`:
@@ -406,6 +408,21 @@ This is how the card above looks like after scrolling all the way to the right:
 
 ![Cities Sample Card](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/toronto_card.png)
 
+### Long Step `_LOOP`
+
+The built-in function `_LOOP` may also take an optional positive parameter `_STEP`. When this parameter is a number *n* greater than 1, the implicit variable `_ITEM` in `_EACH` becomes an array itself, having at most *n* elements. In the following example, the variable `var` takes the value `[[1,2,3],[4,5,6],[7,8]]`:
+
+```json
+"foo":[1,2,3,4,5,6,7,8],
+"var":{
+    "_LOOP":{
+        "_ARRAY":"{foo}",
+        "_STEP":3,
+        "_EACH":"{_ITEM}"
+    }
+}
+```
+
 ### Filtering Arrays Using `_LOOP`
 
 The example below shows that it is possible to filter out some elements of an array using `_LOOP`, simply by returning `null` in `_EACH`. The variable `var` takes the value `[1,3,4,5]`.
@@ -472,6 +489,8 @@ See the `_MATH` function below to understand this example.
 
 ### Other Array Functions
 
+**`_COUNT`** Takes an array and returns its number of elements. All throughout REL, null elements are ignored from computed objects and arrays, and so they don't count towards an array's `_COUNT`.
+
 **`_MERGE`:** Takes an array of objects, strings, or arrays, and returns an array containing each of those objects, strings, and array elements. For example, the variable `var` below takes the value `[1,2,3,4,5,6,7,8,9]`
 
 ```json
@@ -493,6 +512,12 @@ See the `_MATH` function below to understand this example.
     ]
 }
 ```
+
+**`_FIRST_NOT_NULL`** Returns the first not null element of a passed array. It computes elements one by one, stopping when it first finds a not null value.
+
+**`_FIRST_NOT_EMPTY`** Same as above but also rejects empty strings.
+
+**`_FIRST_NOT_ERROR`** Same as `_FIRST_NOT_NULL` but also rejects errors.
 
 ### The `_MATH` Function
 
@@ -603,7 +628,7 @@ This function always returns a string representing a date in a given format. The
 
 You may also include hours, minutes, seconds, and milliseconds. [Click here for a list of all available formats](http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns).
 
-Besides these formats, you could also use `"<<timestamp>>"` (return a [UNIX timestamp, i.e. seconds since 1970](http://en.wikipedia.org/wiki/Unix_time)), `"<<ago>>"` (string such as `"11 minutes ago"`), `"<<fb-ago>>"` (facebook style), or `"<<min-ago>>"` (string such as `"11m"`).
+Besides these formats, you could also use `"<<timestamp>>"` (return a [UNIX timestamp, i.e. seconds since 1970](http://en.wikipedia.org/wiki/Unix_time)), `"<<ago>>"` (string such as `"11 minutes ago"`), `"<<fb-ago>>"` (Facebook style), or `"<<min-ago>>"` (Minimal Twitter style, such as `"11m"`).
 
 You can use the parameter `"_OFFSET"` to offset the current time by any number of seconds. This example produces yesterday's date:
 
@@ -659,7 +684,7 @@ The parameter `_ADDRESS` is the initial URL of the webview. The webview will dis
 }
 ```
 
-This object contains information about the request that was made by the webview upon dismissing. This request is never actually made.
+This object contains information about the url request that was created by the webview before dismissing. This request is never actually called.
 
 ### User-Defined Functions (`_FUNCTION` and `_APPLY`)
 
@@ -844,6 +869,21 @@ Each page of this card contains the templates `banner` (the city's picture), `de
 | **`actions`** (touch down actions)  | Just like the **`buttons`** template, it takes an array of **REL Actions** (See **REL Actions** below), to be performed when the card is held down and the corresponding action is selected. |
 | **`handler`** (card's title)  | This template allows you to customize the text on the card's title (top left) for each page of the card.<br/><br/>For example, the following `handler` template could be added to the cities card (`https://gist.githubusercontent.com/wircho/c8f4f5b0ce440b8edd83/raw/8ef09440e96322e75220ff1470fbc4c65d76e6c2/cities_card`) to display the name of each city on the card's title:<br/><br/> `{"handler":{"_PATH":["_ITEM","name"]}}` |
 
+### Error Handling
+
+Some built-in functions, such as `_URL` may return errors (such as when there is no internet connection). By default, REL propagates errors outwards, which means that whenever an error appears, the card will limit itself to showing this error rather than the expected templates (due to a small bug in Relevant 1.0, a card may show up light gray and not display the error).
+
+You could even create errors manually using `{"_ERROR":"Error message"}`, and they will be propagated outwards just like errors that happen inadventently.
+
+There are cases, however, in which you would like to handle an error. For example, when certain `_URL` returns an error (such as server not found), you may wish to get your data from a different URL.
+
+The following *error handling* functions may be used to stop errors from propagating outwards into the card:
+
+**`_IS_ERROR`:** Returns `true` (`1`) when passed an error, and `false` (`0`) otherwise.
+
+**`_ERROR_CODE`:** Returns an error's numeric error code. This is useful when handling http request errors from `_URL` calls.
+
+**`_FIRST_NOT_ERROR`** Returns the first element of an array which is neither `null` nor an error.
 
 ### REL Actions
 
@@ -852,11 +892,46 @@ REL Actions and similar to user-defined functions. However, they are supposed to
 ```json
 {
     "_DO":...,
-    "_ICON":"icon_name",
+    "_ICON":"Icon name, e.g. source_icon, more_icon, map_icon.",
     "_CAPTION":"Button's caption",
-    "_COLOR":"Button's color"
+    "_COLOR":"Button's color, e.g. red, blue. Leave blank for default color."
 }
 ```
+
+On Relevant 1.0, the parameters `_CAPTION` and `_COLOR` is ignored in the `actions` template, and the parameter `_ICON` is ignored in the `buttons` template whenever there is only one button. This is a design decision and not something to worry about.
+
+The complete list of `_ICON`s available on Relevant 1.0 is: `"done_icon"`, `"eye_icon"`, `"fav_icon"`, `"heart_icon"`, `"refresh_icon"`, `"repost_icon"`, `"share_icon"`, `"source_icon"`, `"map_icon"`, `"call_icon"`, `"do_icon"`, `"log_icon"`, `"more_icon"`, `"play_icon"`, `"read_icon"`, `"reorder_icon"`, `"search_icon"`, `"sync_icon"`, and `"chat_icon"`.
+
+`_DO` is the actual action to be performed by the button. This could be something that happens in the background and is not visible by the user. For example a `_URL` request with `"_METHOD":"POST"` to *like* something on social media (notice that such functionality would require user log-in or OAuth. A tutorial on this coming soon). More traditional examples of actions are listed below:
+
+**Show WebView**
+```json
+"_DO":{
+    "_WEBVIEW":"http://github.com"
+}
+```
+
+**Show MapView** (MapView with directions to a given latitude and longitude)
+```json
+"_DO":{
+    "_MAPVIEW":{
+        "title":"Montreal's City Hall",
+        "latitude":45.508994,
+        "longitude":-73.554418
+    }
+}
+```
+
+**Refresh Card**
+```json
+"_DO":{
+    "_REFRESH":...
+}
+```
+
+The `_REFRESH` action may be passed any string, number, array, or object input value. When a card is refreshed from this action, it loads with an implicit variable `_INPUT` having this value.
+
+
 
 
 
