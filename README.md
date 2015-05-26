@@ -52,17 +52,17 @@ You should see the following card:
 
 Think of the object `_LOAD` as a function that is called every time the card needs to refresh. The `_RETURN` of this function is an array with **only one element**. That means this card has **only one page** (swiping left and right will do nothing). This page is itself an array of **templates**: A `description` template with parameters `title` and `body`, and a `footer` template with parameter `caption`.
 
-**Remark:** The `_RETURN` of the `_LOAD` function must always be an array of arrays. Each element of the outer array is a *page* and each element of the inner array is a *template*.
+**Remark:** The `_RETURN` of the `_LOAD` block must always be an array of arrays. Each element of the outer array is a *page* and each element of the inner array is a *template*.
 
 **Remark:** As of Relevant 1.0, cards **do not update automatically** when you change the code. After making changes to your hosted JSON, you need to delete the current card (tap the "i" button, then REMOVE) and then add it again by shaking the device.
 
 ## The REL Language
 
-Everything inside the `_LOAD` function must follow the syntax of the REL language. Reserved words/keys for the REL language are uppercase and preceded by an *underscore* (`_`). Everything else is what it looks like: a JSON object, array, string, or number.
+Everything inside the `_LOAD` block must follow the syntax of the REL language. Reserved words/keys for the REL language are uppercase and preceded by an *underscore* (`_`). Everything else is what it looks like: a JSON object, array, string, or number.
 
 ### Variables
 
-You can define variables inside the `_LOAD` function as follows:
+You can define variables inside the `_LOAD` block as follows:
 
 ```json
 "_LOAD":{
@@ -108,7 +108,7 @@ The easiest way to use a variable is using the syntax `"{variable_name}"`. For e
 }
 ```
 
-In this card the `_LOAD` function has three intermediate variables, named `hello`, `foo`, and `var`.
+In this card the `_LOAD` block has three intermediate variables, named `hello`, `foo`, and `var`.
 
 ### Inserting/Concatenating String Variables
 
@@ -796,7 +796,7 @@ A function's body may contain intermediate variables, as long as it has a `_RETU
 
 ### Commenting
 
-Because of the simplicity and readability of REL, as long as variables are conveniently named, it should not be necessary to use comments. However, one way to write comments is to define variables that are never used. Naming all unused variables `"//"` is a way to make comments more obvious. For example, the `_LOAD` function of the Hello World example at the beginning of this document could be written as follows:
+Because of the simplicity and readability of REL, as long as variables are conveniently named, it should not be necessary to use comments. However, one way to write comments is to define variables that are never used. Naming all unused variables `"//"` is a way to make comments more obvious. For example, the `_LOAD` block of the Hello World example at the beginning of this document could be written as follows:
 
 ```json
 {
@@ -1030,9 +1030,74 @@ As always, it is possible to have intermediate variables inside `_DO` as long as
 }
 ```
 
+### Card Settings
 
+All the sample cards above have the metadata value `"settings_type":"NONE"`. This defines the user input behaviour when the card is flipped by tapping on the upper right **i** button. There are two possible settings type besides the default `"NONE"`. Namely `"TEXT"` and `"SELECT"`, explained below.
 
+**`"TEXT"` Settings Type:** This means that there is a text field on the back of the card. Developers may access this string from the `_LOAD` block by referencing the variable `_SETTINGS` (as in `"{_SETTINGS}"`). Optionally, you may add a `"settings_default"` string in the metadata.
 
+**`"SELECT"` Settings Type:** This means that there is a drop down selection box on the back of the card. In this case, a `"settings_options"` metadata is required, and it must be an array of objects having the key `"value"`, and any other optinal keys for your own use. For example:
+
+```json
+"settings_type":"SELECT",
+"settings_options":[
+    {
+        "info":1
+        "value":"One"
+    },
+    {
+        "info":2
+        "value":"Two"
+    },
+    {
+        "info":3
+        "value":"Three"
+    }
+]
+```
+
+Optionally, you may set a default value:
+
+```json
+"default_settings":{
+    "info":2
+    "value":"Two"
+}
+```
+
+If no default value is set, the first one of the `settings_options` is used.
+
+As before, you may access the currently selected settings object from the `_LOAD` block by referncing the variable `_SETTINGS` (as in `{"_PATH":["_SETTINGS","info"]}`).
+
+### Persistent Card Variables (The `_MAIN` block)
+
+Occassianally you may wish to have some variables which are only computed once, instead of re-calculating them every time the card is refreshed. This may include user input or user authentication information (from `_WEB_CALLBACK`). In this case you may simply wrap the `_LOAD` block inside a `_MAIN` object and define these variables in the `_MAIN` object, as below:
+
+```json
+{
+    "id": "hello-world",
+    "title": "Hello World Card",
+    "icon_url": "http://relevant.ai/hello_world.png",
+    "summary": "Card's summary for the library.",
+    "credits": "Relevant",
+    "settings_type": "NONE",
+    "_MAIN": {
+        "persistent_var_1":...,
+        "persistent_var_2":...,
+        "_LOAD":{
+            "non_persistent_var_1":...,
+            "non_persistent_var_2":...,
+            "_RETURN":...
+        }
+    }
+}
+```
+
+### Rich Text in Cards
+
+The functions `_SMALL,_BOLD,_RED,_PINK,_PURPLE,_GREEN,_YELLOW,_ORANGE,_BLUE,_CYAN,_GRAY,_DARKGRAY,_WHITE` allow you to enhance the text in card templates by resizing or coloring fonts. All of these functions take a string (or a rich text) and return rich text. You may use `_CONCAT` with rich text.
+
+These functions should only be used at last to populate templates, in order to prevent passing rich text to functions such as `_MATH`, which will silently fail.
 
 
 
