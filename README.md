@@ -521,6 +521,18 @@ See the `_MATH` and `_CONCAT` functions to understand this example.
 
 **`_FIRST_NOT_ERROR`** Same as `_FIRST_NOT_NULL` but also rejects errors.
 
+### Manipulating Arrays and Objects
+
+Below are some examples showing how to manipulate arrays and objects (see also the function `_MERGE` in **Other Array Functions**).
+
+**`{"_REMOVE":{"_OBJECT":"{foo}","_KEY":"{k}"}}`** returns the object or array that results from removing the key `k` from the object `foo`, or the index `k` from the array `foo`.
+
+**`{"_INSERT":{"_OBJECT":"{foo}","_KEY":"{k}","_ELEMENT":"{e}"}}`** returns the object or array that results from inserting the element `e` at the key `k` of object `foo`, or by inserting the element `e` at the index `k` of the array `foo`.
+
+For simplicity, in the examples above, variables `foo`, `k` and `e` are assumed to be variables which are previously defined. However, they could be arbitrary REL expressions, or even hardcoded JSON values.
+
+**`_DICTIONARY`:** Takes an array of two-element arrays, and returs an object whose keys are the first elements of these two-elements arrays, and whose values are their second elements. For example `{"_DICTIONARY":["a",1],["b",[2,3]],["c","four"]}` produces `{"a":1,"b":[2,3],"c":"four"}`.
+
 ### The `_MATH` Function
 
 This function takes a string representing a mathematical expression, and returns the resulting number. In the example below, the variable `var` takes the value `2015`:
@@ -659,7 +671,7 @@ Instead of using today's date, you can also input a fixed date using the paramet
 }
 ```
 
-### Getting User Location / Coordinate Distance
+### Getting User Location / Coordinate Distance / Directions
 
 User location may be accessed through the `_LOCATION` implicit variable, which comes in the format:
 
@@ -672,7 +684,7 @@ User location may be accessed through the `_LOCATION` implicit variable, which c
 
 For example, one may get the user's latitude using `{"_PATH":["_LOCATION","latitude"]}`.
 
-It is possible get the distance between two coordinates using `{"_COORDIST":[...,...]}`. For example, the following returns the distance between the current user location and some place in San Francisco:
+It is possible get the distance between two coordinates using `{"_COORDIST":[...,...]}`. For example, the following returns the distance **in meters** between the current user location and some place in San Francisco:
 
 ```json
 {
@@ -681,6 +693,40 @@ It is possible get the distance between two coordinates using `{"_COORDIST":[...
         {
             "latitude":37.797929,
             "longitude:-122.428931
+        }
+    ]
+}
+```
+
+You can also get step by step directions to a given location using `_ROUTE`. For example:
+
+```json
+{
+    "_ROUTE_":{
+        "_FROM":"{_LOCATION}",
+        "_TO":{
+            "latitude":37.797929,
+            "longitude:-122.428931
+        }
+    }
+}
+```
+
+You may also use the optional parameter `_TYPE` which defaults to `"any"` and may take the values `"any"`, `"walking"`, or `"automobile"`. If the location request succeedes, it returns an array of route objects of the form (distances are **in meters**, and times are **in seconds**):
+
+```json
+{
+    "name":"Such street",
+    "distance":100.05,
+    "travel-time":110.51,
+    "advisory":"Slippery slopes",
+    "type":"walking",
+    "steps":[
+        {
+            "instructions":"Walk to destination",
+            "notice":"",
+            "distance:100.05,
+            "type":"walking"
         }
     ]
 }
