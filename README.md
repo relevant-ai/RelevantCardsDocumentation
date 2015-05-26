@@ -56,9 +56,9 @@ Think of the object `_LOAD` as a function that is called every time the card nee
 
 **Remark:** As of Relevant 1.0, cards **do not update automatically** when you change the code. After making changes to your hosted JSON, you need to delete the current card (tap the "i" button, then REMOVE) and then add it again by shaking the device.
 
-## The Rel Language
+## The REL Language
 
-Everything inside the `_LOAD` function must follow the syntax of the Rel language. Reserved words/keys for the Rel language are uppercase and preceded by an *underscore* (`_`). Everything else is what it looks like: a JSON object, array, string, or number.
+Everything inside the `_LOAD` function must follow the syntax of the REL language. Reserved words/keys for the REL language are uppercase and preceded by an *underscore* (`_`). Everything else is what it looks like: a JSON object, array, string, or number.
 
 ### Variables
 
@@ -73,7 +73,7 @@ You can define variables inside the `_LOAD` function as follows:
 }
 ```
 
-Normally, unless used somewhere in `_RETURN`, these variables will be ignored. This makes Rel *lazy*; it only does things if needed and when needed.
+Normally, unless used somewhere in `_RETURN`, these variables will be ignored. This makes REL *lazy*; it only does things if needed and when needed.
 
 The easiest way to use a variable is using the syntax `"{variable_name}"`. For example, the Hello World card from before is equivalent to the one below:
 
@@ -118,7 +118,7 @@ This is only possible when `foo` is a string, and will not work otherwise.
 
 ### Built-In Functions
 
-The Rel language comes packaged with a set of built-in functions to help you easily manipulate JSON objects. All built-in function names follow the *underscore uppercase* syntax (e.g. `_CONCAT`) to differentiate it from your own variables and JSON objects.
+The REL language comes packaged with a set of built-in functions to help you easily manipulate JSON objects. All built-in function names follow the *underscore uppercase* syntax (e.g. `_CONCAT`) to differentiate it from your own variables and JSON objects.
 
 A built-in function call is usually represented by a one-key object whose only key is the function name. For example:
 
@@ -140,7 +140,7 @@ The value of the key is the parameter of the function. This could be a string, a
 }
 ```
 
-Most of the rest of this documentation is devoted to introducing Rel's built in functions.
+Most of the rest of this documentation is devoted to introducing REL's built in functions.
 
 ### The `_PATH` function
 
@@ -234,7 +234,7 @@ However, you may still wish to use intermediate variables inside `_THEN` and `_E
 }
 ```
 
-**Remark for scope geeks:** Rel uses block dynamic scope, and all variables are set only once (this is called *inmutability*). In particular that means that the variable `city` inside `_THEN` is a local variable, and does not overwrite the other equally named variable.
+**Remark for scope geeks:** REL uses block dynamic scope, and all variables are set only once (this is called *inmutability*). In particular that means that the variable `city` inside `_THEN` is a local variable, and does not overwrite the other equally named variable.
 
 ### The `_URL` Function
 
@@ -581,6 +581,14 @@ These are functions that take the role of common logic operators, returning a bo
 
 **`_EQUAL`:** Takes an array of two JSON values and returns whether they are equal.
 
+### Number Functions
+
+Some functions to format and manipulate numbers.
+
+**`_ROUND`:** Rounds a number to its closest integer.
+
+**`_FLOOR`:** Rounds **down** a number to its closest integer.
+
 ### The `_DATE` Function
 
 This function always returns a string representing a date in a given format. The only required parameter is `"_FORMAT_OUT"`. The example below returns today's date in the format yyyy-MM-dd:
@@ -679,7 +687,94 @@ A function's body may contain intermediate variables, as long as it has a `_RETU
 }
 ```
 
+### Commenting
 
+Because of the simplicity and readability of REL, as long as variables are conveniently named, it should not be necessary to use comments. However, one way to write comments is to define variables that are never used. Naming all unused variables `"//"` is a way to make comments more obvious. For example, the `_LOAD` function of the Hello World example at the beginning of this document could be written as follows:
+
+```json
+{
+    "id": "hello-world",
+    "title": "Hello World Card",
+    "icon_url": "http://relevant.ai/hello_world.png",
+    "summary": "Card's summary for the library.",
+    "credits": "Relevant",
+    "settings_type": "NONE",
+    "_LOAD": {
+        "//":"Change this variable to replace Hello World for anything else",
+        "hello":"Hello World",
+        "//":"This is the description template",
+        "foo":{
+            "description":{
+                "title": "{hello}",
+                "body": "{hello}? There's a card for that."
+            }
+        },
+        "//":"This is the footer template",
+        "var":{
+            "footer":{
+                "caption": "Relevant - The Missing Home Screen"
+            }
+        },
+        "//":"This is the return of the _LOAD function",
+        "_RETURN":[
+            [
+                "{foo}",
+                "{var}"
+            ]
+        ]
+    }
+}
+```
+
+### Logging (The `_LOG` Function):
+
+The `_LOG` function takes any string, number, array, or object, and returns that same string, number, array, or object. However, it also writes this value into a *logs* document. Every time a card containing `_LOG` is refreshed, this document pops up. You can also show the logs of a card without refreshing it, by holding down on the card and selecting the *logs* (console) icon.
+
+You may try the following variation of the cities card using `_LOG` by shaking your phone and adding the card `https://gist.githubusercontent.com/wircho/110b521e5870cec835d3/raw/2d4c89397f14e3581ed56b9bf34edf38bb886df6/cities_logs_card`.
+
+```json
+{
+    "id": "cities-card",
+    "title": "Cities",
+    "icon_url": "http://relevant.ai/cities.png",
+    "summary": "Card's summary for the library.",
+    "credits": "The Web",
+    "settings_type": "NONE",
+    "_LOAD": {
+        "json_info":{
+            "_URL":"https://gist.githubusercontent.com/wircho/d6c606350f8a6dca29ee/raw/b7872ecebfcc868ff825c88fe1c5e06d13ad618c/cities"
+        },
+        "_RETURN":{
+            "_LOOP":{
+                "_ARRAY":{"_PATH":["json_info","cities"]},
+                "_EACH":[
+                    {
+                        "banner":{
+                            "image": {"_PATH":["_ITEM","picture"]}
+                        }
+                    },
+                    {
+                        "description":{"_LOG":{
+                            "title": {"_PATH":["_ITEM","name"]},
+                            "body": {"_PATH":["_ITEM","nickname"]}
+                        }}
+                    },
+                    {
+                        "footer":{
+                            "caption": {"_PATH":["_ITEM","province"]}
+                        }
+                    }
+                ]
+            }
+        }
+        
+    }
+}
+```
+
+Once this card is loaded, a webview pops up with the content below. Swipe right from the left end to dismiss it.
+
+![Logs](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/cities_logs.png)
 
 ## Templates (Card Appearance):
 
