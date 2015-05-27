@@ -4,7 +4,7 @@ This document explains how to create cards for the [Relevant iOS app](http://rel
 
 A *card* is just a JSON file hosted somewhere on the web. This JSON file directs the Relevant servers on how to gather the data and display it using templates such as banner images, footers, etc.
 
-A great way to host a card is using Dropbox.
+Great ways to host cards include [Dropbox](https://www.dropbox.com) and [GitHub Gists](https://gist.github.com).
 
 ## Intro and Hello World
 
