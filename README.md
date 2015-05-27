@@ -4,7 +4,11 @@ This document explains how to create cards for the [Relevant iOS app](http://rel
 
 A *card* is just a JSON file hosted somewhere on the web. This JSON file directs the Relevant servers on how to gather the data and display it using templates such as banner images, footers, etc.
 
+The JSON syntax we have created to build these cards is called **REL - The Fancy JSON**.
+
 Great ways to host cards include [Dropbox](https://www.dropbox.com) and [GitHub Gists](https://gist.github.com).
+
+Visit [cards.relevant.ai](http://cards.relevant.ai) to view sample cards. Click on them to see the JSON code.
 
 ## Intro and Hello World
 
