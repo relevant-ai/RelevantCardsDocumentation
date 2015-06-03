@@ -6,7 +6,7 @@ A *card* is just a JSON file hosted somewhere on the web. This JSON file directs
 
 The JSON syntax we have created to build these cards is called **REL**.
 
-Great ways to host cards include [Dropbox](https://www.dropbox.com) and [GitHub Gists](https://gist.github.com).
+Great ways to host cards include [Dropbox](https://www.dropbox.com) and [GitHub Gists](https://gist.github.com) (in both services, make sure to use the **Raw** link when adding cards to your Relevant deck).
 
 Visit [cards.relevant.ai](http://cards.relevant.ai) to view sample cards. Click on them to see the JSON code.
 
