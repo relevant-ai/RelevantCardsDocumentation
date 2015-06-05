@@ -495,7 +495,7 @@ See the `_MATH` and `_CONCAT` functions to understand this example.
 
 **`_COUNT`** Takes an array and returns its number of elements. All throughout REL, null elements are ignored from computed objects and arrays, and so they don't count towards an array's `_COUNT`.
 
-**`_FOR`** (for loop) Similar to `_LOOP` but with parameters `_FOR,_TO,_EACH`, and implicit variable `_INDEX` within `_EACH`. For example, `{"_FOR":{"_FROM":0,"_TO":10,"_EACH":"{_INDEX}"}}` returns the array `[0,1,2,3,4,5,6,7,8,9,10]`. You can use the optional parameter `_STEP` as well.
+**`_FOR`** (for loop) Similar to `_LOOP` but with parameters `_FROM,_TO,_EACH`, and implicit variable `_INDEX` within `_EACH`. For example, `{"_FOR":{"_FROM":0,"_TO":10,"_EACH":"{_INDEX}"}}` returns the array `[0,1,2,3,4,5,6,7,8,9,10]`. You can use the optional parameter `_STEP` as well.
 
 **`_MERGE`:** Takes an array of objects, strings, or arrays, and returns an array containing each of those objects, strings, and array elements. For example, the variable `var` below takes the value `[1,2,3,4,5,6,7,8,9]`
 
