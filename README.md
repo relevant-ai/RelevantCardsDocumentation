@@ -1,14 +1,14 @@
 # Relevant Cards Documentation
 
-This document explains how to create cards for the [Relevant iOS app](http://relevant.ai).
+This document explains how to create cards for the [Relevant iOS app](http://relevant.ai) using **REL**, the JSON-based programming language we have created for this purpose.
 
-A *card* is just a JSON file hosted somewhere on the web. This JSON file directs the Relevant servers on how to gather the data and display it using templates such as banner images, footers, etc.
+I encourage everyone to start by reading [REL's backstory on our Medium post](https://medium.com/relevant-stories/rel-chapter-1-907ff616bf80).
 
-The JSON syntax we have created to build these cards is called **REL**.
+A *Relevant Card* is a JSON file hosted somewhere on the web, which outputs content for the Relevant iOS App. This JSON file contains instructions on how to gather the data and display it using templates such as banner images, footers, etc.
 
-Great ways to host cards include [Dropbox](https://www.dropbox.com) and [GitHub Gists](https://gist.github.com) (in both services, make sure to use the **Raw** link when adding cards to your Relevant deck).
+Great ways to host JSON files include [Dropbox](https://www.dropbox.com) and [GitHub Gists](https://gist.github.com) (in both services, make sure to use the **Raw** link when adding cards to your Relevant App deck).
 
-Visit [cards.relevant.ai](http://cards.relevant.ai) to view sample cards. Click on them to see the JSON code.
+Visit [cards.relevant.ai](http://cards.relevant.ai) to view sample cards. Click on "Keep Reading" to see their JSON/REL code.
 
 ## Intro and Hello World
 
