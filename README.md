@@ -2,7 +2,7 @@
 
 This document explains how to create cards for the [Relevant iOS App](http://relevant.ai) using **REL**, the JSON-based programming language we have created for this purpose.
 
-I encourage everyone to start by reading [REL's backstory on our Medium post: **How we turned JSON into a full programmig language**](https://medium.com/relevant-stories/rel-chapter-1-907ff616bf80).
+I encourage everyone to start by reading [REL's backstory: **How we turned JSON into a full programmig language**](https://medium.com/relevant-stories/rel-chapter-1-907ff616bf80).
 
 A *Relevant Card* is a JSON file hosted somewhere on the web, which outputs content for the Relevant iOS App. This JSON file contains instructions on how to gather the data and display it using templates such as banner images, footers, etc.
 
