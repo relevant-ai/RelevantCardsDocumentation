@@ -1,6 +1,6 @@
 # Relevant Cards Documentation
 
-This document explains how to create cards for the [Relevant iOS App](http://relevant.ai) using **REL**, the JSON-based programming language we have created for this purpose.
+This document explains how to create **cards** for the [Relevant iOS App](http://relevant.ai) using **REL**, the JSON-based programming language we have created for this purpose.
 
 I encourage everyone to start by reading [REL's backstory: **How we turned JSON into a full programmig language**](https://medium.com/relevant-stories/rel-chapter-1-907ff616bf80).
 
