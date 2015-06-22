@@ -58,11 +58,11 @@ Think of the object `_LOAD` as a function that is called every time the card nee
 
 **Remark:** The `_RETURN` of the `_LOAD` block must always be an array of arrays. Each element of the outer array is a *page* and each element of the inner array is a *template*.
 
-**Remark:** As of Relevant 1.0, cards **do not update automatically** when you change the code. After making changes to your hosted JSON, you need to delete the current card (tap the "i" button, then REMOVE) and then add it again by shaking the device.
+**Remark:** As of Relevant 1.1, cards **do not update automatically** when you change the code. After making changes to your hosted JSON, you need to delete the current card (tap the "i" button, then REMOVE) and then add it again by shaking the device.
 
-## The REL Language
+## The REL Syntax
 
-Everything inside the `_LOAD` block must follow the syntax of the REL language. Reserved words/keys for the REL language are uppercase and preceded by an *underscore* (`_`). Everything else is what it looks like: a JSON object, array, string, or number.
+Everything inside the `_LOAD` block must follow the syntax of REL. Reserved words/keys for REL are uppercase and preceded by an *underscore* (`_`). Everything else is what it looks like: a JSON object, array, string, or number.
 
 ### Variables
 
@@ -238,7 +238,7 @@ However, you may still wish to use intermediate variables inside `_THEN` and `_E
 }
 ```
 
-**Remark for scope geeks:** REL uses block dynamic scope, and all variables are set only once (this is called *inmutability*). In particular that means that the variable `city` inside `_THEN` is a local variable, and does not overwrite the other equally named variable.
+**Remarks:** REL uses *block dynamic scope*, and all variables are set only once (this is called *inmutability*). In particular that means that the variable `city` inside `_THEN` is a local variable, and does not overwrite the other equally named variable.
 
 ### The `_URL` Function
 
@@ -794,45 +794,6 @@ A function's body may contain intermediate variables, as long as it has a `_RETU
     "_FUNCTION":{
         "Z":{"_MATH":"{X}+{Y}"},
         "_RETURN":{"_MATH":"{Z}+1"}
-    }
-}
-```
-
-### Commenting
-
-Because of the simplicity and readability of REL, as long as variables are conveniently named, it should not be necessary to use comments. However, one way to write comments is to define variables that are never used. Naming all unused variables `"//"` is a way to make comments more obvious. For example, the `_LOAD` block of the Hello World example at the beginning of this document could be written as follows:
-
-```json
-{
-    "id": "hello-world",
-    "title": "Hello World Card",
-    "icon_url": "http://relevant.ai/hello_world.png",
-    "summary": "Card's summary for the library.",
-    "credits": "Relevant",
-    "settings_type": "NONE",
-    "_LOAD": {
-        "//":"Change this variable to replace Hello World for anything else",
-        "hello":"Hello World",
-        "//":"This is the description template",
-        "foo":{
-            "description":{
-                "title": "{hello}",
-                "body": "{hello}? There's a card for that."
-            }
-        },
-        "//":"This is the footer template",
-        "var":{
-            "footer":{
-                "caption": "Relevant - The Missing Home Screen"
-            }
-        },
-        "//":"This is the return of the _LOAD function",
-        "_RETURN":[
-            [
-                "{foo}",
-                "{var}"
-            ]
-        ]
     }
 }
 ```
