@@ -63,13 +63,13 @@ You can try adding this sample card immediately: **TODO: ADD ALIAS** before you 
 
 ## Variables and Basic Syntax
 
-REL is a *functional*, *inmutable* programming language. Don't worry if you don't understand these terms. What this means is that almost every line of code is either a *variable initialization* `var a = "hello world"`, or the *return statement of a function* `return "something"`. It also means that it is not possible to change the value of a variable after it has been initialized <s>`a = "ok bye"`</s>.
+REL is a *functional*, *inmutable* programming language. Don't worry if you don't understand these terms. What this means is that almost every line of code is either a *variable initialization* `let a = "hello world"`, or the *return statement of a function* `return "something"`. It also means that it is not possible to change the value of a variable after it has been initialized <s>`a = "ok bye"`</s>.
 
 Variable types in REL are similar to JavaScript types; `"strings"`, numbers (`1`, `2`, `3.14`), `["a","r","r","a","y","s"]`, `null`, and dictionaries/objects. The main difference is that dictionaries/objects in REL are delimited by square brackets `[]`, and that the quotes `""` around the keys are mandatory:
 
 **Dictionary/object**
 ```swift
-var d = [ // <---- Square brackets
+let d = [ // <---- Square brackets
   "name":"Wircho",
   "age":29,
   "hobbies":["easy":["Sleeping","Eating"],"hard":["Code","Guitar","Math"]]
@@ -79,12 +79,12 @@ var d = [ // <---- Square brackets
 You can dig inside an array or dictionary with the usual square bracket syntax (`array[index]`, `dictionary[key]`), and you can also do so with lists or arrays of keys and indices. This means that for the dictionary `d` above, all of the following "`guitar`" variables have value `"Guitar"`:
 
 ```swift
-var guitar0 = d["hobbies"]["hard"][1]
-var guitar1 = d["hobbies","hard",1]
-var guitar2 = d["hobbies","hard"][1]
-var guitar3 = d["hobbies"]["hard",1]
-var path = ["hobbies","hard",1]
-var guitar4 = d[path]
+let guitar0 = d["hobbies"]["hard"][1]
+let guitar1 = d["hobbies","hard",1]
+let guitar2 = d["hobbies","hard"][1]
+let guitar3 = d["hobbies"]["hard",1]
+let path = ["hobbies","hard",1]
+let guitar4 = d[path]
 ```
 
 ## Built-In Functionality
@@ -96,10 +96,10 @@ REL comes equiped with an array of built-in functionality which will keep growin
 Most operators familiar to JavaScript developers are available in REL; namely `+,-,*,/,%,==,!=,&&,||,!`, among others, and their behaviour is very similar to that of JavaScript. For example, `+`'ing two numbers gives you their sum, while `+`'ing a string with any other variable gives you a string. Some examples follow:
 
 ```swift
-var three = 1+2 // Produces 3
-var threeString = "th" + "ree" // Produces "three"
-var theTruth = (1 == 1) // Produces true (Parentheses are optional, here just for readability)
-var aLie = (1 == 2) && (4 == 4) // Produces false
+let three = 1+2 // Produces 3
+let threeString = "th" + "ree" // Produces "three"
+let theTruth = (1 == 1) // Produces true (Parentheses are optional, here just for readability)
+let aLie = (1 == 2) && (4 == 4) // Produces false
 ```
 
 ### Functions and Methods
@@ -107,15 +107,15 @@ var aLie = (1 == 2) && (4 == 4) // Produces false
 Built-In REL *functions* are, like in other programming languages (and in math), prefixes that may take some one or more values as parameters and *return* another value. For example, the function `concat` takes any list or array of values and concatenates them into a string, doing so recursively;
 
 ```swift
-var c = concat("Relevant"," - ",["The"," ","Missing ","Homescreen"]) // Produces "Relevant - The Missing Homescreen"
+let c = concat("Relevant"," - ",["The"," ","Missing ","Homescreen"]) // Produces "Relevant - The Missing Homescreen"
 ```
 
 *Methods* are similar to functions, but are instead suffixed to values after a dot `.`;
 
 ```swift
-var a = 55
-var b = a.toString() // Produces "55"
-var c = a.toString // Same as above
+let a = 55
+let b = a.toString() // Produces "55"
+let c = a.toString // Same as above
 ```
 
 Many of the built in REL functions that take only one parameter, have an equivalent method form. For example `round(1.75)`, `(1.75).round()`, and `(1.75).round` are equivalent statements, all of which produce `2`. This is often useful when chaining several operations; e.g., `round(sqrt(count(foo)))` is equivalent to `foo.count.sqrt.round`.
@@ -126,8 +126,8 @@ Many of the built in REL functions that take only one parameter, have an equival
 
 **The `then` method**
 ```swift
-var a = 1==2 // Produces false
-var b = a.then("it's true!","it's false") // Produces "it's false!"
+let a = 1==2 // Produces false
+let b = a.then("it's true!","it's false") // Produces "it's false!"
 ```
 When the second argument is ommited, it falls back to `null`, so that `a.then("it's true")` simply produces null.
 
@@ -135,7 +135,7 @@ Instead of **for** statements, use the `loop` method applied to an array, after 
 
 **The `loop` method - First example**
 ```swift
-var b = [1,2,3].loop {
+let b = [1,2,3].loop {
   item in
   return item * item
 } // Produces [1,4,9]
@@ -143,7 +143,7 @@ var b = [1,2,3].loop {
 
 **The `loop` method - Second example**
 ```swift
-var b = [1,2,3].loop {
+let b = [1,2,3].loop {
   (item,index) in
   return item * item * index
 } // Produces [0,4,18]
@@ -151,30 +151,45 @@ var b = [1,2,3].loop {
 
 The `loop` method is more of an array manipulation function than an actual control-flow statement.
 
+One thing to notice that loop is actually a method that takes one closure parameter, so that the expressions `a.loop{...}` and `a.loop({...})` are equivalent. A *trailing* (without parentheses) closure is permitted when a closure is the last parameter of a function or method.
 
+## String Manipulation
+
+Strings in REL can be concatenated using `+` or the `concat` function (which takes any number of string or array arguments). Some other string manipulation functions and methods are exemplified below:
+
+```swift
+let a = ", ".join([1,2,3]) // Produces "1, 2, 3"
+let b = "2015-09-29".splitBy("-") // Produces ["2015","09","29"]
+let c = "Hello World".lowercase // Produces "hello world"
+let d = "Hello World".uppercase // Produces "HELLO WORLD"
+let e = "Hello World".matches("llo Wo") // Produces true
+let f = "Hello World".replace("He","hE") // Produces "hEllo World"
+let g = "Hello World".replace("[a-zA-Z]","*",true) // Produces "***** *****". The last argument 'true' means that it should use regular expressions
+let h = 55.toString // Produces "55" (not 55)
+```
 
 ## Inline Functions
 
-Functions are defined the same way as variables `var f = ....`, and they defined by **closures**, i.e., blocks of code delimited by curly brackets. The following function returns the string `"foo"` every time:
+Functions are defined the same way as variables `let f = ....`, and they defined by **closures**, i.e., blocks of code delimited by curly brackets. The following function returns the string `"foo"` every time:
 
 **Function that returns `"foo"` every time**
 ```swift
-var f = {
+let f = {
   return "foo"
 }
-var fooString = f() // Produces "foo"
-var fooStringAgain = f() // Produces "foo"
+let fooString = f() // Produces "foo"
+let fooStringAgain = f() // Produces "foo"
 ```
 
 If a function takes parameters, simply prefix its content with the list of parameter names and the keyword **`in`**
 
 **Function that returns someone's full name**
 ```swift
-var f = {
+let f = {
   (name,lastName) in // Parentheses are optional
   return name + " " + lastName
 }
-var fullName = f("John","Smith") // Produces "John Smith"
+let fullName = f("John","Smith") // Produces "John Smith"
 ```
 
 **TODO: SIMPLIFIED FUNCTION SYNTAX**
