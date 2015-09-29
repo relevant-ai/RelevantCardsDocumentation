@@ -177,6 +177,16 @@ let d = uppercase("Hello World") // Produces "HELLO WORLD"
 let h = toString(55) // Produces "55"
 ```
 
+## Rich Text
+
+Because the output of a REL function is often used for interface skinning, we occasionally need to output rich text. For this purpose we may assume that all strings in REL have an abstract *default* font. The following methods simply applies transformatons to that font. Once a string is applied any of these methods, it becomes rich text and may fail to perform some string manipulation methods such as `join`. Other functions like `concat` or the `+` operation work properly on rich text.
+
+The `small` method/function makes the font size about `0.8` times smaller. Examples: `"Hello World".small`, `small("Hello World")`.
+
+The `bold` and `italic` methods/functions make text bold and italic respectively.
+
+The `color` method allows you to color a given text. Example: `"Hello World".color("red")`. Currently available colors are `"red"`, `"pink"`, `"purple"`, `"green"`, `"yellow"`, `"orange"`, `"blue"`, `"cyan"`, `"gray"`, `"dark-gray"`, `"light-gray"`, `"white"`, and `"transparent"`.
+
 ## Array Manipulation
 
 The two main array manipulation functions in REL are `merge` and `mergeArray`. They do pretty much the same, except the first one takes a list of arrays separated by commas, while the second one takes **only one parameter**: an array of arrays. This is better understood from the examples below:
@@ -191,6 +201,7 @@ let d = mergeArray([[1,2],[3,4],[5,6]]) // Produces [1,2,3,4,5,6]
 Other useful array methods are exemplified below:
 
 ```swift
+let l = ["x","y","z"].reverse // Produces ["z","y","x"]
 let m = ["x","y","z"].count // Produces 3
 let p = ["t","u","v","w","x","y","z"].subarray(2,4) // Produces ["v","w","x"]
 let q = ["t","u","v","w","x","y","z"].subarray(4) // Produces ["t","u","v","w"]
@@ -198,7 +209,7 @@ let r = ["t","u","v","w","x","y","z"].subarray(-4) // Produces ["w","x","y","z"]
 let g = ["t","u","v","w","x","y","z"].group(3) // Produces [["t","u","v"],["w","x","y"],["z"]] (groups 3 by 3)
 ```
 
-In some cases it may be necessary to `loop` inside an array. For this refer to the Control-Flow section above **TODO: LINK THIS**. Similarly, you can filter elements of an array using the `filter` method:
+It is often necesary `loop` inside an array. For this refer to the Control-Flow section above **TODO: LINK THIS**. Similarly, you can filter elements of an array using the `filter` method:
 
 **The `filter` method - First example**
 ```swift
@@ -215,6 +226,8 @@ let b = [7,20,5,4,50].loop {
   return index >= 2
 } // Produces [5,4,50]
 ```
+
+
 
 ## Inline Functions
 
