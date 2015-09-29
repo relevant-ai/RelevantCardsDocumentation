@@ -120,7 +120,7 @@ let c = a.toString // Same as above
 
 Many of the built in REL functions that take only one parameter, have an equivalent method form. For example `round(1.75)`, `(1.75).round()`, and `(1.75).round` are equivalent statements, all of which produce `2`. This is often useful when chaining several operations; e.g., `round(sqrt(count(foo)))` is equivalent to `foo.count.sqrt.round`.
 
-## Control-Flow (if and for)
+## Control-Flow (if-then-else and for-loop)
 
 *Control-flow* refers to the ubiquitous **if-then-else** and **for** statements that we find in most popular programming languages. REL does not have control-flow per-se (this may change in the future), but it has a few functions that simulate it well enough. Instead of **if-then-else** statements, use the `then` method as follows;
 
@@ -166,6 +166,54 @@ let e = "Hello World".matches("llo Wo") // Produces true
 let f = "Hello World".replace("He","hE") // Produces "hEllo World"
 let g = "Hello World".replace("[a-zA-Z]","*",true) // Produces "***** *****". The last argument 'true' means that it should use regular expressions
 let h = 55.toString // Produces "55" (not 55)
+```
+
+Some of these methods also have equivalent function forms:
+
+```swift
+let a = join(", ",[1,2,3]) // Produces "1, 2, 3"
+let c = lowercase("Hello World") // Produces "hello world"
+let d = uppercase("Hello World") // Produces "HELLO WORLD"
+let h = toString(55) // Produces "55"
+```
+
+## Array Manipulation
+
+The two main array manipulation functions in REL are `merge` and `mergeArray`. They do pretty much the same, except the first one takes a list of arrays separated by commas, while the second one takes **only one parameter**: an array of arrays. This is better understood from the examples below:
+
+```swift
+let a = merge([[1,2],[3,4],[5,6]],["x","y","z"],["p","q","r"]) // Produces [[1,2],[3,4],[5,6],"x","y","z","p","q","r"]
+let b = merge([[1,2],[3,4],[5,6]],["x","y","z"]) // Produces [[1,2],[3,4],[5,6],"x","y","z"]
+let c = merge([[1,2],[3,4],[5,6]]) // Produces [[1,2],[3,4],[5,6]] (no change)
+let d = mergeArray([[1,2],[3,4],[5,6]]) // Produces [1,2,3,4,5,6]
+```
+
+Other useful array methods are exemplified below:
+
+```swift
+let m = ["x","y","z"].count // Produces 3
+let p = ["t","u","v","w","x","y","z"].subarray(2,4) // Produces ["v","w","x"]
+let q = ["t","u","v","w","x","y","z"].subarray(4) // Produces ["t","u","v","w"]
+let r = ["t","u","v","w","x","y","z"].subarray(-4) // Produces ["w","x","y","z"]
+let g = ["t","u","v","w","x","y","z"].group(3) // Produces [["t","u","v"],["w","x","y"],["z"]] (groups 3 by 3)
+```
+
+In some cases it may be necessary to `loop` inside an array. For this refer to the Control-Flow section above **TODO: LINK THIS**. Similarly, you can filter elements of an array using the `filter` method:
+
+**The `filter` method - First example**
+```swift
+let b = [7,20,5,4,50].filter {
+  item in
+  return item < 10
+} // Produces [7,5,4]
+```
+
+**The `filter` method - Second example**
+```swift
+let b = [7,20,5,4,50].loop {
+  (item,index) in
+  return index >= 2
+} // Produces [5,4,50]
 ```
 
 ## Inline Functions
