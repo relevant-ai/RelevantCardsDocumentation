@@ -289,6 +289,17 @@ let b = [7,20,5,4,50].filter {
 } // Produces [5,4,50]
 ```
 
+### `first`
+
+The `first` method is similar to `filter`, except it returns only the first element of the array for which the closure returns `true`. For example;
+
+```swift
+let a = [1,4,9,16,25,36,49].first{
+  item in
+  return item > 20
+} // Produces 25
+```
+
 ### `sortAlpha` and `sortNum`
 
 The `sortAlpha` and `sortNum` methods take a closure that maps every item of an array into a string or number value. The result is a new array sorted by that value, alphabetically or numerically, respectively. Examples follow;
@@ -317,7 +328,7 @@ Just like arrays can be merged together with the `merge` and `mergeArray` method
 let a = blend(["a":1,"b":2],["c":3]) // Produces ["a":1,"b":2,"c":3]
 let b = blendArray([["a":1,"b":2],["c":3]]) // Produces ["a":1,"b":2,"c":3]
 ```
-## Web APIs (`get`, `post`, and `request`)
+## Web APIs
 
 These functions allow you to communicate with web services and API's.
 
@@ -354,15 +365,21 @@ var a = get("some-fake-website.com/something.json") // Fetches the contents as a
 
 ## Device APIs (time and location)
 
-### Date + Time (`getTime()`, `timestamp`, `dateString`, `dateObject`)
+### Date and Time
 
-Use `getTime()` to get the device's current date and time. The result of this function is a date object, and needs to be converted into a usable value. One way to do this is by using the `timestamp` method;
+#### `getTime()`
+
+Use `getTime()` to get the device's current date and time. The result of this function is a date object, and needs to be converted into a usable value. One way to do this is by using the `timestamp` method:
+
+#### `timestamp`
 
 ```swift
 let a = getTime().timestamp // Produces the current time in seconds since 00:00:00 UTC on 1 January 1970
 ```
 
-A date can also be converted into a user-ready format with date formats **TODO: LINK HERE**. For example:
+#### `dateString` and `dateObject`
+
+A date can be converted into a user-ready format with date formats **TODO: LINK HERE**. For example:
 
 ```swift
 let b = getTime().dateString("yyyy-MM-dd") // Produces the current date in the format 2015-09-30
@@ -374,7 +391,7 @@ Furthermore, a date string can be parsed into a date object if the format of the
 let c = "2015-09-30, 12:05".dateObject("yyyy-MM-dd, HH:mm").timestamp // Produces 1443614700
 ```
 
-### User Location (`getLocation()`, `isLocationAvailable()`)
+### User Location: `getLocation()` and `isLocationAvailable()`
 
 Use `getLocation()` to get the user's current location in the format `["latitude":45.501262,"longitude":-73.560347]`. This method will return nil if the user does not allow Relevent to access their location. Use `isLocationAvailable()` to verify whether Relevant is allowed to access location.
 
@@ -402,6 +419,8 @@ let f = {
 let fullName = f("Wendy","Smith") // Produces "Wendy Smith"
 ```
 
+<!--
+
 ### Simplifying Inline-Function Syntax
 
 The `parameters in` header may be omitted to simplify a function's syntax. In this case the parameters may be accessed with the variables `$0`, `$1`, `$2` ... within the function's closure. For example;
@@ -423,6 +442,8 @@ These simplification mechanisms are particularly useful when chaining methods th
 ```swift
 let a = [1,4,9,16,25,36].filter{ $0 % 2 == 0 }.map{ sqrt($0) }.map{ $0/2 } // Produces [1,2,3]
 ```
+
+-->
 
 ## The `card` Variable
 
