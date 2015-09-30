@@ -56,15 +56,13 @@ Cards created using the [**Relevant platform** wizard](http://platform.relevant.
 
 **TODO: ADD IMAGE**
 
-To test it, you just need to type the alias into the search box of the Relevant App, and then hit the **Search** (or **Return**) button, as shown below:
+To test it, you just need to type the alias into the search box of the Relevant App, and then hit the **Search** (or **Return**) button on your keyboard.
 
 **TODO: ADD IMAGE**
 
 If the alias exists and the REL code produces no errors, you'll see the option to add this card to your deck. Tap **Add** and voilà!
 
-**TODO: ADD IMAGE**
-
-You can try adding this sample card immediately: **TODO: ADD ALIAS** before you create your own.
+You can try adding this sample card `mo-mozafarian/reddit` immediately, before you create your own.
 
 ## REL Variables and Basic Syntax
 
@@ -588,11 +586,12 @@ load {
   }
 }
 ```
+**TODO: ADD SS IMAGE FOR THIS CARD**
 **TODO: test that card and put it in platform AND ASK TO TEST HERE!!!**
 
 Observe that each template is a dictionary with **one single key**. This key is the template's name, and its value defines its parameters. Here is a list of some available templates:
 
-**TODO: ADD IMAGES BELOW**
+
 
 | Template        | Parameters <br/> Possible Values + Notes |
 | ------------- |-------------|
@@ -607,7 +606,6 @@ Observe that each template is a dictionary with **one single key**. This key is 
 
 ### The `"buttons"` Template
 
-**TODO: ADD IMAGE**
 
 Instead of a dictionary, this template is defined by an array of one, two of three buttons. Each button is a dictionary with optional keys `"caption"`, `"icon"`, `"color"`, and `"function"`, where `"function"` is a closure that gets executed when the button is tapped. For example:
 
