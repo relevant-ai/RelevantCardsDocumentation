@@ -640,35 +640,22 @@ Instead of a dictionary, this template is defined by an array of one, two of thr
 
 The `"icon"` parameter may take any of the values in the following table;
 
-| Value       | Image |
-| ------------- |-------------|
-| `"done-icon"` | <div style="bakcground-color:#ccc"><img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/done-icon.png"/></div> |
-| `"eye-icon"` | ![eye-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/eye-icon.png) |
-| `"fav-icon"` | ![fav-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/fav-icon.png) |
-| `"heart-icon"` | ![heart-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/heart-icon.png) |
-| `"refresh-icon"` | ![refresh-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/refresh-icon.png) |
-| `"repost-icon"` | ![repost-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/repost-icon.png) |
-| `"share-icon"` | ![share-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/share-icon.png) |
-| `"source-icon"` | ![source-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/source-icon.png) |
-| `"time-icon"` | ![time-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/time-icon.png) |
-| `"downvote-icon"` | ![downvote-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/downvote-icon.png) |
-| `"map-icon"` | ![map-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/map-icon.png) |
-| `"upvote-icon"` | ![upvote-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/upvote-icon.png) |
-| `"call-icon"` | ![call-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/call-icon.png) |
-| `"do-icon"` | ![do-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/do-icon.png) |
-| `"like-icon"` | ![like-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/like-icon.png) |
-| `"log-icon"` | ![log-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/log-icon.png) |
-| `"magic-icon"` | ![magic-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/magic-icon.png) |
-| `"more-icon"` | ![more-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/more-icon.png) |
-| `"play-icon"` | ![play-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/play-icon.png) |
-| `"read-icon"` | ![read-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/read-icon.png) |
-| `"reorder-icon"` | ![reorder-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/reorder-icon.png) |
-| `"twitter-icon"` | ![twitter-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/twitter-icon.png) |
-| `"facebook-icon"` | ![facebook-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/facebook-icon.png) |
-| `"gear-icon"` | ![gear-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/gear-icon.png) |
-| `"search-icon"` | ![search-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/search-icon.png) |
-| `"sync-icon"` | ![sync-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/sync-icon.png) |
+| Value       | Image | Value | Image |
+| ------------- |-------------|----------|-----------|
+| `"done-icon"` | ![done-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/done-icon.png) | `"eye-icon"` | ![eye-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/eye-icon.png) |
+| `"fav-icon"` | ![fav-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/fav-icon.png) | `"heart-icon"` | ![heart-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/heart-icon.png) |
+| `"refresh-icon"` | ![refresh-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/refresh-icon.png) | `"repost-icon"` | ![repost-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/repost-icon.png) |
+| `"share-icon"` | ![share-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/share-icon.png) | `"source-icon"` | ![source-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/source-icon.png) |
+| `"time-icon"` | ![time-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/time-icon.png) | `"downvote-icon"` | ![downvote-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/downvote-icon.png) |
+| `"map-icon"` | ![map-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/map-icon.png) | `"upvote-icon"` | ![upvote-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/upvote-icon.png) |
+| `"call-icon"` | ![call-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/call-icon.png) | `"do-icon"` | ![do-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/do-icon.png) |
+| `"log-icon"` | ![log-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/log-icon.png) | `"more-icon"` | ![more-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/more-icon.png) |
+| `"play-icon"` | ![play-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/play-icon.png) | `"read-icon"` | ![read-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/read-icon.png) |
+| `"reorder-icon"` | ![reorder-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/reorder-icon.png) | `"twitter-icon"` | ![twitter-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/twitter-icon.png) |
+| `"facebook-icon"` | ![facebook-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/facebook-icon.png) | `"gear-icon"` | ![gear-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/gear-icon.png) |
+| `"search-icon"` | ![search-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/search-icon.png) | `"sync-icon"` | ![sync-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/sync-icon.png) |
 | `"chat-icon"` | ![chat-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/chat-icon.png) |
+
 
 
 The `"function"` may be any REL function, and it may open web views, map views, or deeplink to a website in the browser, as well as refresh the card to show new content. See the User Actions section **TODO: LINK HERE** below to learn how to perform these actions.
