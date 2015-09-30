@@ -589,7 +589,7 @@ Include this template on every slide as either `["slide":false]` or `["slide":tr
 
 **TODO: IMAGE HERE?**
 
-This template allows you to add your own text to the card title whenever the user slides to the corresponding slide. Use as `["hanlder":someString]`.
+This template allows you to add your own text to the card title whenever the user slides to the corresponding slide. Use as `["handler":someString]`.
 
 ## User Actions
 
