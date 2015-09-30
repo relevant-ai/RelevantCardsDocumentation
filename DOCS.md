@@ -72,8 +72,8 @@ REL is a *functional*, *inmutable* programming language. Don't worry if you don'
 
 Variable types in REL are similar to JavaScript types; `"strings"`, numbers (`1`, `2`, `3.14`), `["a","r","r","a","y","s"]`, `null`, and dictionaries/objects. The main difference is that dictionaries/objects in REL are delimited by square brackets `[]`, and that the quotes `""` around the keys are mandatory:
 
-**Dictionary/object**
 ```swift
+// A dictionary/object
 let d = [ // <---- Square brackets
   "name":"Wircho",
   "age":29,
@@ -249,7 +249,21 @@ let b = [7,20,5,4,50].filter {
 
 ### `sortAlpha` and `sortNum`
 
+The `sortAlpha` and `sortNum` methods take a closure that maps every item of an array into a string or number value. The result is a new array sorted by that value, alphabetically or numerically, respectively. Examples follow;
 
+```swift
+var a = [["device":"iPhone","mill":500],["device":"iPad","mill":170],["device":"iPod","mill":450]].sortAlpha {
+  item in
+  return item["device"]
+} // Produces [["device":"iPad","mill":170],["device":"iPhone","mill":500],["device":"iPod","mill":450]]
+```
+
+```swift
+var a = [["device":"iPhone","mill":500],["device":"iPad","mill":170],["device":"iPod","mill":450]].sortNum {
+  item in
+  return item["mill"]
+} // Produces [["device":"iPad","mill":170],["device":"iPod","mill":450],["device":"iPhone","mill":500]]
+```
 
 ## Dictionary Manipulation
 
@@ -261,6 +275,31 @@ Just like arrays can be merged together with the `merge` and `mergeArray` method
 var a = blend(["a":1,"b":2],["c":3]) // Produces ["a":1,"b":2,"c":3]
 var b = blendArray([["a":1,"b":2],["c":3]]) // Produces ["a":1,"b":2,"c":3]
 ```
+## Device APIs (time and location)
+
+### Date + Time
+
+It is possible to get the current date and time of the device by using `getTime()`. The result of this function is a date object, and needs to be converted into a usable value. One way to do this is by using the `timestamp` method;
+
+```swift
+var a = getTime().timestamp // Produces the current time in seconds since 00:00:00 UTC on 1 January 1970
+```
+
+A date can also be printed in a user-ready format using date formats **TODO: LINK HERE**. For example:
+
+```swift
+var b = getTime().dateString("yyyy-MM-dd") // Produces the current date in the format 2015-09-30
+```
+
+Furthermore, a date string can be parsed into a date object if the format of the string is known. For example:
+
+```swift
+var c = "2015-09-30, 12:05".dateObject("yyyy-MM-dd, HH:mm").timestamp // Produces 1443614700
+```
+
+### User Location
+
+The user location may be obtained by 
 
 ## Inline Functions
 
