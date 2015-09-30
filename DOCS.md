@@ -167,36 +167,60 @@ The `loop` method is more of an array manipulation function than an actual contr
 
 Strings in REL can be concatenated using `+` or the `concat` function (which takes any number of string or array arguments). Some other string manipulation functions and methods are exemplified below:
 
-### `join`, `splitBy`, `lowercase`, `uppercase`, `matches`, and `replace`
+### `join` and `splitBy`
 
 See examples below:
 
 ```swift
 let a = ", ".join([1,2,3]) // Produces "1, 2, 3"
 let b = "2015-09-29".splitBy("-") // Produces ["2015","09","29"]
-let c = "Hello World".lowercase // Produces "hello world"
-let d = "Hello World".uppercase // Produces "HELLO WORLD"
-let e = "Hello World".matches("llo Wo") // Produces true
-let f = "Hello World".replace("He","hE") // Produces "hEllo World"
-let g = "Hello World".replace("[a-zA-Z]","*",true) // Produces "***** *****". The last argument 'true' means that it should use regular expressions
 ```
 
-Some of these methods also have equivalent function forms:
+`join` has an equivalent function form:
 
 ```swift
 let a = join(", ",[1,2,3]) // Produces "1, 2, 3"
-let c = lowercase("Hello World") // Produces "hello world"
-let d = uppercase("Hello World") // Produces "HELLO WORLD"
-let h = toString(55) // Produces "55"
 ```
 
-### Rich Text: `small`, `bold`, `italic`, and `color`
+### `lowercase`, `uppercase`
+
+See examples below:
+
+```swift
+let c = "Hello World".lowercase // Produces "hello world"
+let d = "Hello World".uppercase // Produces "HELLO WORLD"
+```
+
+These methods have equivalent function forms:
+
+```swift
+let c = lowercase("Hello World") // Produces "hello world"
+let d = uppercase("Hello World") // Produces "HELLO WORLD"
+```
+
+### `matches` and `replace`
+
+See examples below:
+
+```swift
+let e = "Hello World!".matches("llo Wo") // Produces true
+let f = "Hello World!".replace("He","hE") // Produces "hEllo World!"
+let g = "Hello World!".replace("[a-zA-Z]","*",true) // Produces "***** *****!". The last argument 'true' means that it should use regular expressions
+```
+
+### Rich Text
 
 Because the output of a REL function is often used for skinning user interfaces, we occasionally need to output rich text. For this purpose we may assume that all strings in REL have an abstract *default* font. The following methods simply apply transformatons to that font. The results of these methods are always rich text, and may fail to perform some string manipulation methods such as `join`. Other functions like `concat` or the `+` operator do work properly on rich text.
 
+#### `small`
+
 The `small` method/function makes the font size about `0.8` times smaller. Examples: `"Hello World".small`, `small("Hello World")`.
 
+#### `bold` and `italic`
+
 The `bold` and `italic` methods/functions make text bold and italic respectively.
+
+#### `color`
 
 The `color` method allows you to color a given text. Example: `"Hello World".color("red")`. Currently available colors are `"red"`, `"pink"`, `"purple"`, `"green"`, `"yellow"`, `"orange"`, `"blue"`, `"cyan"`, `"gray"`, `"dark-gray"`, `"light-gray"`, `"white"`, and `"transparent"`.
 
