@@ -12,8 +12,8 @@ Click here for an example of a full REL card which displays top content from Red
 
 A *card* in REL has two parts; the **metadata** and the **loading function**, preceeded by the words `meta` and `load` respectively, as follows
 
-**Relevant Card Written in REL**
 ```swift
+// Relevant Card Written in REL
 meta {
   title = "My Card"
   credits = "Myself"
@@ -23,6 +23,7 @@ load {
   card in
   // REL code that outputs the content of the card
   // from different services and APIs
+  // ...
 }
 ```
 
@@ -30,7 +31,7 @@ The actual REL code goes in the `load` *closure* (a *closure* is just a block of
 
 `card` is the input of the load function. This variable has some special powers, as you'll see in The `card` Variable section. **TODO: LINK THIS**.
 
-The return of the `load` closure is the visible content of the card, which must be an array of arrays. The outer array represents the horizontal slides of the card, and each of the inner arrays represent the *templates* that make up each slide (banners, rounded profile image, title+body description, footer, etc). Most templates follow the form below:
+The return of the `load` closure is the visible content of the card, which must be an array of arrays. The outer array represents the horizontal slides of the card, and each of the inner arrays represent the *templates* that make up each slide (such as banners, rounded profile image, title+body description, footer, etc). Most templates follow the form below:
 
 ```swift
 //...
@@ -93,7 +94,7 @@ REL comes equiped with an array of built-in functionality which will keep growin
 
 ### Operators
 
-Most operators familiar to JavaScript developers are available in REL; namely `+,-,*,/,%,==,!=,&&,||,!`, among others, and their behaviour is very similar to that of JavaScript. For example, `+`'ing two numbers gives you their sum, while `+`'ing a string with any other variable gives you a string. Some examples follow:
+Most operators familiar to JavaScript developers are available in REL; namely `+,-,*,/,%,==,!=,&&,||,!`, among others, and their behaviour is very similar to that in JavaScript. For example, `+`'ing two numbers gives you their sum, while `+`'ing a string with any other variable gives you a string. Some examples follow:
 
 ```swift
 let three = 1+2 // Produces 3
@@ -104,7 +105,7 @@ let aLie = (1 == 2) && (4 == 4) // Produces false
 
 ### Functions and Methods
 
-Built-In REL *functions* are, like in other programming languages (and in math), prefixes that may take some one or more values as parameters and *return* another value. For example, the function `concat` takes any list or array of values and concatenates them into a string, doing so recursively;
+Built-In REL *functions* are, like in other programming languages (and in math), prefixes that may take zero or more values as parameters, and *return* another value. For example, the function `concat` takes any list or array of values and concatenates them into a string, doing so recursively;
 
 ```swift
 let c = concat("Relevant"," - ",["The"," ","Missing ","Homescreen"]) // Produces "Relevant - The Missing Homescreen"
@@ -122,27 +123,27 @@ Many of the built in REL functions that take only one parameter, have an equival
 
 ## Control-Flow (if-then-else and for-loop)
 
-*Control-flow* refers to the ubiquitous **if-then-else** and **for** statements that we find in most popular programming languages. REL does not have control-flow per-se (this may change in the future), but it has a few functions that simulate it well enough. Instead of **if-then-else** statements, use the `then` method as follows;
+*Control-flow* refers to the ubiquitous **if-then-else** and **for** statements that we find in most popular programming languages. REL **does not** have control-flow per-se, but it has a few functions that simulate it well enough. Instead of **if-then-else** statements, use the `then` method as follows;
 
-**The `then` method**
 ```swift
+// The then method.
 let a = 1==2 // Produces false
-let b = a.then("it's true!","it's false") // Produces "it's false!"
+let b = a.then("it's true!","it's false!") // Produces "it's false!"
 ```
-When the second argument is ommited, it falls back to `null`, so that `a.then("it's true")` simply produces null.
+When the second argument is ommited, it falls back to `null`, so that `a.then("it's true")` simply produces `null`.
 
-Instead of **for** statements, use the `loop` method applied to an array, after which you may simply append a closure taking one parameter (each item of the array), or two parameters (each item of the array along with its index). Some examples follow;
+Instead of **for** statements, use the `loop` method on an array, after which you may simply append a closure taking one parameter (each item of the array), or two parameters (each item of the array along with its index). Some examples follow;
 
-**The `loop` method - First example**
 ```swift
+// The loop method. First example.
 let b = [1,2,3].loop {
   item in
   return item * item
 } // Produces [1,4,9]
 ```
 
-**The `loop` method - Second example**
 ```swift
+// The loop method. Second example.
 let b = [1,2,3].loop {
   (item,index) in
   return item * item * index
@@ -202,6 +203,7 @@ Other useful array methods are exemplified below:
 
 ```swift
 let l = ["x","y","z"].reverse // Produces ["z","y","x"]
+let l = ["x","y","z"].append("aa") // Produces ["x","y","z","aa"]
 let m = ["x","y","z"].count // Produces 3
 let p = ["t","u","v","w","x","y","z"].subarray(2,4) // Produces ["v","w","x"]
 let q = ["t","u","v","w","x","y","z"].subarray(4) // Produces ["t","u","v","w"]
