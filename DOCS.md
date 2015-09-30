@@ -182,7 +182,7 @@ let b = "2015-09-29".splitBy("-") // Produces ["2015","09","29"]
 let a = join(", ",[1,2,3]) // Produces "1, 2, 3"
 ```
 
-### `lowercase`, `uppercase`
+### `lowercase` and `uppercase`
 
 See examples below:
 
