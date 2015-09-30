@@ -436,6 +436,8 @@ meta {
 
 ## Relevant Card Templates
 
+### Basic Templates
+
 As we said in the Card Structure section **TODO: LINK THIS**, the `return` of the `load` closure has to be an array of arrays, and the inner arrays represent the templates of each slide of the card. For example, a simple card with three slides may look like this:
 
 ```swift
@@ -477,13 +479,114 @@ load {
 ```
 **TODO: test that card!!!**
 
-Observe that each template is a dictionary with **one single key**. This key is the template's name, and its value defines its parameters. Here is a list of basic templates:
+Observe that each template is a dictionary with **one single key**. This key is the template's name, and its value defines its parameters. Here is a list of some available templates:
 
+**TODO: ADD IMAGES BELOW**
 
+| Template        | Parameters <br/> Possible Values + Notes 
+| ------------- |-------------|
+| **`banner`** (banner image)   | **`type`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"narrow"` (default) <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"short"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"medium"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"square"` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"tall"` <br/><br/> **`image`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image. <br/><br/> **`title`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Image title (overlaid in large font) <br/><br/> **`caption`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Image caption (overlaid in small font) <br/><br/> **`align`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Alignment of `title` and `caption` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"left"` (default) <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"center"` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"right"` <br/><br/> **`color`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Background color (e.g. `"cyan"` (default)) |
+| **`profile`** (circle image + caption)   | **`type`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"small"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"medium"` (default) <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"large"` (centered image only, no caption) <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"cell"` <br/><br/> **`image`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image. <br/><br/> **`caption`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Caption beside image <br/><br/> **`border-color`** <br/> &nbsp;&nbsp;&nbsp;&nbsp; Image border color (e.g. `"white"` (default)) |
+| **`double-profile`** (two circle images side by side)   | **`image-i`** (`i=1,2`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image. <br/><br/> **`caption-i`** (`i=1,2`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;Caption under image <br/><br/> **`border-color-i`** (`i=1,2`) <br/> &nbsp;&nbsp;&nbsp;&nbsp; Border color of image |
+| **`description`** (title + body)   | **`type`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"short"` (default) <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"medium"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"long"` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"very-long"` <br/><br/> **`image`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image on the left or right of the template. This parameter forces `type` to be `"medium"`. <br/><br/> **`title`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Title (in bigger font) <br/><br/> **`body`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Body (in smaller font) <br/><br/> **`align`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Alignment of `title` and `body` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"left"` (default) <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"center"` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"right"` <br/><br/> **`image-align`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Alignment of `image`, if available. <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"left"` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"right"` (default) |
+| **`stats`** (one, two, or three stats)   | **`type`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"single"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"double"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"triple"` (default) <br/><br/> **`value-i`** (`i=1,2,3`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;Stats value (e.g. `"200"`) <br/><br/> **`title-i`** (`i=1,2,3`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;Caption under stats value (e.g. `"visitors"`)  <br/><br/> **`align`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Alignment of titles and values <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"left"` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"center"` (default) <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"right"`|
+| **`scalar`** (value and image)   | **`value`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Value on the left <br/><br/> **`image`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image on the right |
+| **`footer`**   | **`type`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"short"` (default) <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"long"` <br/><br/> **`caption`** <br/><br/> **`align`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Alignment of `caption` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"left"` (default) <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"center"` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"right"` |
+| **`sectional`**   | Simply use as `[sectional:true]`. It adds a grey backdrop behind the preceding template. |
 
+### The `"buttons"` Template
 
+**TODO: ADD IMAGE**
 
-## User Actions (`webView`, `mapView`, `refresh`, `deeplink`)
+Instead of a dictionary, this template is defined by an array of one, two of three buttons. Each button is a dictionary with optional keys `"caption"`, `"icon"`, `"color"`, and `"function"`, where `"function"` is a closure that gets executed when the button is tapped. For example:
+
+```swift
+// ...
+    [ // Buttons Template
+      "buttons":[
+        [ // First button
+          "caption":"Share",
+          "icon":"share-icon",
+          "function": {
+            // ...
+            //Do something
+            // ...
+          }
+        ],
+        [ // Second button
+          "caption":"View",
+          "icon":"eye-icon",
+          "function": {
+            // ...
+            //Do something
+            // ...
+          }
+        ]
+      ]
+    ]
+// ...
+```
+
+The `"function"` may be any REL function, and it may open web views, map views, or deeplink to a website in the browser, as well as refresh the card to show new content. See the User Actions section **TODO: LINK HERE** below to learn how to perform these actions.
+
+### The `"actions"` (Hold Down Actions) Template
+
+This template is not visible in the card. Instead it appears when the user holds down on a card for a second. It's syntax is exactly the same as the buttons template, except that you could include up to 5 actions into an `"actions"` template. See the User Actions section **TODO: LINK HERE** below to learn how to perform actions such as opening a map view or deeplinking to the device's browser.
+
+### The `"slide"` Template
+
+Include this template on every slide as either `["slide":false]` or `["slide":true]`. When the card loads, it will have moved automatically to the first slide of value `true`.
+
+### The `"handler"` Template
+
+**TODO: IMAGE HERE?**
+
+This template allows you to add your own text to the card title whenever the user slides to the corresponding slide. Use as `["hanlder":someString]`.
+
+## User Actions
+
+### `webView`
+
+This function may be attached to a button or an action so that the app opens an overlaying web view when the action is triggered. For example, the following is a button template with a single button that opens the New York Times website:
+
+```swift
+// ...
+    [ // Buttons Template
+      "buttons":[
+        [ // Only button
+          "caption":"NYT",
+          "icon":"eye-icon",
+          "function": webView("http://www.nytimes.com")
+        ]
+      ]
+    ]
+// ...
+```
+
+### `mapView`
+
+This function may be used on buttons and actions, like `webView`. It opens an overlaying map view with a pin at a given location. Optionally it shows the user location and default directions to the pin. The syntax is as follows;
+
+```swift
+// ...
+        "function":mapView(<location>,<title>,<show directions>)
+// ...
+```
+
+Where;
+
+`<location>` is the location of the pin in the format `["latitude":45.501262,"longitude":-73.560347]`.
+`<title>` is the title of the pin.
+`<show directions>` is true if you wish to display default directions from the user's location to the pin.
+
+### `deeplink`
+
+```swift
+// ...
+        "function":deeplink("http://www.nytimes.com") // Will open in the device's browser
+// ...
+```
+
 
 
 
