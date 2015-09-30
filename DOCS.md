@@ -640,8 +640,8 @@ Instead of a dictionary, this template is defined by an array of one, two of thr
 
 The `"icon"` parameter may take any of the values in the following table;
 
-| Value       | Image | Value | Image |
-| ------------- |-------------|----------|-----------|
+| Value       | Image | Value | Image | Value | Image | Value | Image |
+| ------------- |-------------|----------|-----------|----------|-----------|----------|-----------|
 | `"done-icon"` | ![done-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/done-icon.png) | `"eye-icon"` | ![eye-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/eye-icon.png) | `"fav-icon"` | ![fav-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/fav-icon.png) | `"heart-icon"` | ![heart-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/heart-icon.png) |
 | `"refresh-icon"` | ![refresh-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/refresh-icon.png) | `"repost-icon"` | ![repost-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/repost-icon.png) | `"share-icon"` | ![share-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/share-icon.png) | `"source-icon"` | ![source-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/source-icon.png) |
 | `"time-icon"` | ![time-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/time-icon.png) | `"downvote-icon"` | ![downvote-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/downvote-icon.png) | `"map-icon"` | ![map-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/map-icon.png) | `"upvote-icon"` | ![upvote-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/upvote-icon.png) |
