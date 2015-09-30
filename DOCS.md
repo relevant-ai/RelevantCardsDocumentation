@@ -163,6 +163,44 @@ The `loop` method is more of an array manipulation function than an actual contr
 
 **Note on trailing closures:** `loop` is actually a method that takes one closure parameter, so that the expressions `a.loop{...}` and `a.loop({...})` are equivalent. A *trailing* closure is permitted when a closure is the last parameter of a function or method.
 
+## Numeric Manipulation
+
+Numbers may be operated as in other programming languages using operators such as `+`, `-`, `*`, and `/`. Besides this they may be formatted into strings with a specific number of decimals using the `decimals` function/method. Some math functions found in many programming languages are also available in REL.
+
+### Number formatting: `decimals`
+
+You may use the `decimals` method in three different ways, exemplified below:
+
+```swift
+// With no parameters:
+let b = a.decimals // Produces the number a with up to exactly 2 decimal places
+let example1 = (3.14159265).decimals // Produces "3.14"
+let example2 = 100.decimals // Produces "100.00"
+```
+
+```swift
+// With one integer parameter:
+let b = a.decimals(n) // Produces the number a with up to exactly n decimal places
+let example1 = (3.14159265).decimals(3) // Produces "3.142"
+let example2 = 100.decimals(3) // Produces "100.000"
+```
+
+```swift
+// With two integer parameters:
+let b = a.decimals(m,n) // Produces the number a with no less than m and no more than n decimal places
+let example1 = (3.14159265).decimals(1,3) // Produces "3.142"
+let example2 = 98.decimals(1,3) // Produces "98.0"
+let example3 = (1.52).decimals(1,3) // Produces "1.52"
+let example4 = 98.decimals(0,3) // Produces "98"
+```
+
+### Random numbers
+
+```swift
+var a = random(100) // Produces a random integer between 0 and 99 (inclusive)
+var b = 5 + random(21) // Random number between 5 and 25 (inclusive)
+```
+
 ## String Manipulation
 
 Strings in REL can be concatenated using `+` or the `concat` function (which takes any number of string or array arguments). Some other string manipulation functions and methods are exemplified below:
@@ -337,15 +375,19 @@ These functions allow you to communicate with web services and API's.
 The most general way to do communicate with a web API is using the `request` function to make an HTTP request, formatted as follows;
 
 ```swift
-var a = request(<method>,<url>,<body>,<headers>,<response type>)
+let a = request(<method>,<url>,<body>,<headers>,<response type>)
 ```
 
 Where;
 
-`<method>` is a string representing an HTTP method, such as `"GET"` or `"POST"`.
+`<method>` is a string representing an HTTP method, such as `"GET"`, `"POST"`, `"PUT"`, `"DELETE"`, `"OPTIONS"`, `"HEAD"`, `"PATCH"`, `"TRACE"`, or `"CONNECT"`.
+
 `<url>` is the URL to be queried.
+
 `<body>` is **a dictionary** of keys and values that will be appended to your request.
+
 `<headers>` is **a dictionary** of your request's HTTP headers.
+
 `<response type>` is either `"string"` or `"json"` (case insensitive). The latter means that the result of the request must be parsed into a JSON variable. This parameter defaults to `"json"`.
 
 Similarly you may use the functions `get` and `post` for GET and POST requests respectively.
@@ -353,14 +395,14 @@ Similarly you may use the functions `get` and `post` for GET and POST requests r
 ### `get` and `post`
 
 ```swift
-var a = get(<url>,<body>,<headers>,<response type>)
-var b = post(<url>,<body>,<headers>,<response type>)
+let a = get(<url>,<body>,<headers>,<response type>)
+let b = post(<url>,<body>,<headers>,<response type>)
 ```
 
 You may ommit any number of parameters at the end, for example;
 
 ```swift
-var a = get("some-fake-website.com/something.json") // Fetches the contents as a JSON variable
+let a = get("some-fake-website.com/something.json") // Fetches the contents as a JSON variable
 ```
 
 ## Device APIs (time and location)
@@ -516,7 +558,7 @@ meta {
 load {
   card in
   
-  var info = [
+  let info = [
     ["name":"Red", "color":"red", "rgb-values":[231,76,60]],
     ["name":"Green", "color":"green", "rgb-values":[112,173,75]],
     ["name":"Blue", "color":"blue", "rgb-values":[41,128,185]]
@@ -645,7 +687,9 @@ This function may be used on buttons and actions, like `webView`. It opens an ov
 Where;
 
 `<location>` is the location of the pin in the format `["latitude":45.501262,"longitude":-73.560347]`.
+
 `<title>` is the title of the pin.
+
 `<show directions>` is true if you wish to display default directions from the user's location to the pin.
 
 ### `deeplink`
