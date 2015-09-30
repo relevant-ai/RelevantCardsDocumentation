@@ -4,11 +4,15 @@ REL is a simple script language built for API aggregation. It is possible to use
 
 This document is a basic introduction to its syntax.
 
-## Sample Card and Structure
+## Relevant Cards
 
-You may create cards using our [**Relevant platform** wizard](http://platform.relevant.ai). Once you make a card in the step-by-step wizard, you will be able to see and edit the code by clicking on the code button. **TODO: ADD IMAGE**.
+### How to Build a Card
+
+You may create cards using our [**Relevant platform** wizard](http://platform.relevant.ai). Once you make a card in the step-by-step wizard, you will be able to view and edit the code by clicking on the code button. **TODO: ADD IMAGE**.
 
 Click here for an example of a full REL card which displays top content from Reddit. **TODO: ADD LINK**
+
+### Structure
 
 A *card* in REL has two parts; the **metadata** and the **loading function**, preceeded by the words `meta` and `load` respectively, as follows
 
@@ -46,7 +50,7 @@ The return of the `load` closure is the visible content of the card, which must 
 ```
 (Scroll all the way down or click here for a reference of all available templates. **TODO: LINK THIS**)
 
-## Testing Cards
+### Testing Cards
 
 Cards created using the [**Relevant platform** wizard](http://platform.relevant.ai) have an *alias*, as shown below:
 
@@ -62,7 +66,7 @@ If the alias exists and the REL code produces no errors, you'll see the option t
 
 You can try adding this sample card immediately: **TODO: ADD ALIAS** before you create your own.
 
-## Variables and Basic Syntax
+## REL Variables and Basic Syntax
 
 REL is a *functional*, *inmutable* programming language. Don't worry if you don't understand these terms. What this means is that almost every line of code is either a *variable initialization* `let a = "hello world"`, or the *return statement of a function* `return "something"`. It also means that it is not possible to change the value of a variable after it has been initialized <s>`a = "ok bye"`</s>.
 
@@ -88,7 +92,7 @@ let path = ["hobbies","hard",1]
 let guitar4 = d[path]
 ```
 
-## Built-In Functionality
+## Basic Operators, Functions and Methods
 
 REL comes equiped with an array of built-in functionality which will keep growing in future versions. This document does not intend to detail all of this functionality, but rather give a good enough preview for you to try it out.
 
@@ -103,7 +107,7 @@ let theTruth = (1 == 1) // Produces true (Parentheses are optional, here just fo
 let aLie = (1 == 2) && (4 == 4) // Produces false
 ```
 
-### Functions and Methods
+### Built-In Functions and Methods
 
 Built-In REL *functions* are, like in other programming languages (and in math), prefixes that may take zero or more values as parameters, and *return* another value. For example, the function `concat` takes any list or array of values and concatenates them into a string, doing so recursively;
 
@@ -123,16 +127,21 @@ Many of the built in REL functions that take only one parameter, have an equival
 
 ## Control-Flow (if-then-else and for-loop)
 
-*Control-flow* refers to the ubiquitous **if-then-else** and **for** statements that we find in most popular programming languages. REL **does not** have control-flow per-se, but it has a few functions that simulate it well enough. Instead of **if-then-else** statements, use the `then` method as follows;
+*Control-flow* refers to the ubiquitous **if-then-else** and **for** statements that we find in most popular programming languages. REL **does not** have control-flow per-se, but it has a few functions that simulate it well enough.
+
+### The `then` Method
+
+In place of **if-then-else** statements, use the `then` method as follows;
 
 ```swift
-// The then method.
 let a = 1==2 // Produces false
 let b = a.then("it's true!","it's false!") // Produces "it's false!"
 ```
 When the second argument is ommited, it falls back to `null`, so that `a.then("it's true")` simply produces `null`.
 
-Instead of **for** statements, use the `loop` method on an array, after which you may simply append a closure taking one parameter (each item of the array), or two parameters (each item of the array along with its index). Some examples follow;
+### The `loop` Method
+
+In place of **for** loops, use the `loop` method on an array, after which you may simply append a closure taking one parameter (each item of the array), or two parameters (each item of the array along with its index). Some examples follow;
 
 ```swift
 // The loop method. First example.
@@ -152,11 +161,15 @@ let b = [1,2,3].loop {
 
 The `loop` method is more of an array manipulation function than an actual control-flow statement.
 
-One thing to notice that loop is actually a method that takes one closure parameter, so that the expressions `a.loop{...}` and `a.loop({...})` are equivalent. A *trailing* (without parentheses) closure is permitted when a closure is the last parameter of a function or method.
+**Note on trailing closures:** `loop` is actually a method that takes one closure parameter, so that the expressions `a.loop{...}` and `a.loop({...})` are equivalent. A *trailing* closure is permitted when a closure is the last parameter of a function or method.
 
 ## String Manipulation
 
 Strings in REL can be concatenated using `+` or the `concat` function (which takes any number of string or array arguments). Some other string manipulation functions and methods are exemplified below:
+
+### `join`, `splitBy`, `lowercase`, `uppercase`, `matches`, and `replace`
+
+See examples below:
 
 ```swift
 let a = ", ".join([1,2,3]) // Produces "1, 2, 3"
@@ -166,7 +179,6 @@ let d = "Hello World".uppercase // Produces "HELLO WORLD"
 let e = "Hello World".matches("llo Wo") // Produces true
 let f = "Hello World".replace("He","hE") // Produces "hEllo World"
 let g = "Hello World".replace("[a-zA-Z]","*",true) // Produces "***** *****". The last argument 'true' means that it should use regular expressions
-let h = 55.toString // Produces "55" (not 55)
 ```
 
 Some of these methods also have equivalent function forms:
@@ -178,9 +190,9 @@ let d = uppercase("Hello World") // Produces "HELLO WORLD"
 let h = toString(55) // Produces "55"
 ```
 
-## Rich Text
+### Rich Text: `small`, `bold`, `italic`, and `color`
 
-Because the output of a REL function is often used for interface skinning, we occasionally need to output rich text. For this purpose we may assume that all strings in REL have an abstract *default* font. The following methods simply applies transformatons to that font. Once a string is applied any of these methods, it becomes rich text and may fail to perform some string manipulation methods such as `join`. Other functions like `concat` or the `+` operation work properly on rich text.
+Because the output of a REL function is often used for skinning user interfaces, we occasionally need to output rich text. For this purpose we may assume that all strings in REL have an abstract *default* font. The following methods simply apply transformatons to that font. The results of these methods are always rich text, and may fail to perform some string manipulation methods such as `join`. Other functions like `concat` or the `+` operator do work properly on rich text.
 
 The `small` method/function makes the font size about `0.8` times smaller. Examples: `"Hello World".small`, `small("Hello World")`.
 
@@ -189,6 +201,8 @@ The `bold` and `italic` methods/functions make text bold and italic respectively
 The `color` method allows you to color a given text. Example: `"Hello World".color("red")`. Currently available colors are `"red"`, `"pink"`, `"purple"`, `"green"`, `"yellow"`, `"orange"`, `"blue"`, `"cyan"`, `"gray"`, `"dark-gray"`, `"light-gray"`, `"white"`, and `"transparent"`.
 
 ## Array Manipulation
+
+### `merge` and `mergeArray`
 
 The two main array manipulation functions in REL are `merge` and `mergeArray`. They do pretty much the same, except the first one takes a list of arrays separated by commas, while the second one takes **only one parameter**: an array of arrays. This is better understood from the examples below:
 
@@ -199,7 +213,9 @@ let c = merge([[1,2],[3,4],[5,6]]) // Produces [[1,2],[3,4],[5,6]] (no change)
 let d = mergeArray([[1,2],[3,4],[5,6]]) // Produces [1,2,3,4,5,6]
 ```
 
-Other useful array methods are exemplified below:
+### `reverse`, `append`, `count`, `subarray`, and `group`
+
+See examples below:
 
 ```swift
 let l = ["x","y","z"].reverse // Produces ["z","y","x"]
@@ -211,25 +227,40 @@ let r = ["t","u","v","w","x","y","z"].subarray(-4) // Produces ["w","x","y","z"]
 let g = ["t","u","v","w","x","y","z"].group(3) // Produces [["t","u","v"],["w","x","y"],["z"]] (groups 3 by 3)
 ```
 
-It is often necesary `loop` inside an array. For this refer to the Control-Flow section above **TODO: LINK THIS**. Similarly, you can filter elements of an array using the `filter` method:
+### `loop` and `filter`
 
-**The `filter` method - First example**
+It is often necesary to `loop` an array. For this refer to the Control-Flow section above **TODO: LINK THIS**. Similarly, you can filter elements of an array using the `filter` method:
+
 ```swift
+// The filter method - First example
 let b = [7,20,5,4,50].filter {
   item in
   return item < 10
 } // Produces [7,5,4]
 ```
 
-**The `filter` method - Second example**
 ```swift
-let b = [7,20,5,4,50].loop {
+// The filter method - Second example
+let b = [7,20,5,4,50].filter {
   (item,index) in
   return index >= 2
 } // Produces [5,4,50]
 ```
 
+### `sortAlpha` and `sortNum`
 
+
+
+## Dictionary Manipulation
+
+### `blend` and `blendArray`
+
+Just like arrays can be merged together with the `merge` and `mergeArray` methods, dictionaries can be blended together with the `blend` and `blendArray` methods. The first one takes a list of dictionaries separated by commas, while the second one takes an array of dictionaries. For example
+
+```swift
+var a = blend(["a":1,"b":2],["c":3]) // Produces ["a":1,"b":2,"c":3]
+var b = blendArray([["a":1,"b":2],["c":3]]) // Produces ["a":1,"b":2,"c":3]
+```
 
 ## Inline Functions
 
