@@ -1,6 +1,6 @@
 # REL
 
-REL is a simple script language built for API aggregation. It is possible to use REL's easy syntax to build cards for the [Relevant iOS App](http://relevant.ai).
+REL is a simple script language built for API aggregation and manipulation in order to build cards for the [Relevant iOS App](http://relevant.ai).
 
 This document is a basic introduction to some of its features.
 
