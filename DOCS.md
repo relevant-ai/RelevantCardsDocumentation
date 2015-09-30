@@ -319,7 +319,11 @@ let b = blendArray([["a":1,"b":2],["c":3]]) // Produces ["a":1,"b":2,"c":3]
 ```
 ## Web APIs (`get`, `post`, and `request`)
 
-These functions allow you to communicate with web services and API's. The most general way to do this is using the `request function`, formatted as follows;
+These functions allow you to communicate with web services and API's.
+
+### `request`
+
+The most general way to do communicate with a web API is using the `request` function to make an HTTP request, formatted as follows;
 
 ```swift
 var a = request(<method>,<url>,<body>,<headers>,<response type>)
@@ -333,7 +337,9 @@ Where;
 `<headers>` is **a dictionary** of your request's HTTP headers.
 `<response type>` is either `"string"` or `"json"` (case insensitive). The latter means that the result of the request must be parsed into a JSON variable. This parameter defaults to `"json"`.
 
-Similarly you may use the functions `get` and `post` for GET and POST requests respectively;
+Similarly you may use the functions `get` and `post` for GET and POST requests respectively.
+
+### `get` and `post`
 
 ```swift
 var a = get(<url>,<body>,<headers>,<response type>)
