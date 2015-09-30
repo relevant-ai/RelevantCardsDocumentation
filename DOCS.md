@@ -237,17 +237,35 @@ let c = merge([[1,2],[3,4],[5,6]]) // Produces [[1,2],[3,4],[5,6]] (no change)
 let d = mergeArray([[1,2],[3,4],[5,6]]) // Produces [1,2,3,4,5,6]
 ```
 
-### `count`, `append`, `reverse`, `subarray`, and `group`
-
-See examples below:
+### `count`
 
 ```swift
 let l = ["x","y","z"].count // Produces 3
+```
+
+### `append`
+
+```swift
 let m = ["x","y","z"].append("aa") // Produces ["x","y","z","aa"]
+```
+
+### `reverse`
+
+```swift
 let n = ["x","y","z"].reverse // Produces ["z","y","x"]
+```
+
+### `subarray`
+
+```swift
 let p = ["t","u","v","w","x","y","z"].subarray(2,4) // Produces ["v","w","x"]
 let q = ["t","u","v","w","x","y","z"].subarray(4) // Produces ["t","u","v","w"]
 let r = ["t","u","v","w","x","y","z"].subarray(-4) // Produces ["w","x","y","z"]
+```
+
+### `group`
+
+```swift
 let g = ["t","u","v","w","x","y","z"].group(3) // Produces [["t","u","v"],["w","x","y"],["z"]] (groups 3 by 3)
 ```
 
