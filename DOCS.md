@@ -10,7 +10,7 @@ This document is a basic introduction to some of its features.
 
 You may create cards using our [**Relevant platform** wizard](http://platform.relevant.ai). Once you make a card in the step-by-step wizard, you will be able to view and edit the code by clicking on the code button. **TODO: ADD IMAGE**.
 
-Click here for an example of a full REL card which displays top content from Reddit.**TODO: DECIDE WHETHER REDDIT?**  **TODO: ADD LINK**
+Click here for an example of a full REL card which displays top content from Reddit.**TODO: DECIDE WHETHER REDDIT?**  **TODO: ADD LINK AND ADD TO PLATFORM, ASK TO TEST HERE**
 
 ### Card Structure
 
@@ -588,7 +588,7 @@ load {
   }
 }
 ```
-**TODO: test that card!!!**
+**TODO: test that card and put it in platform AND ASK TO TEST HERE!!!**
 
 Observe that each template is a dictionary with **one single key**. This key is the template's name, and its value defines its parameters. Here is a list of some available templates:
 
@@ -644,6 +644,7 @@ The `"function"` may be any REL function, and it may open web views, map views, 
 
 This template is not visible in the card. Instead it appears when the user holds down on a card for a second. It's syntax is exactly the same as the buttons template, except that you could include up to 5 actions into an `"actions"` template. See the User Actions section **TODO: LINK HERE** below to learn how to perform actions such as opening a map view or deeplinking to the device's browser.
 
+<!--
 ### The `"slide"` Template
 
 Include this template on every slide as either `["slide":false]` or `["slide":true]`. When the card loads, it will have moved automatically to the first slide of value `true`.
@@ -653,6 +654,8 @@ Include this template on every slide as either `["slide":false]` or `["slide":tr
 **TODO: IMAGE HERE?**
 
 This template allows you to add your own text to the card title whenever the user slides to the corresponding slide. Use as `["handler":someString]`.
+
+-->
 
 ## User Actions
 
