@@ -1,1106 +1,859 @@
-# Relevant Cards Documentation
+# REL
 
-This document explains how to create **Cards** for the [Relevant iOS App](http://relevant.ai) using **REL**, the JSON-based programming language we have created for this purpose.
+REL is a simple script language built for API aggregation and manipulation in order to build cards for the [Relevant iOS App](http://relevant.ai).
 
-I encourage everyone to start by reading [REL's backstory: **How we turned JSON into a full programmig language**](https://medium.com/relevant-stories/rel-chapter-1-907ff616bf80).
+This document is a basic introduction to some of its features.
 
-A **Relevant Card** is a JSON file hosted somewhere on the web, which outputs content for the Relevant iOS App. This JSON file contains instructions on how to gather data from JSON APIs, and display it using templates such as images, footers, etc.
+## Relevant Cards
 
-Great ways to host JSON files include [Dropbox](https://www.dropbox.com) and [GitHub Gists](https://gist.github.com) (in both services, make sure to use the **Raw** link when adding cards to your Relevant App deck).
+### How to Build and Test a Card
 
-Visit [cards.relevant.ai](http://cards.relevant.ai) to view sample cards (Click on "Keep Reading" to see their JSON/REL code).
+You may create cards using our [**Relevant Platform** wizard](http://platform.relevant.ai). Once you make a card in the step-by-step wizard, you will be able to view and edit its code by clicking on the <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/code.png" alt="View Code" width="25" align="center"> button.
 
-## Intro and Hello World
+![Card on the Relevant Platform](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/platform-card.png)
 
-Here is a sample *"Hello World"* card:
+Cards have an **Alias**, as displayed above. To test a card, simply type its alias into the search box of the Relevant App, and then hit **Search** (or **Return**) on your keyboard. If the alias exists and the REL code produces no errors, you'll see the option to add this card to your deck. Tap **ADD** and voilà! <br/> <br/>
 
-```json
-{
-    "id": "hello-world",
-    "title": "Hello World Card",
-    "icon_url": "http://relevant.ai/hello_world.png",
-    "summary": "Card's summary for the library.",
-    "credits": "Relevant",
-    "settings_type": "NONE",
-    "_LOAD": {
-        "_RETURN":[
-            [
-                {
-                    "description":{
-                        "title": "Hello World",
-                        "body": "Hello World? There's a card for that."
-                    }
-                },
-                {
-                    "footer":{
-                        "caption": "Relevant - The Missing Home Screen"
-                    }
-                }
-            ]
-        ]
-    }
+<img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/card-alias.jpg" alt="Adding Card" width="45%" align="top"> <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/actual-card.jpg" alt="Card on the Relevant App" width="45%">
+
+You may actually add this sample card `mo-mozafarian/reddit` before you create your own.
+
+### Card Structure
+
+A *card* in REL has two parts; the **metadata** and the **loading function**, preceeded by the words `meta` and `load` respectively, as follows
+
+```swift
+// Relevant Card Written in REL
+meta {
+  title = "My Card"
+  credits = "Myself"
+}
+
+load {
+  card in
+  // REL code that outputs the content of the card
+  // from different services and APIs
+  // ...
 }
 ```
 
-The keys `id`, `title`, `icon_url`, `summary`, `credits`, and `settings-type` are metadata. Of these, only the `title` value is visible on the card itself.
+The actual REL code goes in the `load` *closure* (a *closure* is just a block of code inside curly brackets `{}`, we'll explain this later in more detail).
 
-The `"_LOAD"` key represents the content and appearance of the card.
+`card` is the input of the load function. This variable has some special powers, as you'll see in [The `card` Variable](#the-card-variable) section.
 
-**To test this card;** launch the [Relevant iOS app](http://relevant.ai), shake your device, and when prompted, insert the following URL into the input box:
+The return of the `load` closure is the visible content of the card, which must be an array of arrays. The outer array represents the horizontal slides of the card, and each of the inner arrays represent the *templates* that make up each slide (such as banners, rounded profile image, title+body description, footer, etc). Most templates follow the form below:
 
-`https://gist.githubusercontent.com/wircho/f250e0ae9f818637c9c5/raw/d2ebeb8306f7520f60f5f318bc721eb378dd4fe1/card`
-
-You should see the following card:
-
-![Hello World Sample Card](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/hello_world_card.png)
-
-Think of the object `_LOAD` as a function that is called every time the card needs to refresh. The `_RETURN` of this function is an array with **only one element**. That means this card has **only one page** (swiping left and right will do nothing). This page is itself an array of **templates**: A `description` template with parameters `title` and `body`, and a `footer` template with parameter `caption`.
-
-**Remark:** The `_RETURN` of the `_LOAD` block must always be an array of arrays. Each element of the outer array is a *page* and each element of the inner array is a *template*.
-
-**Remark:** As of Relevant 1.0, cards **do not update automatically** when you change the code. After making changes to your hosted JSON, you need to delete the current card (tap the "i" button, then REMOVE) and then add it again by shaking the device.
-
-## The REL Language
-
-Everything inside the `_LOAD` block must follow the syntax of the REL language. Reserved words/keys for the REL language are uppercase and preceded by an *underscore* (`_`). Everything else is what it looks like: a JSON object, array, string, or number.
-
-### Variables
-
-You can define variables inside the `_LOAD` block as follows:
-
-```json
-"_LOAD":{
-    "foo":5,
-    "var":[1,"a",{"b":"c"}],
-    "norf":{"x":50.1,"y":-70},
-    "_RETURN": ...
-}
-```
-
-Normally, unless used somewhere in `_RETURN`, these variables will be ignored. This makes REL *lazy*; it only does things if needed and when needed.
-
-The easiest way to use a variable is using the syntax `"{variable_name}"`. For example, the Hello World card from before is equivalent to the one below:
-
-```json
-{
-    "id": "hello-world",
-    "title": "Hello World Card",
-    "icon_url": "http://relevant.ai/hello_world.png",
-    "summary": "Card's summary for the library.",
-    "credits": "Relevant",
-    "settings_type": "NONE",
-    "_LOAD": {
-        "hello":"Hello World",
-        "foo":{
-            "description":{
-                "title": "{hello}",
-                "body": "{hello}? There's a card for that."
-            }
-        },
-        "var":{
-            "footer":{
-                "caption": "Relevant - The Missing Home Screen"
-            }
-        },
-        "_RETURN":[
-            [
-                "{foo}",
-                "{var}"
-            ]
-        ]
-    }
-}
-```
-
-In this card the `_LOAD` block has three intermediate variables, named `hello`, `foo`, and `var`.
-
-### Inserting/Concatenating String Variables
-
-As in the previous example, it is possible to insert a string-valued variable into another string using the syntax `"... {variable_name} ..."`. For example `"The value of the variable foo is {foo}"`.
-
-This is only possible when `foo` is a string, and will not work otherwise.
-
-### Built-In Functions
-
-The REL language comes packaged with a set of built-in functions to help you easily manipulate JSON objects. All built-in function names follow the *underscore uppercase* syntax (e.g. `_CONCAT`) to differentiate it from your own variables and JSON objects.
-
-A built-in function call is usually represented by a one-key object whose only key is the function name. For example:
-
-```json
-{
-    "_FUNC_NAME": ...
-}
-```
-
-The value of the key is the parameter of the function. This could be a string, an array, an object, or in some cases a set of parameters with specific names, as follows:
-
-```json
-{
-    "_FUNC_NAME": {
-        "_FIRST_PARAM_NAME": ...,
-        "_SECOND_PARAM_NAME": ...,
-        "_THIRD_PARAM_NAME": ...
-    }
-}
-```
-
-Most of the rest of this documentation is devoted to introducing REL's built in functions.
-
-### The `_PATH` function
-
-We often need to dig deep inside a JSON object or array, in order to fetch a specific value. This will be more useful when we get JSON objects following all kinds of different standards from web services (See the `_URL` function below).
-
-The `_PATH` function takes an array of strings and integers. The first string is the name of a variable. Every subsequent string or integer represents either an object's key, or an array's index. The result of the function call is obtained by recursively looking up these keys and indices into the variable. Whenever a look up fails, the function `_PATH` returns `null`.
-
-In the example bellow, the variable `var` takes the value `"Hello World"`
-
-```json
-"foo":{
-    "byes":[
-        {"value":"Adios Mundo","language":"Spanish"},
-        {"value":"Bye World","language":"English"}
-    ],
-    "hellos":[
-        {"value":"Hola Mundo","language":"Spanish"},
-        {"value":"Hello World","language":"English"}
+```swift
+//...
+  [
+    "template-name":[
+      "parameter":value,
+      "another-parameter":anotherValue
+      //...
     ]
-},
-"var":{
-    "_PATH":["foo","hellos",0,"value"]
-}
+  ]
+//...
 ```
+([Click here for a reference to all available templates.](#relevant-card-templates))
 
-**Remark:** Observe that `{"_PATH":["variable_name"]}` is equivalent to `"{variable_name}"`.
+## REL Variables and Basic Syntax
 
-### The `_PATH_EXISTS` Function
+REL is a *functional*, *inmutable* programming language. Don't worry if you don't understand these terms. What this means is that almost every line of code is either a *variable initialization* `let a = "hello world"`, or the *return statement of a function* `return "something"`. It also means that it is not possible to change the value of a variable after it has been initialized <s>`a = "ok bye"`</s>.
 
-Like `_PATH`, this function takes an array of strings and integers. It returns `true` (`1`) if this array represents a path that exists, and `false` (`0`) otherwise. For example:
+Variable types in REL are similar to JavaScript types; `"strings"`, numbers (`1`, `2`, `3.14`), `["a","r","r","a","y","s"]`, `null`, and dictionaries/objects. The main difference is that dictionaries/objects in REL are delimited by square brackets `[]`, and that the quotes `""` around the keys are mandatory:
 
-```json
-"object": {
-    "key_1": [
-        "element #1",
-        [
-            "element",
-            "#",
-            "2"
-        ]
-    ],
-    "key_2": {
-        "red": 255,
-        "green": 255
-    }
-},
-"another_object": {
-    "something": "{object}"
-},
-"a": {
-    "_PATH_EXISTS":["another_object","something","key_1",1,1]
-},
-"b": {
-    "_PATH_EXISTS":["another_object","something","key_1",1,2]
-},
-"c": {
-    "_PATH_EXISTS":["another_object","something","key_2","blue"]
-}
-```
-
-In the code above, the variables `a` and `b` are `1` (`true`), and the variable `c` is `0` (`false`).
-
-### The `_IF`, `_THEN`, `_ELSE` Function
-
-Unlike other built-in functions, this one is represented by an object with three keys, rather than one. It works just as you would expect it in any programming language. In the example below, the variable `city` takes the value `"Montreal"`.
-
-```json
-"foo":true,
-"cities":["Montreal","Toronto"],
-"city":{
-    "_IF":"{foo}",
-    "_THEN":{"_PATH":["cities",0]},
-    "_ELSE":{"_PATH":["cities",1]}
-}
-```
-
-It is important to keep in mind that `_IF,_THEN,_ELSE` is a function, and not a construct, as in other programming languages. That means `_THEN` and `_ELSE` contain **values** to be *returned*, rather than **statements** to be *executed*.
-
-However, you may still wish to use intermediate variables inside `_THEN` and `_ELSE`. This is possible as long as they have a `_RETURN` key, as in the example below:
-
-```json
-"foo":true,
-"cities":["Montreal","Toronto"],
-"city":{
-    "_IF":"{foo}",
-    "_THEN":{
-        "city":{"_PATH":["cities",0]},
-        "_RETURN":"{city}"
-    },
-    "_ELSE":{"_PATH":["cities",1]}
-}
-```
-
-**Remark for scope geeks:** REL uses block dynamic scope, and all variables are set only once (this is called *inmutability*). In particular that means that the variable `city` inside `_THEN` is a local variable, and does not overwrite the other equally named variable.
-
-### The `_URL` Function
-
-Allows you to make a call to a web service that returns a JSON object. To test this function we're using the JSON from this URL:
-
-`https://gist.githubusercontent.com/wircho/d6c606350f8a6dca29ee/raw/b7872ecebfcc868ff825c88fe1c5e06d13ad618c/cities`
-
-```json
-{
-    "cities":[
-        {
-            "picture":"http://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/df/montreal.jpg",
-            "name":"Montreal",
-            "nickname":"The City Of Saints",
-            "province":"Quebec"
-        },
-        {
-            "picture":"http://images.hellobc.com/mgen/tbccw/production/TBCCWDisplay.ms?img=/getmedia/4149a8de-fc5d-4e54-b659-5282486fa973/2-200291313-001-Vancouver-skyline.jpg.aspx&tl=1&sID=1&c=public,max-age=172802,post-check=7200,pre-check=43200&bid=4_5",
-            "name":"Vancouver",
-            "nickname":"Hollywood North",
-            "province":"British Columbia"
-        },
-        {
-            "picture":"http://www.seetorontonow.com/App_Themes/tourismtoronto/images/about-tourism-toronto.jpg",
-            "name":"Toronto",
-            "nickname":"T-Dot",
-            "province":"Ontario"
-        }
-    ]
-}
-```
-
-The card below exemplifies the use of the `_URL` function. You can test it by shaking your phone and adding the card `https://gist.githubusercontent.com/wircho/327fef8392c1865dec5e/raw/5aa7e97fa166888c3bd8d0f38c4b062deebc6819/city_card`
-
-```json
-{
-    "id": "city-card",
-    "title": "City",
-    "icon_url": "http://relevant.ai/city.png",
-    "summary": "Card's summary for the library.",
-    "credits": "The Web",
-    "settings_type": "NONE",
-    "_LOAD": {
-        "json_info":{
-            "_URL":"https://gist.githubusercontent.com/wircho/d6c606350f8a6dca29ee/raw/b7872ecebfcc868ff825c88fe1c5e06d13ad618c/cities"
-        },
-        "first_city":{
-            "_PATH": ["json_info","cities",0]
-        },
-        "_RETURN":[
-            [
-                {
-                    "banner":{
-                        "image": {"_PATH":["first_city","picture"]}
-                    }
-                },
-                {
-                    "description":{
-                        "title": {"_PATH":["first_city","name"]},
-                        "body": {"_PATH":["first_city","nickname"]}
-                    }
-                },
-                {
-                    "footer":{
-                        "caption": {"_PATH":["first_city","province"]}
-                    }
-                }
-            ]
-        ]
-    }
-}
-```
-
-![City Sample Card](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/montreal_card.png)
-
-As the Hello World card, this card has only one page. See the `_LOOP` function below to learn how to display all cities from the web service.
-
-You can also make richer requests using `_URL`, as exemplified below:
-
-```json
-"var":{
-    "_URL":{
-        "_ADDRESS":"http://some/web/address.html",
-        "_METHOD":"POST",
-        "_BODY":"a=something&b=something%20else",
-        "_HEADERS": {
-            "Some Header": "Some Value",
-            "Another Header": "Another Value"
-        }
-    }
-}
-```
-
-**Remark:** The `_URL` function may return an error object if, for example, there is no internet connection. In most cases you can safely ignore this, and the card will just display the error. Read **Error Handling** below to learn how to handle errors.
-
-### The `_LOOP` Function
-
-This function loops an array and processes each of its items to produce a new array. For example, the variable `var` below takes the value `[1,2,3,4]`:
-
-```json
-"foo":[{"num":1,"name":"one"},{"num":2,"name":"two"},{"num":3,"name":"three"},{"num":4,"name":"four"}],
-"var":{
-    "_LOOP":{
-        "_ARRAY":"{foo}",
-        "_EACH":{"_PATH":["_ITEM","num"]}
-    }
-}
-```
-
-`_ARRAY` and `_EACH` are the parameter names of the function `_LOOP`, and must always be present. The implicit variable `_ITEM` exists only within the `_EACH` object, and represents the current element of the array. You may also use the implicit variable `_INDEX`, which is the current index between `0` and the array's length.
-
-You may use intermediate variables inside `_EACH` as long as there is a `_RETURN` key. In the example below, the variable `var` takes the value `["1 is one","2 is two","3 is three","4 is four"]`:
-
-```json
-"foo":[{"num":1,"name":"one"},{"num":2,"name":"two"},{"num":3,"name":"three"},{"num":4,"name":"four"}],
-"var":{
-    "_LOOP":{
-        "_ARRAY":"{foo}",
-        "_EACH":{
-            "num":{"_PATH":["_ITEM","num"]},
-            "name":{"_PATH":["_ITEM","name"]},
-            "_RETURN":"{num} is {name}"
-        }
-    }
-}
-```
-
-We may use `_LOOP` to improve upon the card exemplifying the `_URL` function above. Test this improved card by shaking your phone and inputing this URL: `https://gist.githubusercontent.com/wircho/c8f4f5b0ce440b8edd83/raw/8ef09440e96322e75220ff1470fbc4c65d76e6c2/cities_card`
-
-```json
-{
-    "id": "cities-card",
-    "title": "Cities",
-    "icon_url": "http://relevant.ai/cities.png",
-    "summary": "Card's summary for the library.",
-    "credits": "The Web",
-    "settings_type": "NONE",
-    "_LOAD": {
-        "json_info":{
-            "_URL":"https://gist.githubusercontent.com/wircho/d6c606350f8a6dca29ee/raw/b7872ecebfcc868ff825c88fe1c5e06d13ad618c/cities"
-        },
-        "_RETURN":{
-            "_LOOP":{
-                "_ARRAY":{"_PATH":["json_info","cities"]},
-                "_EACH":[
-                    {
-                        "banner":{
-                            "image": {"_PATH":["_ITEM","picture"]}
-                        }
-                    },
-                    {
-                        "description":{
-                            "title": {"_PATH":["_ITEM","name"]},
-                            "body": {"_PATH":["_ITEM","nickname"]}
-                        }
-                    },
-                    {
-                        "footer":{
-                            "caption": {"_PATH":["_ITEM","province"]}
-                        }
-                    }
-                ]
-            }
-        }
-        
-    }
-}
-```
-
-This is how the card above looks like after scrolling all the way to the right:
-
-![Cities Sample Card](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/toronto_card.png)
-
-### Long Step `_LOOP`
-
-The built-in function `_LOOP` may also take an optional positive parameter `_STEP`. When this parameter is a number *n* greater than 1, the implicit variable `_ITEM` in `_EACH` becomes an array itself, having at most *n* elements. In the following example, the variable `var` takes the value `[[1,2,3],[4,5,6],[7,8]]`:
-
-```json
-"foo":[1,2,3,4,5,6,7,8],
-"var":{
-    "_LOOP":{
-        "_ARRAY":"{foo}",
-        "_STEP":3,
-        "_EACH":"{_ITEM}"
-    }
-}
-```
-
-### Filtering Arrays Using `_LOOP`
-
-The example below shows that it is possible to filter out some elements of an array using `_LOOP`, simply by returning `null` in `_EACH`. The variable `var` takes the value `[1,3,4,5]`.
-
-```json
-"foo":[true,false,true,true,true,false],
-"var":{
-    "_LOOP": {
-        "_ARRAY": [1,2,3,4,5,6],
-        "_EACH" : {
-            "_IF":{"_PATH":["foo","{_INDEX}"]},
-            "_THEN":"{_ITEM}",
-            "_ELSE":null
-        }
-    }
-}
-```
-
-### The `_SORT` Function
-
-This function sorts an `_ARRAY` parameter. The parameter `_BY` defines the sorting condition. As in `_LOOP`, the elements of the array are represented by the implicit local variable `_ITEM` inside `_BY`.
-
-```json
-"var":{
-    "_SORT": {
-        "_ARRAY": [{"info":{"number":5}},{"info":{"number":3}},{"info":{"number":8}}],
-        "_BY": {"_PATH":["_ITEM","info","number"]}
-    }
-}
-```
-
-It is possible to reverse the ordering using `"_REVERSE":true`:
-
-```json
-"var":{
-    "_SORT": {
-        "_ARRAY": [{"info":{"number":5}},{"info":{"number":3}},{"info":{"number":8}}],
-        "_BY": {"_PATH":["_ITEM","info","number"]},
-        "_REVERSE":true
-    }
-}
-```
-
-Sorting by a comparison function is just as easy, except the key is now `_BY_FUNCTION` and it holds an expression depending on two implicit local parameters. The local parameters are keyed `"_A"` and `"_B"` and represent two arbitrary items in the `"_ARRAY"`. The function/expression must return `1` (`true`) if the items should be ordered `"_A","_B"` and `0` (`false`) if they should be ordered `"_A","_B"`
-
-See the `_MATH` and `_CONCAT` functions to understand this example.
-
-```json
-"var":{
-    "_SORT": {
-        "_ARRAY": [{"info":{"number":5}},{"info":{"number":3}},{"info":{"number":8}}],
-        "_BY_FUNCTION": {
-            "_MATH":{
-                "_CONCAT":[
-                    {"_PATH":["_A","info","number"]},
-                    "<",
-                    {"_PATH":["_B","info","number"]}
-                ]
-            }
-        }
-    }
-}
-```
-
-### Other Array Functions
-
-**`_COUNT`** Takes an array and returns its number of elements. All throughout REL, null elements are ignored from computed objects and arrays, and so they don't count towards an array's `_COUNT`.
-
-**`_FOR`** (for loop) Similar to `_LOOP` but with parameters `_FROM,_TO,_EACH`, and implicit variable `_INDEX` within `_EACH`. For example, `{"_FOR":{"_FROM":0,"_TO":10,"_EACH":"{_INDEX}"}}` returns the array `[0,1,2,3,4,5,6,7,8,9,10]`. You can use the optional parameter `_STEP` as well.
-
-**`_MERGE`:** Takes an array of objects, strings, or arrays, and returns an array containing each of those objects, strings, and array elements. For example, the variable `var` below takes the value `[1,2,3,4,5,6,7,8,9]`
-
-```json
-"var":{
-    "_MERGE":[
-        1,
-        [
-            2,
-            3,
-            4,
-            5
-        ],
-        6,
-        7,
-        [
-            8,
-            9
-        ]
-    ]
-}
-```
-
-**`_FIRST_NOT_NULL`** Returns the first not null element of a passed array. It computes elements one by one, stopping when it first finds a not null value.
-
-**`_FIRST_NOT_EMPTY`** Same as above but also rejects empty strings.
-
-**`_FIRST_NOT_ERROR`** Same as `_FIRST_NOT_NULL` but also rejects errors.
-
-### Manipulating Arrays and Objects
-
-Below are some examples showing how to manipulate arrays and objects (see also the function `_MERGE` in **Other Array Functions**).
-
-**`{"_REMOVE":{"_OBJECT":"{foo}","_KEY":"{k}"}}`** returns the object or array that results from removing the key `k` from the object `foo`, or the index `k` from the array `foo`.
-
-**`{"_INSERT":{"_OBJECT":"{foo}","_KEY":"{k}","_ELEMENT":"{e}"}}`** returns the object or array that results from inserting the element `e` at the key `k` of object `foo`, or by inserting the element `e` at the index `k` of the array `foo`.
-
-For simplicity, in the examples above, variables `foo`, `k` and `e` are assumed to be variables which are previously defined. However, they could be arbitrary REL expressions, or even hardcoded JSON values.
-
-**`_DICTIONARY`:** Takes an array of two-element arrays, and returs an object whose keys are the first elements of these two-elements arrays, and whose values are their second elements. For example `{"_DICTIONARY":["a",1],["b",[2,3]],["c","four"]}` produces `{"a":1,"b":[2,3],"c":"four"}`.
-
-### The `_MATH` Function
-
-This function takes a string representing a mathematical expression, and returns the resulting number. In the example below, the variable `var` takes the value `2015`:
-
-```json
-"x":1000,
-"y":1,
-"z":1,
-"var":{"_MATH":"{x}+{x}+({y}+{z})*7.5"}
-```
-
-### Basic String Functions
-
-Basic string functions are built in functions that take a string and return a string. Some available basic string functions are listed below:
-
-**`_URL_ENCODE`:** Percent encoding for URL parameters.
-
-**`_URL_DECODE`:** Inverse of above.
-
-**`_UPPERCASE`:** Convert a String to uppercase.
-
-**`_LOWERCASE`:** Convert a String to lowercase.
-
-### Other String Functions
-
-**`_CONCAT`:** Takes an array of strings (or numbers) and concatenates them to form a string.
-
-**`_JOIN`:** Takes an array of strings (or numbers) and joins them by a given string. For example, the variable `var` below takes the value `"a-b-c"`:
-
-```json
-"foo":["a","b","c"],
-"var":{
-    "_JOIN":{
-        "_ARRAY":"{foo}",
-        "_WITH":"-"
-    }
-}
-```
-
-**`_SPLIT`:** This function takes a string `_STRING` and a separator string `_SEPARATOR`. It returns the array that results from splitting the string by the separator. For example, the variable `var` below takes the value `[a,b,c,d]`:
-
-```json
-"var":{
-    "_SPLIT": {
-        "_STRING": "a, b, c, d",
-        "_SEPARATOR": ", ",
-    }
-}
-```
-
-**`_REPLACE`:** Takes parameters `_STRING`, `_SEARCH` and `_REPLACEMENT`. `_STRING` is a string. `_SEARCH` and `_REPLACEMENT` must be strings or equally long arrays of strings. Returns a string that results from replacing each ocurrence of a string from `_SEARCH` in `_STRING` with the corresponding element in `_REPLACEMENT`. An optional parameters `"_REGEX":true` may be used for regular expression search. In both examples below, the variable `var` takes the value `"ABC"`:
-
-```json
-"foo":"A123B123C123",
-"var":{
-    "_REPLACE":{
-        "_STRING":"{foo}",
-        "_SEARCH":["12","3"],
-        "_REPLACEMENT":["",""]
-    }
-}
-```
-
-```json
-"foo":"A123B45C6789",
-"var":{
-    "_REPLACE":{
-        "_STRING":"{foo}",
-        "_SEARCH":"[1-9]",
-        "_REPLACEMENT":"",
-        "_REGEX":true
-    }
-}
-```
-
-### Logic/Boolean Functions
-
-These are functions that take the role of common logic operators, returning a boolean (`true` or `false`). Some of these are listed below:
-
-**`_NOT`:** Takes a boolean and returs its opposite.
-
-**`_AND`:** Takes an array and returns whether all of its elements are `true`.
-
-**`_OR`:** Takes an array and returns whether any of its elements is `true`.
-
-**`_EQUAL`:** Takes an array of two JSON values and returns whether they are equal.
-
-### Number Functions
-
-Some functions to format and manipulate numbers (also see **The `_MATH` Function** above).
-
-**`_RANDOM`** `{"_RANDOM":100}`, for example, returns a random integer between 0 and 99.
-
-**`_ROUND`:** Rounds a number to its closest integer.
-
-**`_FLOOR`:** Rounds **down** a number to its closest integer.
-
-**`_DECIMAL`:** Displays a number using the standard format used for currency in the English language, with comma-separated thousands, e.g. `1,000.02` or `1,000`. Support for other locales will become available in future versions of Relevant.
-
-### The `_DATE` Function
-
-This function always returns a string representing a date in a given format. The only required parameter is `"_FORMAT_OUT"`. The example below returns today's date in the format yyyy-MM-dd:
-
-```json
-"todays_date":{
-    "_DATE": {
-        "_FORMAT_OUT":"yyyy-MM-dd",
-    }
-}
-```
-
-You may also include hours, minutes, seconds, and milliseconds. [Click here for a list of all available formats](http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns).
-
-Besides these formats, you could also use `"<<timestamp>>"` (return a [UNIX timestamp, i.e. seconds since 1970](http://en.wikipedia.org/wiki/Unix_time)), `"<<ago>>"` (string such as `"11 minutes ago"`), `"<<fb-ago>>"` (Facebook style), or `"<<min-ago>>"` (Minimal Twitter style, such as `"11m"`).
-
-You can use the parameter `"_OFFSET"` to offset the current time by any number of seconds. This example produces yesterday's date:
-
-```json
-"yesterdays_date":{
-    "_DATE": {
-        "_OFFSET": -86400,
-        "_FORMAT_OUT": "yyyy-MM-dd",
-    }
-}
-```
-
-Instead of using today's date, you can also input a fixed date using the parameter "`_VALUE`", which is either a [UNIX timestamp (seconds since 1970)](http://en.wikipedia.org/wiki/Unix_time), or a formatted date string. In the latter case, it is also necessary to include a parameter "`_FORMAT_IN`". For example:
-
-```json
-"some_date":{
-    "_DATE": {
-        "_VALUE": "01/11/2022",
-        "_FORMAT_IN": "MM/dd/yyyy",
-        "_FORMAT_OUT": "yyyy-MM-dd",
-    }
-}
-```
-
-### Getting User Location / Coordinate Distance / Directions
-
-User location may be accessed through the `_LOCATION` implicit variable, which comes in the format:
-
-```json
-{
-    "latitude":...,
-    "longitude":...
-}
-```
-
-For example, one may get the user's latitude using `{"_PATH":["_LOCATION","latitude"]}`.
-
-It is possible get the distance between two coordinates using `{"_COORDIST":[...,...]}`. For example, the following returns the distance **in meters** between the current user location and some place in San Francisco:
-
-```json
-{
-    "_COORDIST":[
-        "{_LOCATION}",
-        {
-            "latitude":37.797929,
-            "longitude:-122.428931
-        }
-    ]
-}
-```
-
-You can also get step by step directions to a given location using `_ROUTE`. For example:
-
-```json
-{
-    "_ROUTE_":{
-        "_FROM":"{_LOCATION}",
-        "_TO":{
-            "latitude":37.797929,
-            "longitude:-122.428931
-        }
-    }
-}
-```
-
-You may also use the optional parameter `_TYPE` which defaults to `"any"` and may take the values `"any"`, `"walking"`, or `"automobile"`. If the location request succeedes, it returns an array of route objects of the form (distances are **in meters**, and times are **in seconds**):
-
-```json
-{
-    "name":"Such street",
-    "distance":100.05,
-    "travel-time":110.51,
-    "advisory":"Slippery slopes",
-    "type":"walking",
-    "steps":[
-        {
-            "instructions":"Walk to destination",
-            "notice":"",
-            "distance:100.05,
-            "type":"walking"
-        }
-    ]
-}
-```
-
-### The `_WEB_CALLBACK` Function (Web View for User Input)
-
-It is possible to pop up a webview while a relevant card is being loaded, be it for user authentication, or any other form of user input. This is achieved with the `_WEB_CALLBACK` function. This function will return either when the user dismisses the webview manually, or when a certain base URL is loaded as a result of navigation. This functions looks like this:
-
-```json
-"var":{
-    "_WEB_CALLBACK": {
-        "_ADDRESS":"http://relevant.ai/",
-        "_CALLBACK_BASE":"relevant.ai/callback"
-    }
-}
-```
-
-The parameter `_ADDRESS` is the initial URL of the webview. The webview will dismiss automatically once it reaches a URL prefixed by the `_CALLBACK_BASE`. **Remember not to include the protocol http:// in the `_CALLBACK_BASE`**. If the user dismisses the webview manually, then this function returns `null`. Otherwise it returs an object of the form:
-
-```json
-{
-    "url":"http://url/absolute/string",
-    "body":{
-        "param1":"value1",
-        "param2":"value2"
-    },
-    "method":"GET or POST or any other method",
-    "headers":{ 
-        "Header One":"value of header one",
-        "Header Two":"value of header two",
-        "Header Three":"value of header three"
-    }
-}
-```
-
-This object contains information about the url request that was created by the webview before dismissing. This request is never actually called.
-
-### Inline Functions (`_FUNCTION` and `_APPLY`)
-
-It is possible to define your own functions. In the example below we define a function `increment` which takes numbers `X`,`Y` and returns `X+Y+1`:
-
-```json
-"increment":{
-    "_FUNCTION":{"_MATH":"{X}+{Y}+1"}
-}
-```
-
-To apply this function you use `_APPLY` on a dictionary whose only key is the name of the function. The value of this key represents the parameters that are passed to the function, as in the following example, in which `var` takes the value `101`:
-
-```json
-"var":{
-    "_APPLY":{"increment":{"X":45,"Y":55}}
-}
-```
-
-A function's body may contain intermediate variables, as long as it has a `_RETURN` key. The function `increment_1` below is equivalent to `increment` above.
-
-```json
-"increment_1":{
-    "_FUNCTION":{
-        "Z":{"_MATH":"{X}+{Y}"},
-        "_RETURN":{"_MATH":"{Z}+1"}
-    }
-}
-```
-
-### Commenting
-
-Because of the simplicity and readability of REL, as long as variables are conveniently named, it should not be necessary to use comments. However, one way to write comments is to define variables that are never used. Naming all unused variables `"//"` is a way to make comments more obvious. For example, the `_LOAD` block of the Hello World example at the beginning of this document could be written as follows:
-
-```json
-{
-    "id": "hello-world",
-    "title": "Hello World Card",
-    "icon_url": "http://relevant.ai/hello_world.png",
-    "summary": "Card's summary for the library.",
-    "credits": "Relevant",
-    "settings_type": "NONE",
-    "_LOAD": {
-        "//":"Change this variable to replace Hello World for anything else",
-        "hello":"Hello World",
-        "//":"This is the description template",
-        "foo":{
-            "description":{
-                "title": "{hello}",
-                "body": "{hello}? There's a card for that."
-            }
-        },
-        "//":"This is the footer template",
-        "var":{
-            "footer":{
-                "caption": "Relevant - The Missing Home Screen"
-            }
-        },
-        "//":"This is the return of the _LOAD function",
-        "_RETURN":[
-            [
-                "{foo}",
-                "{var}"
-            ]
-        ]
-    }
-}
-```
-
-### Logging (The `_LOG` Function)
-
-The `_LOG` function takes any string, number, array, or object, and returns that same string, number, array, or object. However, it also writes this value into a *logs* document. Every time a card containing `_LOG` is refreshed, this document pops up. You can also show the logs of a card without refreshing it, by holding down on the card and selecting the *logs* (console) icon.
-
-You may try the following variation of the cities card (see the `_LOOP` function section above) by shaking your phone and adding the card `https://gist.githubusercontent.com/wircho/110b521e5870cec835d3/raw/2d4c89397f14e3581ed56b9bf34edf38bb886df6/cities_logs_card`.
-
-```json
-{
-    "id": "cities-card",
-    "title": "Cities",
-    "icon_url": "http://relevant.ai/cities.png",
-    "summary": "Card's summary for the library.",
-    "credits": "The Web",
-    "settings_type": "NONE",
-    "_LOAD": {
-        "json_info":{
-            "_URL":"https://gist.githubusercontent.com/wircho/d6c606350f8a6dca29ee/raw/b7872ecebfcc868ff825c88fe1c5e06d13ad618c/cities"
-        },
-        "_RETURN":{
-            "_LOOP":{
-                "_ARRAY":{"_PATH":["json_info","cities"]},
-                "_EACH":[
-                    {
-                        "banner":{
-                            "image": {"_PATH":["_ITEM","picture"]}
-                        }
-                    },
-                    {
-                        "description":{"_LOG":{
-                            "title": {"_PATH":["_ITEM","name"]},
-                            "body": {"_PATH":["_ITEM","nickname"]}
-                        }}
-                    },
-                    {
-                        "footer":{
-                            "caption": {"_PATH":["_ITEM","province"]}
-                        }
-                    }
-                ]
-            }
-        }
-        
-    }
-}
-```
-
-Once this card is loaded, a webview pops up with the content shown below. Swipe right from the left end to dismiss it.
-
-![Logs](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/cities_logs.png)
-
-### Using Templates
-
-Let us take another look at the cities card (`https://gist.githubusercontent.com/wircho/c8f4f5b0ce440b8edd83/raw/8ef09440e96322e75220ff1470fbc4c65d76e6c2/cities_card`):
-
-```json
-{
-    "id": "cities-card",
-    "title": "Cities",
-    "icon_url": "http://relevant.ai/cities.png",
-    "summary": "Card's summary for the library.",
-    "credits": "The Web",
-    "settings_type": "NONE",
-    "_LOAD": {
-        "json_info":{
-            "_URL":"https://gist.githubusercontent.com/wircho/d6c606350f8a6dca29ee/raw/b7872ecebfcc868ff825c88fe1c5e06d13ad618c/cities"
-        },
-        "_RETURN":{
-            "_LOOP":{
-                "_ARRAY":{"_PATH":["json_info","cities"]},
-                "_EACH":[
-                    {
-                        "banner":{
-                            "image": {"_PATH":["_ITEM","picture"]}
-                        }
-                    },
-                    {
-                        "description":{
-                            "title": {"_PATH":["_ITEM","name"]},
-                            "body": {"_PATH":["_ITEM","nickname"]}
-                        }
-                    },
-                    {
-                        "footer":{
-                            "caption": {"_PATH":["_ITEM","province"]}
-                        }
-                    }
-                ]
-            }
-        }
-        
-    }
-}
-```
-
-Each page of this card contains the templates `banner` (the city's picture), `description` (the city's name and nickname), and `footer` (the city's province). Below is a list of available templates with their parameters and possible values:
-
-| Template        | Parameters <br/> Possible Values + Notes 
-| ------------- |-------------|
-| **`banner`** (banner image)<br/><br/> When used it should be the **first visible template** of a card.   | **`type`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"narrow"` (default) <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"short"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"medium"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"square"` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"tall"` <br/><br/> **`image`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image. <br/><br/> **`title`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Image title (displayed in large font) <br/><br/> **`caption`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Image caption (displayed in small font) <br/><br/> **`align`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Alignment of `title` and `caption` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"left"` (default) <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"center"` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"right"` <br/><br/> **`color`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Background color (e.g. `"white"` (default)) |
-| **`profile`** (circle image + caption)   | **`type`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"small"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"medium"` (default) <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"large"` (centered image only, no caption) <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"cell"` <br/><br/> **`image`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image. <br/><br/> **`caption`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Caption beside image <br/><br/> **`border-color`** <br/> &nbsp;&nbsp;&nbsp;&nbsp; Image border color (e.g. `"white"` (default)) |
-| **`double-profile`** (two circle images side by side)   | **`image-i`** (`i=1,2`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image. <br/><br/> **`caption-i`** (`i=1,2`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;Caption under image <br/><br/> **`border-color-i`** (`i=1,2`) <br/> &nbsp;&nbsp;&nbsp;&nbsp; Border color of image |
-| **`stats`** (one, two, or three stats)   | **`type`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"single"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"double"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"triple"` (default) <br/><br/> **`value-i`** (`i=1,2,3`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;Stats value (e.g. `"200"`) <br/><br/> **`title-i`** (`i=1,2,3`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;Caption under stats value (e.g. `"visitors"`) |
-| **`scalar`** (value and image)   | **`value`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Value on the left <br/><br/> **`image`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image on the right |
-| **`buttons`** (one, two, or three buttons) | This template does not take an object of parameters<br/><br/> Instead it takes an array of one, two, or three **REL Actions** to be performed on tap (See **REL Actions** below)|
-| **`sectional`** (light gray background for last template)<br/><br/> When used it should be the **last visible template** of a card. | This template does not take parameters. Simply use `{"sectional":true}` |
-
-### Advanced Templates (`actions` and `handler`)
-
-`actions` and `handler` are templates which may be inserted **at the beginning of each page's array**, and are not part of the card content. However they may be essential to the functionality of some cards.
-
-| Advanced Template        | Parameters <br/> Possible Values + Notes 
-| ------------- |-------------|
-| **`actions`** (touch down actions)  | Just like the **`buttons`** template, it takes an array of **REL Actions** (See **REL Actions** below), to be performed when the card is held down and the corresponding action is selected. |
-| **`handler`** (card's title)  | This template allows you to customize the text on the card's title (top left) for each page of the card.<br/><br/>For example, the following `handler` template could be added to the cities card (`https://gist.githubusercontent.com/wircho/c8f4f5b0ce440b8edd83/raw/8ef09440e96322e75220ff1470fbc4c65d76e6c2/cities_card`) to display the name of each city on the card's title:<br/><br/> `{"handler":{"_PATH":["_ITEM","name"]}}` |
-
-### Error Handling
-
-Some built-in functions, such as `_URL` may return errors (such as when there is no internet connection). By default, REL propagates errors outwards, which means that whenever an error appears, the card will limit itself to showing this error rather than the expected templates (due to a small bug in Relevant 1.0, a card may show up light gray and not display the error).
-
-You could even create errors manually using `{"_ERROR":"Error message"}`, and they will be propagated outwards just like errors that happen inadventently.
-
-There are cases, however, in which you would like to handle an error. For example, when certain `_URL` returns an error (such as server not found), you may wish to get your data from a different URL.
-
-The following *error handling* functions may be used to stop errors from propagating outwards into the card:
-
-**`_IS_ERROR`:** Returns `true` (`1`) when passed an error, and `false` (`0`) otherwise.
-
-**`_ERROR_CODE`:** Returns an error's numeric error code. This is useful when handling http request errors from `_URL` calls.
-
-**`_IS_NULL_OR_ERROR`** Returns whether the passed object is `null` or an error.
-
-**`_FIRST_NOT_ERROR`** Returns the first element of an array which is neither `null` nor an error.
-
-### REL Actions
-
-REL Actions and similar to Inline functions. However, they are supposed to be used only in the `buttons` and `actions` template, and they include a button's icon, color, and caption within their syntax. Each REL Action is an object of this form:
-
-```json
-{
-    "_DO":...,
-    "_ICON":"Icon name, e.g. source_icon, more_icon, map_icon.",
-    "_CAPTION":"Button's caption",
-    "_COLOR":"Button's color, e.g. red, blue. Leave blank for default color."
-}
-```
-
-On Relevant 1.0, the parameters `_CAPTION` and `_COLOR` is ignored in the `actions` template, and the parameter `_ICON` is ignored in the `buttons` template whenever there is only one button. This is a design decision and not something to worry about.
-
-The complete list of `_ICON`s available on Relevant 1.0 is: `"done_icon"`, `"eye_icon"`, `"fav_icon"`, `"heart_icon"`, `"refresh_icon"`, `"repost_icon"`, `"share_icon"`, `"source_icon"`, `"map_icon"`, `"call_icon"`, `"do_icon"`, `"log_icon"`, `"more_icon"`, `"play_icon"`, `"read_icon"`, `"reorder_icon"`, `"search_icon"`, `"sync_icon"`, and `"chat_icon"`.
-
-`_DO` is the actual action to be performed by the button. This could be something that happens in the background and is not visible by the user. For example a `_URL` request with `"_METHOD":"POST"` to *like* something on social media (notice that such functionality would require user log-in or OAuth. A tutorial on this coming soon). More traditional examples of actions are listed below:
-
-**Show WebView**
-```json
-"_DO":{
-    "_WEBVIEW":"http://github.com"
-}
-```
-
-**Open External URL or Deeplink** (Open URL or iOS Deeplink)
-```json
-"_DO":{
-    "_DEEPLINK":"http://github.com"
-}
-```
-
-**Remark:** You may wish to wrap the function `_DEEPLINK` inside an `_IF,_THEN,_ELSE` conditioning on `{"_CAN_DEEPLINK":"http://github.com"}` to make sure you're not calling an URL that cannot be opened by the device.
-
-**Show MapView** (MapView with directions to a given latitude and longitude)
-```json
-"_DO":{
-    "_MAPVIEW":{
-        "title":"Montreal's City Hall",
-        "latitude":45.508994,
-        "longitude":-73.554418
-    }
-}
-```
-
-**Refresh Card**
-```json
-"_DO":{
-    "_REFRESH":...
-}
-```
-
-The `_REFRESH` action may be passed any string, number, array, or object input value. When a card is refreshed from this action, it loads with an implicit variable `_INPUT` having this value.
-
-As always, it is possible to have intermediate variables inside `_DO` as long as there is a `_RETURN` key. For example:
-
-```json
-"_DO":{
-    "url":"http://github.com",
-    "_RETURN":{"_WEBVIEW":"{url}"}
-}
-```
-
-### Card Settings
-
-All the sample cards above have the metadata value `"settings_type":"NONE"`. This defines the user input behaviour when the card is flipped by tapping on the upper right **i** button. There are two possible settings type besides the default `"NONE"`. Namely `"TEXT"` and `"SELECT"`, explained below.
-
-**`"TEXT"` Settings Type:** This means that there is a text field on the back of the card. Developers may access this string from the `_LOAD` block by referencing the variable `_SETTINGS` (as in `"{_SETTINGS}"`). Optionally, you may add a `"settings_default"` string in the metadata.
-
-**`"SELECT"` Settings Type:** This means that there is a drop down selection box on the back of the card. In this case, a `"settings_options"` metadata is required, and it must be an array of objects having the key `"value"`, and any other optinal keys for your own use. For example:
-
-```json
-"settings_type":"SELECT",
-"settings_options":[
-    {
-        "info":1
-        "value":"One"
-    },
-    {
-        "info":2
-        "value":"Two"
-    },
-    {
-        "info":3
-        "value":"Three"
-    }
+```swift
+// A dictionary/object
+let d = [ // <---- Square brackets
+  "name":"Wircho",
+  "age":29,
+  "hobbies":["easy":["Sleeping","Eating"],"hard":["Code","Guitar","Math"]]
 ]
 ```
 
-Optionally, you may set a default value:
+You can dig inside an array or dictionary with the usual square bracket syntax (`array[index]`, `dictionary[key]`), and you can also do so with lists or arrays of keys and indices. This means that for the dictionary `d` above, all of the following "`guitar`" variables have value `"Guitar"`:
 
-```json
-"default_settings":{
-    "info":2
-    "value":"Two"
+```swift
+let guitar0 = d["hobbies"]["hard"][1]
+let guitar1 = d["hobbies","hard",1]
+let guitar2 = d["hobbies","hard"][1]
+let guitar3 = d["hobbies"]["hard",1]
+let path = ["hobbies","hard",1]
+let guitar4 = d[path]
+```
+
+## Basic Operators, Functions and Methods
+
+REL comes equiped with an array of built-in functionality which will keep growing in future versions. This document does not intend to detail all of this functionality, but rather give a good enough preview for you to try it out.
+
+### Operators
+
+Most operators familiar to JavaScript developers are available in REL; namely `+,-,*,/,%,==,!=,&&,||,!`, among others, and their behaviour is very similar to that in JavaScript. For example, `+`'ing two numbers gives you their sum, while `+`'ing a string with any other variable gives you a string. Some examples follow:
+
+```swift
+let three = 1+2 // Produces 3
+let threeString = "th" + "ree" // Produces "three"
+let theTruth = (1 == 1) // Produces true (Parentheses are optional, here just for readability)
+let aLie = (1 == 2) && (4 == 4) // Produces false
+```
+
+### Built-In Functions and Methods
+
+Built-In REL *functions* are, like in other programming languages (and in math), prefixes that may take zero or more values as parameters, and *return* another value. For example, the function `concat` takes any list or array of values and concatenates them into a string, doing so recursively;
+
+```swift
+let c = concat("Relevant"," - ",["The"," ","Missing ","Homescreen"]) // Produces "Relevant - The Missing Homescreen"
+```
+
+*Methods* are similar to functions, but are instead suffixed to values after a dot `.`;
+
+```swift
+let a = 55
+let b = a.toString() // Produces "55"
+let c = a.toString // Same as above
+```
+
+Many of the built in REL functions that take only one parameter, have an equivalent method form. For example `round(1.75)`, `(1.75).round()`, and `(1.75).round` are equivalent statements, all of which produce `2`. This is often useful when chaining several operations; e.g., `round(sqrt(count(foo)))` is equivalent to `foo.count.sqrt.round`.
+
+## Control-Flow (if-then-else and for-loop)
+
+*Control-flow* refers to the ubiquitous **if-then-else** and **for** statements that we find in most popular programming languages. REL **does not** have control-flow per-se, but it has a few functions that simulate it well enough.
+
+### The `then` Method
+
+In place of **if-then-else** statements, use the `then` method as follows;
+
+```swift
+let a = 1==2 // Produces false
+let b = a.then("it's true!","it's false!") // Produces "it's false!"
+```
+When the second argument is ommited, it falls back to `null`, so that `a.then("it's true")` simply produces `null`.
+
+### The `loop` Method
+
+In place of **for** loops, use the `loop` method on an array, after which you may simply append a closure taking one parameter (each item of the array), or two parameters (each item of the array along with its index). Some examples follow;
+
+```swift
+// The loop method. First example.
+let b = [1,2,3].loop {
+  item in
+  return item * item
+} // Produces [1,4,9]
+```
+
+```swift
+// The loop method. Second example.
+let b = [1,2,3].loop {
+  (item,index) in
+  return item * item * index
+} // Produces [0,4,18]
+```
+
+The `loop` method is more of an array manipulation function than an actual control-flow statement.
+
+**Note on trailing closures:** `loop` is actually a method that takes one closure parameter, so that the expressions `a.loop{...}` and `a.loop({...})` are equivalent. A *trailing* closure is permitted when a closure is the last parameter of a function or method.
+
+## Numeric Manipulation
+
+Numbers may be operated as in other programming languages using operators such as `+`, `-`, `*`, and `/`. Besides this they may be formatted into strings with a specific number of decimals using the `decimals` function/method. Some math functions found in many programming languages are also available in REL.
+
+### Number formatting: `decimals`
+
+You may use the `decimals` method in three different ways, exemplified below:
+
+```swift
+// With no parameters:
+let b = a.decimals // Produces the number a with up to exactly 2 decimal places
+let example1 = (3.14159265).decimals // Produces "3.14"
+let example2 = 100.decimals // Produces "100.00"
+```
+
+```swift
+// With one integer parameter:
+let b = a.decimals(n) // Produces the number a with up to exactly n decimal places
+let example1 = (3.14159265).decimals(3) // Produces "3.142"
+let example2 = 100.decimals(3) // Produces "100.000"
+```
+
+```swift
+// With two integer parameters:
+let b = a.decimals(m,n) // Produces the number a with no less than m and no more than n decimal places
+let example1 = (3.14159265).decimals(1,3) // Produces "3.142"
+let example2 = 98.decimals(1,3) // Produces "98.0"
+let example3 = (1.52).decimals(1,3) // Produces "1.52"
+let example4 = 98.decimals(0,3) // Produces "98"
+```
+
+### Random numbers
+
+```swift
+let a = random(100) // Produces a random integer between 0 and 99 (inclusive)
+let b = 5 + random(21) // Random number between 5 and 25 (inclusive)
+```
+
+## String Manipulation
+
+Strings in REL can be concatenated using `+` or the `concat` function (which takes any number of string or array arguments). Some other string manipulation functions and methods are exemplified below:
+
+### `join` and `splitBy`
+
+See examples below:
+
+```swift
+let a = ", ".join([1,2,3]) // Produces "1, 2, 3"
+let b = "2015-09-29".splitBy("-") // Produces ["2015","09","29"]
+```
+
+`join` has an equivalent function form:
+
+```swift
+let a = join(", ",[1,2,3]) // Produces "1, 2, 3"
+```
+
+### `lowercase` and `uppercase`
+
+See examples below:
+
+```swift
+let c = "Hello World".lowercase // Produces "hello world"
+let d = "Hello World".uppercase // Produces "HELLO WORLD"
+```
+
+These methods have equivalent function forms:
+
+```swift
+let c = lowercase("Hello World") // Produces "hello world"
+let d = uppercase("Hello World") // Produces "HELLO WORLD"
+```
+
+### `matches` and `replace`
+
+See examples below:
+
+```swift
+let e = "Hello World!".matches("llo Wo") // Produces true
+let f = "Hello World!".replace("He","hE") // Produces "hEllo World!"
+let g = "Hello World!".replace("[a-zA-Z]","*",true) // Produces "***** *****!". The last argument 'true' means that it should use regular expressions
+```
+
+### `urlEncode`
+
+See example below;
+
+```swift
+let query = "Some string with spaces!"
+let json = get("http://some-api.api/?query=" + urlEncode(query))
+```
+
+This function also has a method form `query.urlEncode`.
+
+### `htmlEncode` and `htmlDecode`
+
+`htmlEncode` add HTML entities to text, while `htmlDecode` converts them to their unicode equivalents. For example:
+
+```swift
+let a = htmlEncode("Montréal") // Produces "Montr&eacute;al"
+let b = htmlDecode("Montr&eacute;al") // Produces "Montréal"
+``
+
+These functions also have method forms, for example you may use `"Montréal".urlEncode`.
+
+### Rich Text
+
+Because the output of a REL function is often used for skinning user interfaces, we occasionally need to output rich text. For this purpose we may assume that all strings in REL have an abstract *default* font. The following methods simply apply transformatons to that font. The results of these methods are always rich text, and may fail to perform some string manipulation methods such as `join`. Other functions like `concat` or the `+` operator do work properly on rich text.
+
+#### `small`
+
+The `small` method/function makes the font size about `0.8` times smaller. Examples: `"Hello World".small`, `small("Hello World")`.
+
+#### `bold` and `italic`
+
+The `bold` and `italic` methods/functions make text bold and italic respectively.
+
+#### `color`
+
+The `color` method allows you to color a given text. Example: `"Hello World".color("red")`. Currently available colors are `"red"`, `"pink"`, `"purple"`, `"green"`, `"yellow"`, `"orange"`, `"blue"`, `"cyan"`, `"gray"`, `"dark-gray"`, `"light-gray"`, `"white"`, and `"transparent"`.
+
+### `inlineImage`
+
+See example below;
+
+```swift
+let img = inlineImage(https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/done-icon.png)
+let someRichText = "Hello World " + img
+```
+
+## Array Manipulation
+
+### `merge` and `mergeArray`
+
+The two main array manipulation functions in REL are `merge` and `mergeArray`. They do pretty much the same, except the first one takes a list of arrays separated by commas, while the second one takes **only one parameter**: an array of arrays. This is better understood from the examples below:
+
+```swift
+let a = merge([[1,2],[3,4],[5,6]],["x","y","z"],["p","q","r"]) // Produces [[1,2],[3,4],[5,6],"x","y","z","p","q","r"]
+let b = merge([[1,2],[3,4],[5,6]],["x","y","z"]) // Produces [[1,2],[3,4],[5,6],"x","y","z"]
+let c = merge([[1,2],[3,4],[5,6]]) // Produces [[1,2],[3,4],[5,6]] (no change)
+let d = mergeArray([[1,2],[3,4],[5,6]]) // Produces [1,2,3,4,5,6]
+```
+
+### `count`
+
+```swift
+let l = ["x","y","z"].count // Produces 3
+let m = count(["x","y","z"]) // Same as above
+```
+
+### `append`
+
+```swift
+let n = ["x","y","z"].append("aa") // Produces ["x","y","z","aa"]
+```
+
+### `reverse`
+
+```swift
+let p = ["x","y","z"].reverse // Produces ["z","y","x"]
+let q = reverse(["x","y","z"]) // Same as above
+```
+
+### `subarray`
+
+```swift
+let j = ["t","u","v","w","x","y","z"].subarray(2,4) // Produces ["v","w","x"]
+let s = ["t","u","v","w","x","y","z"].subarray(4) // Produces ["t","u","v","w"]
+let k = ["t","u","v","w","x","y","z"].subarray(-4) // Produces ["w","x","y","z"]
+```
+
+### `group`
+
+```swift
+let g = ["t","u","v","w","x","y","z"].group(3) // Produces [["t","u","v"],["w","x","y"],["z"]] (groups 3 by 3)
+```
+
+### `randomize`
+
+```swift
+let r = ["t","u","v","w","x","y","z"].randomize // Produces a random element in the array
+let r1 = ["t","u","v","w","x","y","z"].randomize // Same as above
+```
+
+**Warning:** Currently, `randomize` can only be used with a literal array argument.
+
+### `contains`
+
+Use this method to determine whether an array contains a given element. For example:
+
+```swift
+let array = ["this is a string",["this":"is","a":"dictionary"],["this","is","an","array"]]
+let a = array.contains("this") // Produces false
+let a = array.contains("this is a string") // Produces true
+let a = array.contains(["an","array","this","is"]) // Produces false
+let a = array.contains(["this","is","an","array"]) // Produces true
+let a = array.contains(["a":"dictionary","this":"is"]) // Produces true (because dictionaries have no order)
+```
+
+### `loop` and `filter`
+
+It is often necesary to `loop` an array. For this refer to the [Control-Flow section](#control-flow-if-then-else-and-for-loop) above. Similarly, you can filter elements of an array using the `filter` method:
+
+```swift
+// The filter method - First example
+let b = [7,20,5,4,50].filter {
+  item in
+  return item < 10
+} // Produces [7,5,4]
+```
+
+```swift
+// The filter method - Second example
+let b = [7,20,5,4,50].filter {
+  (item,index) in
+  return index >= 2
+} // Produces [5,4,50]
+```
+
+### `first`
+
+The `first` method is similar to `filter`, except it returns only the first element of the array for which the closure returns `true`. For example;
+
+```swift
+let a = [1,4,9,16,25,36,49].first{
+  item in
+  return item > 20
+} // Produces 25
+```
+
+### `sortAlpha` and `sortNum`
+
+The `sortAlpha` and `sortNum` methods take a closure that maps every item of an array into a string or number value. The result is a new array sorted by that value, alphabetically or numerically, respectively. Examples follow;
+
+```swift
+let a = [["device":"iPhone","mill":500],["device":"iPad","mill":170],["device":"iPod","mill":450]].sortAlpha {
+  item in
+  return item["device"]
+} // Produces [["device":"iPad","mill":170],["device":"iPhone","mill":500],["device":"iPod","mill":450]]
+```
+
+```swift
+let a = [["device":"iPhone","mill":500],["device":"iPad","mill":170],["device":"iPod","mill":450]].sortNum {
+  item in
+  return item["mill"]
+} // Produces [["device":"iPad","mill":170],["device":"iPod","mill":450],["device":"iPhone","mill":500]]
+```
+
+## Dictionary Manipulation
+
+### `blend` and `blendArray`
+
+Just like arrays can be merged together with the `merge` and `mergeArray` methods, dictionaries can be blended together with the `blend` and `blendArray` methods. The first one takes a list of dictionaries separated by commas, while the second one takes an array of dictionaries. For example
+
+```swift
+let a = blend(["a":1,"b":2],["c":3]) // Produces ["a":1,"b":2,"c":3]
+let b = blendArray([["a":1,"b":2],["c":3]]) // Produces ["a":1,"b":2,"c":3]
+```
+
+## Converting/casting between types
+
+### `toNumber`
+
+Some API's may provide, for example, a `latitude` value as a string. This is impractical if you would like to perform mathematical operations such as addition on it, because the addition of a string with any other object produces a string.
+
+In JavaScript some developers write `--latitude`. However, double-prefixes such as `--` are not allowed in REL to prevent unexpected results from typos. Instead you would write `-(-latitude)`, which does convert the string to a number.
+
+An even better solution is to use the `toNumber` method. As follows:
+
+```string
+let latitude = "43.1835"
+let l = latitude + 3.1 // BAD: Produces "43.18353.1"
+let m = latitude.toNumber + 3.1 // GOOD: Produces "46.2835"
+```
+
+Numbers are returned intact by the `toNumber` method. For arrays, dictionaries, `null`, and other values, the `toNumber` method produces `0`.
+
+`toNumber` has an equivalent function form `toNumber(latitude)`.
+
+### `toString`
+
+This method converts strings, booleans and numbers to strings, and any other values to the empty string `""`. It has an equivalent function form `toString(...)`.
+
+### `toBoolean`
+
+This method converts strings, numbers, and booleans to booleans; `null` to `false`; and any other value to `true`. It has an equivalent function form `toBoolean(...)`.
+
+### `toArray`
+
+This method keeps arrays intact and converts any other value to an empty array `[]`.  It has an equivalent function form `toArray(...)`.
+
+### `toDictionary`
+
+This method keeps dictionaries intact and converts any other value to an empty dictionary.  It has an equivalent function form `toDictionary(...)`.
+
+## Web APIs
+
+These functions allow you to communicate with web services and API's.
+
+### `request`
+
+The most general way to do communicate with a web API is using the `request` function to make an HTTP request, formatted as follows;
+
+```swift
+let a = request(<method>,<url>,<body>,<headers>,<response type>)
+```
+
+Where;
+
+`<method>` is a string representing an HTTP method, such as `"GET"`, `"POST"`, `"PUT"`, `"DELETE"`, `"OPTIONS"`, `"HEAD"`, `"PATCH"`, `"TRACE"`, or `"CONNECT"`.
+
+`<url>` is the URL to be queried.
+
+`<body>` is **a dictionary** of keys and values that will be appended to your request.
+
+`<headers>` is **a dictionary** of your request's HTTP headers.
+
+`<response type>` is either `"string"` or `"json"` (case insensitive). The latter means that the result of the request must be parsed into a JSON variable. This parameter defaults to `"json"`.
+
+Similarly you may use the functions `get` and `post` for GET and POST requests respectively.
+
+### `get` and `post`
+
+```swift
+let a = get(<url>,<body>,<headers>,<response type>)
+let b = post(<url>,<body>,<headers>,<response type>)
+```
+
+You may ommit any number of parameters at the end, for example;
+
+```swift
+let a = get("some-fake-website.com/something.json") // Fetches the contents as a JSON variable
+```
+
+### `yql`
+
+YQL is a powerful query language powered by Yahoo ([click here for YQL reference](https://developer.yahoo.com/yql)) that allows you to gather data accross the web. You can make YQL calls through REL using the `yql` function. For example;
+
+```swift
+let a = yql("select * from html where url='https://news.ycombinator.com' and xpath='//a'") // Produces an object with information about all links on https://news.ycombinator.com 
+```
+
+## Device APIs
+
+### Date and Time
+
+#### `getTime()`
+
+Use `getTime()` to get the device's current date and time. The result of this function is a date object, and needs to be converted into a usable value. One way to do this is by using the `timestamp` method:
+
+#### `timestamp`
+
+```swift
+let a = getTime().timestamp // Produces the current time in seconds since 00:00:00 UTC on 1 January 1970
+```
+
+#### `dateString` and `dateObject`
+
+A date can be converted into a user-ready format using date formats. [Click here for specifications on possible formats](http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns). For example:
+
+```swift
+let b = getTime().dateString("yyyy-MM-dd") // Produces the current date in the format 2015-09-30
+```
+
+Furthermore, a date string can be parsed into a date object if the format of the string is known. For example:
+
+```swift
+let c = "2015-09-30, 12:05".dateObject("yyyy-MM-dd, HH:mm").timestamp // Produces 1443614700
+```
+
+### `ago`
+
+The `ago` method may be used to format dates as "some time ago". It may optionally take the parameter `"fb"` (Facebook-style date formatting), or `"min"` (minimalistic style), as follows;
+
+```swift
+let a = d.ago() // For example: "3 days ago"
+let b = d.ago("fb") // For example "1 hour ago" or "Wednesday"
+let c = d.ago("min") // For example "4s"
+```
+
+### User Location:
+
+#### `getLocation` and `isLocationAvailable`
+
+Use `getLocation()` to get the user's current location in the format `["latitude":45.501262,"longitude":-73.560347]`. This method will return nil if the user does not allow Relevent to access their location. Use `isLocationAvailable()` to verify whether Relevant is allowed to access location for this user.
+
+#### `getDistance`
+
+Use this function to determine the distance (in meters) between two coordinates, both of which must come in the format `["latitude":45.501262,"longitude":-73.560347]`.
+
+## Inline Functions
+
+You may define your own functions the same way as variables `let f = ....`, by using **closures** (blocks of code delimited by curly brackets `{}`). The following function returns the string `"foo"` every time:
+
+```swift
+// This function returns "foo" every time
+let f = {
+  return "foo"
+}
+let fooString = f() // Produces "foo"
+let fooStringAgain = f() // Produces "foo"
+```
+
+If you need your function to take parameters, simply prefix its content with the list of parameter names and the keyword **`in`**
+
+```swift
+// This function returns someone's full name given their first and last name
+let f = {
+  (name,lastName) in // Parentheses are optional
+  return name + " " + lastName
+}
+let fullName = f("Wendy","Smith") // Produces "Wendy Smith"
+```
+
+<!--
+
+### Simplifying Inline-Function Syntax
+
+The `parameters in` header may be omitted to simplify a function's syntax. In this case the parameters may be accessed with the variables `$0`, `$1`, `$2` ... within the function's closure. For example;
+
+```swift
+// This function returns the sum of the squares of two numbers
+let f = { return $0*$0 + $1*$1 }
+```
+
+Furthermore, the `return` keyword may be ommited, as REL functions always return the last statement in their closures:
+
+```swift
+// This function is equivalent to the one above
+let f = { $0*$0 + $1*$1 }
+```
+
+These simplification mechanisms are particularly useful when chaining methods that take trailing closures. For example;
+
+```swift
+let a = [1,4,9,16,25,36].filter{ $0 % 2 == 0 }.map{ sqrt($0) }.map{ $0/2 } // Produces [1,2,3]
+```
+
+-->
+
+## The `card` Variable
+
+As we mentioned in the [Card Structure section](#card-structure) at the beginning, the `load` closure of a Relevant card has one parameter named `card`. This is a reference to the card instance itself and as such, it has access to some special methods.
+
+### `card.settings`
+
+The return of this method is the value entered by the user after flipping the card (tapping on the button at the top-right corner).
+
+If you flip a basic card built using the [**Relevant Platform** wizard](http://platform.relevant.ai), you will see nothing at the back of the card.
+
+To allow your card to have settings, you need to include the `meta` variable `settingsType`:
+
+```swift
+meta {
+  // ...
+  settingsType = "text" // Possible values are "text", "select", and "none" ("none" is equivalent to not having a settingsType variable)
+  // ...
 }
 ```
 
-If no default value is set, the first one of the `settings_options` is used.
+For `settingsType = "text"`, you may also include a string `settingsDefault`, which will be the default value once the card is added to the deck:
 
-As before, you may access the currently selected settings object from the `_LOAD` block by referncing the variable `_SETTINGS` (as in `{"_PATH":["_SETTINGS","info"]}`).
-
-### Persistent Card Variables (The `_MAIN` block)
-
-Occassianally you may wish to have some variables which are only computed once, instead of re-calculating them every time the card is refreshed. This may include user input or user authentication information (from `_WEB_CALLBACK`). In this case you may simply wrap the `_LOAD` block inside a `_MAIN` object and define these variables in the `_MAIN` object, as below:
-
-```json
-{
-    "id": "hello-world",
-    "title": "Hello World Card",
-    "icon_url": "http://relevant.ai/hello_world.png",
-    "summary": "Card's summary for the library.",
-    "credits": "Relevant",
-    "settings_type": "NONE",
-    "_MAIN": {
-        "persistent_var_1":...,
-        "persistent_var_2":...,
-        "_LOAD":{
-            "non_persistent_var_1":...,
-            "non_persistent_var_2":...,
-            "_RETURN":...
-        }
-    }
+```swift
+meta {
+  // ...
+  settingsType = "text" // Possible values are "text", "select", and "none" ("none" is equivalent to not having a settingsType variable)
+  settingsDefault = "Canada"
+  // ...
 }
 ```
 
-### Rich Text in Cards
+For `settingsType = "select"` the rules are a bit more complicated. You need to include a `settingsOptions` value which must be an array of dictionaries. Each of these dictionaries must have at least a `"value"` key, which will be then visible in the settings drop-down menu. You also need one of this dictionaries to be the values of `settingsDefault`. For example:
 
-The functions `_SMALL,_BOLD,_RED,_PINK,_PURPLE,_GREEN,_YELLOW,_ORANGE,_BLUE,_CYAN,_GRAY,_DARKGRAY,_WHITE` allow you to enhance the text in card templates by resizing or coloring fonts. All of these functions take a string (or a rich text) and return rich text. You may use `_CONCAT` with rich text.
+```swift
+meta {
+  // ...
+  settingsType = "select"
+  settingsOptions = [
+    [
+      "value":"Canada",
+      "other-info":"Additional Information"
+      "even-more-info":"So much Info" // "other-info" and "even-more-info" will not be visible to the user, but still accessible from card.settings
+    ],
+    [
+      "value":"United States",
+      "other-info":"Something Else"
+      "even-more-info":"So Much Else"
+    ]
+  ]
+  settingsDefault = [
+    "value":"Canada",
+    "other-info":"Additional Information"
+    "even-more-info":"So much Info"
+  ]
+  // ...
+}
+```
 
-These functions should only be used at the end to populate templates, in order to prevent passing rich text to functions such as `_MATH`, which would silently fail.
+## Relevant Card Templates
+
+### Basic Templates
+
+As we said in the [Card Structure section](#card-structure), the `return` of the `load` closure needs to be an array of arrays, and the inner arrays represent the templates of each slide of the card. For example, a simple card with three slides may look like this:
+
+```swift
+meta {
+  title = "Color Samples"
+}
+
+load {
+  card in
+
+  let info = [
+    ["name":"Red", "color":"red", "rgb-values":[231,76,60]],
+    ["name":"Green", "color":"green", "rgb-values":[112,173,75]],
+    ["name":"Blue", "color":"blue", "rgb-values":[41,128,185]]
+  ]
+
+  return info.loop {
+    item in
+    
+    return [
+      [ // First template of each slide
+        "banner":[
+          "color":item["color"]
+        ]
+      ],
+      [ // Second template of each slide
+        "description":[
+          "title":item["name"],
+          "body":"RGB: (" + ",".join(item["rgb-values"]) + ")"
+        ]
+      ],
+      [ // Third template of each slide
+        "footer":[
+          "caption":("Sample Text in " + item["name"]).bold.color(item["color"])
+        ]
+      ]
+    ]
+  }
+}
+```
+<img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/colors.png" alt="Color Samples" width="40%">
+
+You may test this card yourself by either copying the code above into one of your Relevant Platform cards' code, or by entering `wircho/colors` into the Relevant App search box.
+
+Observe that each template is a dictionary with **one single key**. This key is the template's name, and its value defines its parameters. Here is a list of some available templates:
+
+| Template        | Parameters <br/> Possible Values + Notes |
+| ------------- |-------------|
+| **`banner`** (banner image)   | **`type`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"narrow"` (default) <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"short"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"medium"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"square"` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"tall"` <br/><br/> **`image`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image. <br/><br/> **`title`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Image title (overlaid in large font) <br/><br/> **`caption`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Image caption (overlaid in small font) <br/><br/> **`align`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Alignment of `title` and `caption` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"left"` (default) <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"center"` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"right"` <br/><br/> **`color`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Background color (e.g. `"cyan"` (default)) |
+| **`profile`** (circle image + caption)   | **`type`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"small"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"medium"` (default) <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"large"` (centered image only, no caption) <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"cell"` <br/><br/> **`image`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image. <br/><br/> **`caption`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Caption beside image <br/><br/> **`border-color`** <br/> &nbsp;&nbsp;&nbsp;&nbsp; Image border color (e.g. `"white"` (default)) |
+| **`double-profile`** (two circle images side by side)   | **`image-i`** (`i=1,2`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image. <br/><br/> **`caption-i`** (`i=1,2`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;Caption under image <br/><br/> **`border-color-i`** (`i=1,2`) <br/> &nbsp;&nbsp;&nbsp;&nbsp; Border color of image |
+| **`description`** (title + body)   | **`type`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"short"` (default) <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"medium"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"long"` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"very-long"` <br/><br/> **`image`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image on the left or right of the template. This parameter forces `type` to be `"medium"`. <br/><br/> **`title`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Title (in bigger font) <br/><br/> **`body`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Body (in smaller font) <br/><br/> **`align`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Alignment of `title` and `body` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"left"` (default) <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"center"` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"right"` <br/><br/> **`image-align`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Alignment of `image`, if available. <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"left"` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"right"` (default) |
+| **`stats`** (one, two, or three stats)   | **`type`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"single"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"double"` <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"triple"` (default) <br/><br/> **`value-i`** (`i=1,2,3`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;Stats value (e.g. `"200"`) <br/><br/> **`title-i`** (`i=1,2,3`) <br/> &nbsp;&nbsp;&nbsp;&nbsp;Caption under stats value (e.g. `"visitors"`)  <br/><br/> **`align`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Alignment of titles and values <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"left"` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"center"` (default) <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"right"`|
+| **`scalar`** (value and image)   | **`value`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Value on the left <br/><br/> **`image`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image on the right |
+| **`footer`**   | **`type`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"short"` (default) <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"long"` <br/><br/> **`caption`** <br/><br/> **`align`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Alignment of `caption` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"left"` (default) <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"center"` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"right"` |
+| **`sectional`**   | Simply use as `[sectional:true]`. It adds a grey backdrop behind the preceding template. |
+
+Other templates, like the ones listed below, have a more complicated behaviour and syntax.
+
+### The `"buttons"` Template
+
+
+Instead of a dictionary, this template is defined by an array of one, two of three buttons. Each button is a dictionary with optional keys `"caption"`, `"icon"`, `"color"`, and `"function"`, where `"function"` is a closure that gets executed when the button is tapped. For example:
+
+```swift
+// ...
+    [ // Buttons Template
+      "buttons":[
+        [ // First button
+          "caption":"Share",
+          "icon":"share-icon",
+          "function": {
+            // ...
+            //Do something
+            // ...
+          }
+        ],
+        [ // Second button
+          "caption":"View",
+          "icon":"eye-icon",
+          "function": {
+            // ...
+            //Do something
+            // ...
+          }
+        ]
+      ]
+    ]
+// ...
+```
+
+The `"icon"` parameter may take any of the values in the following table;
+
+| Value       | Image | Value | Image | Value | Image |
+| ------------- |-------------|----------|-----------|----------|-----------|
+| `"done-icon"` | ![done-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/done-icon.png) | `"eye-icon"` | ![eye-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/eye-icon.png) | `"fav-icon"` | ![fav-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/fav-icon.png) | `"heart-icon"` | ![heart-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/heart-icon.png) |
+| `"refresh-icon"` | ![refresh-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/refresh-icon.png) | `"repost-icon"` | ![repost-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/repost-icon.png) | `"share-icon"` | ![share-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/share-icon.png) | `"source-icon"` | ![source-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/source-icon.png) |
+| `"time-icon"` | ![time-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/time-icon.png) | `"downvote-icon"` | ![downvote-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/downvote-icon.png) | `"map-icon"` | ![map-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/map-icon.png) | `"upvote-icon"` | ![upvote-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/upvote-icon.png) |
+| `"call-icon"` | ![call-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/call-icon.png) | `"do-icon"` | ![do-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/do-icon.png) | `"log-icon"` | ![log-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/log-icon.png) | `"more-icon"` | ![more-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/more-icon.png) |
+| `"play-icon"` | ![play-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/play-icon.png) | `"read-icon"` | ![read-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/read-icon.png) | `"reorder-icon"` | ![reorder-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/reorder-icon.png) | `"twitter-icon"` | ![twitter-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/twitter-icon.png) |
+| `"facebook-icon"` | ![facebook-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/facebook-icon.png) | `"gear-icon"` | ![gear-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/gear-icon.png) | `"search-icon"` | ![search-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/search-icon.png) | `"sync-icon"` | ![sync-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/sync-icon.png) |
+| `"chat-icon"` | ![chat-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/chat-icon.png) |
+
+
+
+The `"function"` parameter may be any REL function. This function may, among other actions, open web views, map views, or deeplink to a website in the device's browser, as well as refresh the card to show new content. See the [User Actions section](#user-actions) below to learn how to perform these actions.
+
+### The `"actions"` (Hold Down Actions) Template
+
+This template is not visible in the card. Instead it appears when the user holds down on a card for a second. It's syntax is exactly the same as the buttons template, except that you may include up to 5 actions into an `"actions"` template. See the [User Actions section](#user-actions) below to learn how to perform actions such as opening a map view or deeplinking to the device's browser.
+
+<!--
+### The `"slide"` Template
+
+Include this template on every slide as either `["slide":false]` or `["slide":true]`. When the card loads, it will have moved automatically to the first slide of value `true`.
+
+### The `"handler"` Template
+
+**TODO: IMAGE HERE?**
+
+This template allows you to add your own text to the card title whenever the user slides to the corresponding slide. Use as `["handler":someString]`.
+
+-->
+
+## User Actions
+
+### `webView`
+
+This function may be attached to a button or an action so that the app opens an overlaying web view when the action is triggered. For example, the following is a button template with a single button that opens the New York Times website:
+
+```swift
+// ...
+    [ // Buttons Template
+      "buttons":[
+        [ // Only button
+          "caption":"NYT",
+          "icon":"eye-icon",
+          "function": webView("http://www.nytimes.com")
+        ]
+      ]
+    ]
+// ...
+```
+
+### `mapView`
+
+This function may be used on buttons and actions, like `webView`. It opens an overlaying map view with a pin at a given location. Optionally it shows the user location and default directions to the pin. The syntax is as follows;
+
+```swift
+// ...
+        "function":mapView(<location>,<title>,<show directions>)
+// ...
+```
+
+Where;
+
+`<location>` is the location of the pin in the format `["latitude":45.501262,"longitude":-73.560347]`.
+
+`<title>` is the title of the pin.
+
+`<show directions>` is true if you wish to display default directions from the user's location to the pin.
+
+### `deeplink`
+
+```swift
+// ...
+        "function":deeplink("http://www.nytimes.com") // Will open in the device's browser
+// ...
+```
+
+### `share`
+
+This function is used to share content natively from the device. It's format is as folows;
+
+```swift
+// ...
+      "function":share(<service>,<text>,<link>,<image>)
+// ...
+```
+
+Where;
+
+`<service>` is either `"twitter"`, `"facebook"`, or `"all"` (iOS action sheet).
+
+`<text>` is an optional string containing text to be shared.
+
+`<link>` is an optional URL to be shared.
+
+`<image>` is an optional URL to an image to be downloaded instantly and shared.
+
+`share` may also be used in method form on the `card` variable. This will result in a screenshot of the card being included in the items to be shared. For example;
+
+```swift
+// ...
+      "function":card.share("facebook","Relevant is awesome!")
+// ...
+```
+
+
+
 
 
