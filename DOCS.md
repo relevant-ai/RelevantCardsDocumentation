@@ -375,6 +375,43 @@ Just like arrays can be merged together with the `merge` and `mergeArray` method
 let a = blend(["a":1,"b":2],["c":3]) // Produces ["a":1,"b":2,"c":3]
 let b = blendArray([["a":1,"b":2],["c":3]]) // Produces ["a":1,"b":2,"c":3]
 ```
+
+## Converting/casting between types
+
+### `toNumber`
+
+Some API's may provide, for example, a `latitude` value as a string. This is impractical if you would like to perform mathematical operations such as addition on it, because the addition of a string with any other object produces a string.
+
+In JavaScript some developers write `--latitude`. However, double-prefixes such as `--` are not allowed in REL to prevent unexpected results from typos. Instead you would write `-(-latitude)`, which does convert the string to a number.
+
+An even better solution is to use the `toNumber` method. As follows:
+
+```string
+let latitude = "43.1835"
+let l = latitude + 3.1 // BAD: Produces "43.18353.1"
+let m = latitude.toNumber + 3.1 // GOOD: Produces "46.2835"
+```
+
+Numbers are returned intact by the `toNumber` method. For arrays, dictionaries, `null`, and other values, the `toNumber` method produces `0`.
+
+`toNumber` has an equivalent function form `toNumber(latitude)`.
+
+### `toString`
+
+This method converts strings, booleans and numbers to strings, and any other values to the empty string `""`. It has an equivalent function form `toString(...)`.
+
+### `toBoolean`
+
+This method converts strings, numbers, and booleans to booleans; `null` to `false`; and any other value to `true`. It has an equivalent function form `toBoolean(...)`.
+
+### `toArray`
+
+This method keeps arrays intact and converts any other value to an empty array `[]`.  It has an equivalent function form `toArray(...)`.
+
+### `toDictionary`
+
+This method keeps dictionaries intact and converts any other value to an empty dictionary.  It has an equivalent function form `toDictionary(...)`.
+
 ## Web APIs
 
 These functions allow you to communicate with web services and API's.
