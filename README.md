@@ -16,7 +16,7 @@ Cards have an **Alias**, as displayed above. To test a card, simply type its ali
 
 <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/card-alias.jpg" alt="Adding Card" width="45%" align="top"> <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/actual-card.jpg" alt="Card on the Relevant App" width="45%">
 
-You may actually add this sample card `mo-mozafarian/reddit` before you create your own.
+You may actually add this sample card `mo-mozafarian/reddit` before you create your own. You may also [click here to view this card's REL source](https://gist.githubusercontent.com/mo-mozafarian/50ba05051bf5d140ac14/raw/867b02e30c22216f7ceab42fdbb8d6594736b2c9/reddit-card).
 
 ### Card Structure
 
@@ -37,7 +37,7 @@ load {
 }
 ```
 
-The actual REL code goes in the `load` *closure* (a *closure* is just a block of code inside curly brackets `{}`, we'll explain this later in more detail).
+The actual REL code goes in the `load` *closure* (a *closure* is just a block of code inside curly brackets `{}`, as we'll explain later in more detail).
 
 `card` is the input of the load function. This variable has some special powers, as you'll see in [The `card` Variable](#the-card-variable) section.
 
@@ -763,6 +763,8 @@ The `"icon"` parameter may take any of the values in the following table;
 The `"function"` parameter may be any REL function. This function may, among other actions, open web views, map views, or deeplink to a website in the device's browser, as well as refresh the card to show new content. See the [User Actions section](#user-actions) below to learn how to perform these actions.
 
 ### The `"actions"` (Hold Down Actions) Template
+
+<img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/action.png" alt="Hold Down Actions" width="40%">
 
 This template is not visible in the card. Instead it appears when the user holds down on a card for a second. It's syntax is exactly the same as the buttons template, except that you may include up to 5 actions into an `"actions"` template. See the [User Actions section](#user-actions) below to learn how to perform actions such as opening a map view or deeplinking to the device's browser.
 
