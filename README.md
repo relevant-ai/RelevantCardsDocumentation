@@ -6,13 +6,17 @@ This document is a basic introduction to some of its features.
 
 ## Relevant Cards
 
-### How to Build and Test a Card
+### How to Build and Edit a Card
 
-You may create cards using our [**Relevant Platform** wizard](http://platform.relevant.ai). Once you make a card in the step-by-step wizard, you will be able to view and edit its code by clicking on the <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/code.png" alt="View Code" width="25" align="center"> button.
+You may create cards using our [**Relevant Platform** wizard](http://platform.relevant.ai). Once you make a card in the step-by-step wizard, you will be able to view and edit its source by clicking on the <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/code.png" alt="View Source" width="25" align="center"> button.
 
 ![Card on the Relevant Platform](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/platform-card.png)
 
-Cards have an **Alias**, as displayed above. To test a card, simply type its alias into the search box of the Relevant App, and then hit **Search** (or **Return**) on your keyboard. If the alias exists and the REL code produces no errors, you'll see the option to add this card to your deck. Tap **ADD** and voilà! <br/> <br/>
+![Edit Card's Source](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/edit-source.png)
+
+### How to Test an Card
+
+Cards have an **Alias**, as displayed in the first screenshot above. To test a card, simply type its alias into the search box of the Relevant App, and then hit **Search** (or **Return**) on your keyboard. If the alias exists and the REL code produces no errors, you'll see the option to add this card to your deck. Tap **ADD** and voilà! <br/> <br/>
 
 <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/card-alias.jpg" alt="Adding Card" width="45%" align="top"> <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/actual-card.jpg" alt="Card on the Relevant App" width="45%">
 
