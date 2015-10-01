@@ -12,9 +12,9 @@ You may create cards using our [**Relevant Platform** wizard](http://platform.re
 
 ![Card on the Relevant Platform](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/platform-card.png)
 
-<img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/edit-source.png" alt="Edit Card's Source" width="45%">
+<img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/edit-source.png" alt="Edit Card's Source" width="60%">
 
-### How to Test an Card
+### How to Test a Card
 
 Cards have an **Alias**, as displayed in the first screenshot above. To test a card, simply type its alias into the search box of the Relevant App, and then hit **Search** (or **Return**) on your keyboard. If the alias exists and the REL code produces no errors, you'll see the option to add this card to your deck. Tap **ADD** and voilà! <br/> <br/>
 
