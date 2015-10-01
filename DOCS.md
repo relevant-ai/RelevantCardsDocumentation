@@ -6,9 +6,19 @@ This document is a basic introduction to some of its features.
 
 ## Relevant Cards
 
-### How to Build a Card
+### How to Build and Test a Card
 
 You may create cards using our [**Relevant platform** wizard](http://platform.relevant.ai). Once you make a card in the step-by-step wizard, you will be able to view and edit the code by clicking on the code button. **TODO: ADD IMAGE**.
+
+[Card on the Relevant Platform](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/platform-card.jpg)
+
+Cards have an *alias*, as displayed above. To test a card, you just need to type its alias into the search box of the Relevant App, and then hit the **Search** (or **Return**) button on your keyboard.
+
+**TODO: ADD IMAGE**
+
+If the alias exists and the REL code produces no errors, you'll see the option to add this card to your deck. Tap **Add** and voilà!
+
+You can try adding this sample card `mo-mozafarian/reddit` immediately, before you create your own.
 
 Click here for an example of a full REL card which displays top content from Reddit.**TODO: DECIDE WHETHER REDDIT?**  **TODO: ADD LINK AND ADD TO PLATFORM, ASK TO TEST HERE**
 
@@ -49,20 +59,6 @@ The return of the `load` closure is the visible content of the card, which must 
 //...
 ```
 (Scroll all the way down or click here for a reference of all available templates. **TODO: LINK THIS**)
-
-### Testing Cards
-
-Cards created using the [**Relevant platform** wizard](http://platform.relevant.ai) have an *alias*, as shown below:
-
-**TODO: ADD IMAGE**
-
-To test it, you just need to type the alias into the search box of the Relevant App, and then hit the **Search** (or **Return**) button on your keyboard.
-
-**TODO: ADD IMAGE**
-
-If the alias exists and the REL code produces no errors, you'll see the option to add this card to your deck. Tap **Add** and voilà!
-
-You can try adding this sample card `mo-mozafarian/reddit` immediately, before you create your own.
 
 ## REL Variables and Basic Syntax
 
@@ -195,8 +191,8 @@ let example4 = 98.decimals(0,3) // Produces "98"
 ### Random numbers
 
 ```swift
-var a = random(100) // Produces a random integer between 0 and 99 (inclusive)
-var b = 5 + random(21) // Random number between 5 and 25 (inclusive)
+let a = random(100) // Produces a random integer between 0 and 99 (inclusive)
+let b = 5 + random(21) // Random number between 5 and 25 (inclusive)
 ```
 
 ## String Manipulation
@@ -244,6 +240,28 @@ let f = "Hello World!".replace("He","hE") // Produces "hEllo World!"
 let g = "Hello World!".replace("[a-zA-Z]","*",true) // Produces "***** *****!". The last argument 'true' means that it should use regular expressions
 ```
 
+### `urlEncode`
+
+See example below;
+
+```swift
+let query = "Some string with spaces!"
+let json = get("http://some-api.api/?query=" + urlEncode(query))
+```
+
+This function also has a method form `query.urlEncode`.
+
+### `htmlEncode` and `htmlDecode`
+
+`htmlEncode` add HTML entities to text, while `htmlDecode` converts them to their unicode equivalents. For example:
+
+```swift
+let a = htmlEncode("Montréal") // Produces "Montr&eacute;al"
+let b = htmlDecode("Montr&eacute;al") // Produces "Montréal"
+``
+
+These functions also have method forms, for example you may use `"Montréal".urlEncode`.
+
 ### Rich Text
 
 Because the output of a REL function is often used for skinning user interfaces, we occasionally need to output rich text. For this purpose we may assume that all strings in REL have an abstract *default* font. The following methods simply apply transformatons to that font. The results of these methods are always rich text, and may fail to perform some string manipulation methods such as `join`. Other functions like `concat` or the `+` operator do work properly on rich text.
@@ -259,6 +277,15 @@ The `bold` and `italic` methods/functions make text bold and italic respectively
 #### `color`
 
 The `color` method allows you to color a given text. Example: `"Hello World".color("red")`. Currently available colors are `"red"`, `"pink"`, `"purple"`, `"green"`, `"yellow"`, `"orange"`, `"blue"`, `"cyan"`, `"gray"`, `"dark-gray"`, `"light-gray"`, `"white"`, and `"transparent"`.
+
+### `inlineImage`
+
+See example below;
+
+```swift
+let img = inlineImage(https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/done-icon.png)
+let someRichText = "Hello World " + img
+```
 
 ## Array Manipulation
 
@@ -315,6 +342,19 @@ let r1 = ["t","u","v","w","x","y","z"].randomize // Same as above
 ```
 
 **Warning:** Currently, `randomize` can only be used with a literal array argument.
+
+### `contains`
+
+Use this method to determine whether an array contains a given element. For example:
+
+```swift
+let array = ["this is a string",["this":"is","a":"dictionary"],["this","is","an","array"]]
+let a = array.contains("this") // Produces false
+let a = array.contains("this is a string") // Produces true
+let a = array.contains(["an","array","this","is"]) // Produces false
+let a = array.contains(["this","is","an","array"]) // Produces true
+let a = array.contains(["a":"dictionary","this":"is"]) // Produces true (because dictionaries have no order)
+```
 
 ### `loop` and `filter`
 
@@ -459,7 +499,7 @@ YQL is a powerful query language powered by Yahoo ([click here for YQL reference
 let a = yql("select * from html where url='https://news.ycombinator.com' and xpath='//a'") // Produces an object with information about all links on https://news.ycombinator.com 
 ```
 
-## Device APIs (time and location)
+## Device APIs
 
 ### Date and Time
 
@@ -492,14 +532,20 @@ let c = "2015-09-30, 12:05".dateObject("yyyy-MM-dd, HH:mm").timestamp // Produce
 The `ago` method may be used to format dates as "some time ago". It may optionally take the parameter `"fb"` (Facebook-style date formatting), or `"min"` (minimalistic style), as follows;
 
 ```swift
-var a = d.ago() // For example: "3 days ago"
-var b = d.ago("fb") // For example "1 hour ago" or "Wednesday"
-var c = d.ago("min") // For example "4s"
+let a = d.ago() // For example: "3 days ago"
+let b = d.ago("fb") // For example "1 hour ago" or "Wednesday"
+let c = d.ago("min") // For example "4s"
 ```
 
-### User Location: `getLocation()` and `isLocationAvailable()`
+### User Location:
 
-Use `getLocation()` to get the user's current location in the format `["latitude":45.501262,"longitude":-73.560347]`. This method will return nil if the user does not allow Relevent to access their location. Use `isLocationAvailable()` to verify whether Relevant is allowed to access location.
+#### `getLocation` and `isLocationAvailable`
+
+Use `getLocation()` to get the user's current location in the format `["latitude":45.501262,"longitude":-73.560347]`. This method will return nil if the user does not allow Relevent to access their location. Use `isLocationAvailable()` to verify whether Relevant is allowed to access location for this user.
+
+#### `getDistance`
+
+Use this function to determine the distance (in meters) between two coordinates, both of which must come in the format `["latitude":45.501262,"longitude":-73.560347]`.
 
 ## Inline Functions
 
