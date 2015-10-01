@@ -8,7 +8,7 @@ This document is a basic introduction to some of its features.
 
 ### How to Build and Test a Card
 
-You may create cards using our [**Relevant platform** wizard](http://platform.relevant.ai). Once you make a card in the step-by-step wizard, you will be able to view and edit its code by clicking on the <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/code.png" alt="View Code" width="25" align="center"> button.
+You may create cards using our [**Relevant Platform** wizard](http://platform.relevant.ai). Once you make a card in the step-by-step wizard, you will be able to view and edit its code by clicking on the <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/code.png" alt="View Code" width="25" align="center"> button.
 
 ![Card on the Relevant Platform](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/platform-card.png)
 
@@ -601,7 +601,7 @@ As we mentioned in the [Card Structure section](#card-structure) at the beginnin
 
 The return of this method is the value entered by the user after flipping the card (tapping on the button at the top-right corner).
 
-If you flip a basic card built using the [**Relevant platform** wizard](http://platform.relevant.ai), you will see nothing at the back of the card.
+If you flip a basic card built using the [**Relevant Platform** wizard](http://platform.relevant.ai), you will see nothing at the back of the card.
 
 To allow your card to have settings, you need to include the `meta` variable `settingsType`:
 
@@ -697,7 +697,7 @@ load {
 ```
 <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/colors.png" alt="Color Samples" width="40%">
 
-You may test this card yourself by either copying the code above into one of your Relevant platform cards' code, or by entering `wircho/colors` into the Relevant App search box.
+You may test this card yourself by either copying the code above into one of your Relevant Platform cards' code, or by entering `wircho/colors` into the Relevant App search box.
 
 Observe that each template is a dictionary with **one single key**. This key is the template's name, and its value defines its parameters. Here is a list of some available templates:
 
@@ -845,7 +845,7 @@ Where;
 
 `<image>` is an optional URL to an image to be downloaded instantly and shared.
 
-`share` may also be used in method form on the `card` variable. This will result in a screenshot of the card being shared. For example;
+`share` may also be used in method form on the `card` variable. This will result in a screenshot of the card being included in the items to be shared. For example;
 
 ```swift
 // ...
