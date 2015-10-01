@@ -511,7 +511,7 @@ let a = getTime().timestamp // Produces the current time in seconds since 00:00:
 
 #### `dateString` and `dateObject`
 
-A date can be converted into a user-ready format with date formats **TODO: LINK HERE**. For example:
+A date can be converted into a user-ready format using date formats. [Click here for specifications on possible formats](http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns). For example:
 
 ```swift
 let b = getTime().dateString("yyyy-MM-dd") // Produces the current date in the format 2015-09-30
