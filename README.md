@@ -12,7 +12,7 @@ You may create cards using our [**Relevant Platform** wizard](http://platform.re
 
 ![Card on the Relevant Platform](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/platform-card.png)
 
-![Edit Card's Source](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/edit-source.png)
+<img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/edit-source.png" alt="Edit Card's Source" width="45%">
 
 ### How to Test an Card
 
