@@ -655,7 +655,7 @@ meta {
 
 ### Basic Templates
 
-As we said in the [Card Structure section](#card-structure), the `return` of the `load` closure has to be an array of arrays, and the inner arrays represent the templates of each slide of the card. For example, a simple card with three slides may look like this:
+As we said in the [Card Structure section](#card-structure), the `return` of the `load` closure needs to be an array of arrays, and the inner arrays represent the templates of each slide of the card. For example, a simple card with three slides may look like this:
 
 ```swift
 meta {
@@ -695,9 +695,9 @@ load {
   }
 }
 ```
-![Color Samples](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/colors.png)
+<img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/colors.png" alt="Color Samples" width="40%">
 
-You may test this card yourself by either copying this code into one of your Relevant platform cards' code, or by entering `wircho/colors` into the Relevant App search box.
+You may test this card yourself by either copying the code above into one of your Relevant platform cards' code, or by entering `wircho/colors` into the Relevant App search box.
 
 Observe that each template is a dictionary with **one single key**. This key is the template's name, and its value defines its parameters. Here is a list of some available templates:
 
@@ -711,6 +711,8 @@ Observe that each template is a dictionary with **one single key**. This key is 
 | **`scalar`** (value and image)   | **`value`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Value on the left <br/><br/> **`image`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;URL of image on the right |
 | **`footer`**   | **`type`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"short"` (default) <br/>   &nbsp;&nbsp;&nbsp;&nbsp;`"long"` <br/><br/> **`caption`** <br/><br/> **`align`** <br/> &nbsp;&nbsp;&nbsp;&nbsp;Alignment of `caption` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"left"` (default) <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"center"` <br/> &nbsp;&nbsp;&nbsp;&nbsp;`"right"` |
 | **`sectional`**   | Simply use as `[sectional:true]`. It adds a grey backdrop behind the preceding template. |
+
+Other templates, like the ones listed below, have a more complicated behaviour and syntax.
 
 ### The `"buttons"` Template
 
@@ -758,11 +760,11 @@ The `"icon"` parameter may take any of the values in the following table;
 
 
 
-The `"function"` may be any REL function, and it may open web views, map views, or deeplink to a website in the browser, as well as refresh the card to show new content. See the User Actions section **TODO: LINK HERE** below to learn how to perform these actions.
+The `"function"` parameter may be any REL function. This function may, among other actions, open web views, map views, or deeplink to a website in the device's browser, as well as refresh the card to show new content. See the [User Actions section](#user-actions) below to learn how to perform these actions.
 
 ### The `"actions"` (Hold Down Actions) Template
 
-This template is not visible in the card. Instead it appears when the user holds down on a card for a second. It's syntax is exactly the same as the buttons template, except that you could include up to 5 actions into an `"actions"` template. See the User Actions section **TODO: LINK HERE** below to learn how to perform actions such as opening a map view or deeplinking to the device's browser.
+This template is not visible in the card. Instead it appears when the user holds down on a card for a second. It's syntax is exactly the same as the buttons template, except that you may include up to 5 actions into an `"actions"` template. See the [User Actions section](#user-actions) below to learn how to perform actions such as opening a map view or deeplinking to the device's browser.
 
 <!--
 ### The `"slide"` Template
