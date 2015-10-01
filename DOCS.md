@@ -10,7 +10,7 @@ This document is a basic introduction to some of its features.
 
 You may create cards using our [**Relevant platform** wizard](http://platform.relevant.ai). Once you make a card in the step-by-step wizard, you will be able to view and edit the code by clicking on the code button. **TODO: ADD IMAGE**.
 
-[Card on the Relevant Platform](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/platform-card.jpg)
+![Card on the Relevant Platform](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/platform-card.png)
 
 Cards have an *alias*, as displayed above. To test a card, you just need to type its alias into the search box of the Relevant App, and then hit the **Search** (or **Return**) button on your keyboard.
 
