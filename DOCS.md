@@ -8,7 +8,7 @@ This document is a basic introduction to some of its features.
 
 ### How to Build and Test a Card
 
-You may create cards using our [**Relevant platform** wizard](http://platform.relevant.ai). Once you make a card in the step-by-step wizard, you will be able to view and edit the code by clicking on the ![View Code](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/code-button.png) button.
+You may create cards using our [**Relevant platform** wizard](http://platform.relevant.ai). Once you make a card in the step-by-step wizard, you will be able to view and edit the code by clicking on the ![View Code](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/code.png) button.
 
 ![Card on the Relevant Platform](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/platform-card.png)
 
