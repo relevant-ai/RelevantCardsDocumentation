@@ -334,7 +334,7 @@ let g = ["t","u","v","w","x","y","z"].group(3) // Produces [["t","u","v"],["w","
 
 ```swift
 let r = ["t","u","v","w","x","y","z"].randomize // Produces a random element in the array
-let r1 = ["t","u","v","w","x","y","z"].randomize // Same as above
+let r1 = randomize(["t","u","v","w","x","y","z"]) // Same as above
 ```
 
 **Warning:** Currently, `randomize` can only be used with a literal array argument.
