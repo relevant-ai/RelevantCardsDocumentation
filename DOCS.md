@@ -595,7 +595,7 @@ let a = [1,4,9,16,25,36].filter{ $0 % 2 == 0 }.map{ sqrt($0) }.map{ $0/2 } // Pr
 
 ## The `card` Variable
 
-As we mentioned in the Card Structure section **TODO: LINK HERE** at the beginning, the `load` closure of a Relevant card has one parameter named `card`. This is a reference to the card instance itself and as such, it has access to some special methods.
+As we mentioned in the [Card Structure section](#card-structure) at the beginning, the `load` closure of a Relevant card has one parameter named `card`. This is a reference to the card instance itself and as such, it has access to some special methods.
 
 ### `card.settings`
 
@@ -655,7 +655,7 @@ meta {
 
 ### Basic Templates
 
-As we said in the Card Structure section **TODO: LINK THIS**, the `return` of the `load` closure has to be an array of arrays, and the inner arrays represent the templates of each slide of the card. For example, a simple card with three slides may look like this:
+As we said in the [Card Structure section](#card-structure), the `return` of the `load` closure has to be an array of arrays, and the inner arrays represent the templates of each slide of the card. For example, a simple card with three slides may look like this:
 
 ```swift
 meta {
