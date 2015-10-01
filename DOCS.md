@@ -8,17 +8,15 @@ This document is a basic introduction to some of its features.
 
 ### How to Build and Test a Card
 
-You may create cards using our [**Relevant platform** wizard](http://platform.relevant.ai). Once you make a card in the step-by-step wizard, you will be able to view and edit the code by clicking on the <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/code.png" alt="View Code" width="25" align="center"> button.
+You may create cards using our [**Relevant platform** wizard](http://platform.relevant.ai). Once you make a card in the step-by-step wizard, you will be able to view and edit its code by clicking on the <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/code.png" alt="View Code" width="25" align="center"> button.
 
 ![Card on the Relevant Platform](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/platform-card.png)
 
-Cards have an **Alias**, as displayed above. To test a card, simply type its alias into the search box of the Relevant App, and then hit **Search** (or **Return**) on your keyboard. If the alias exists and the REL code produces no errors, you'll see the option to add this card to your deck. Tap **Add** and voilà! <br/> <br/>
+Cards have an **Alias**, as displayed above. To test a card, simply type its alias into the search box of the Relevant App, and then hit **Search** (or **Return**) on your keyboard. If the alias exists and the REL code produces no errors, you'll see the option to add this card to your deck. Tap **ADD** and voilà! <br/> <br/>
 
 <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/card-alias.jpg" alt="Adding Card" width="45%" align="top"> <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/actual-card.jpg" alt="Card on the Relevant App" width="45%">
 
-You can actually add this sample card `mo-mozafarian/reddit` before you create your own.
-
-Click here for an example of a full REL card which displays top content from Reddit.**TODO: DECIDE WHETHER REDDIT?**  **TODO: ADD LINK AND ADD TO PLATFORM, ASK TO TEST HERE**
+You may actually add this sample card `mo-mozafarian/reddit` before you create your own.
 
 ### Card Structure
 
@@ -41,7 +39,7 @@ load {
 
 The actual REL code goes in the `load` *closure* (a *closure* is just a block of code inside curly brackets `{}`, we'll explain this later in more detail).
 
-`card` is the input of the load function. This variable has some special powers, as you'll see in The `card` Variable section. **TODO: LINK THIS**.
+`card` is the input of the load function. This variable has some special powers, as you'll see in [The `card` Variable](#the-card-variable) section.
 
 The return of the `load` closure is the visible content of the card, which must be an array of arrays. The outer array represents the horizontal slides of the card, and each of the inner arrays represent the *templates* that make up each slide (such as banners, rounded profile image, title+body description, footer, etc). Most templates follow the form below:
 
@@ -56,7 +54,7 @@ The return of the `load` closure is the visible content of the card, which must 
   ]
 //...
 ```
-(Scroll all the way down or click here for a reference of all available templates. **TODO: LINK THIS**)
+([Click here for a reference to all available templates.](#relevant-card-templates))
 
 ## REL Variables and Basic Syntax
 
@@ -356,7 +354,7 @@ let a = array.contains(["a":"dictionary","this":"is"]) // Produces true (because
 
 ### `loop` and `filter`
 
-It is often necesary to `loop` an array. For this refer to the Control-Flow section above **TODO: LINK THIS**. Similarly, you can filter elements of an array using the `filter` method:
+It is often necesary to `loop` an array. For this refer to the [Control-Flow section](#control-flow-if-then-else-and-for-loop) above. Similarly, you can filter elements of an array using the `filter` method:
 
 ```swift
 // The filter method - First example
@@ -513,7 +511,7 @@ let a = getTime().timestamp // Produces the current time in seconds since 00:00:
 
 #### `dateString` and `dateObject`
 
-A date can be converted into a user-ready format with date formats **TODO: LINK HERE**. For example:
+A date can be converted into a user-ready format using date formats. [Click here for specifications on possible formats](http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns). For example:
 
 ```swift
 let b = getTime().dateString("yyyy-MM-dd") // Produces the current date in the format 2015-09-30
@@ -597,7 +595,7 @@ let a = [1,4,9,16,25,36].filter{ $0 % 2 == 0 }.map{ sqrt($0) }.map{ $0/2 } // Pr
 
 ## The `card` Variable
 
-As we mentioned in the Card Structure section **TODO: LINK HERE** at the beginning, the `load` closure of a Relevant card has one parameter named `card`. This is a reference to the card instance itself and as such, it has access to some special methods.
+As we mentioned in the [Card Structure section](#card-structure) at the beginning, the `load` closure of a Relevant card has one parameter named `card`. This is a reference to the card instance itself and as such, it has access to some special methods.
 
 ### `card.settings`
 
@@ -657,7 +655,7 @@ meta {
 
 ### Basic Templates
 
-As we said in the Card Structure section **TODO: LINK THIS**, the `return` of the `load` closure has to be an array of arrays, and the inner arrays represent the templates of each slide of the card. For example, a simple card with three slides may look like this:
+As we said in the [Card Structure section](#card-structure), the `return` of the `load` closure has to be an array of arrays, and the inner arrays represent the templates of each slide of the card. For example, a simple card with three slides may look like this:
 
 ```swift
 meta {
