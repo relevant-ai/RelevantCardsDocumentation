@@ -12,14 +12,9 @@ You may create cards using our [**Relevant platform** wizard](http://platform.re
 
 ![Card on the Relevant Platform](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/platform-card.png)
 
-Cards have an **Alias**, as displayed above. To test a card, simply type its alias into the search box of the Relevant App, and then hit **Search** (or **Return**) on your keyboard:
+Cards have an **Alias**, as displayed above. To test a card, simply type its alias into the search box of the Relevant App, and then hit **Search** (or **Return**) on your keyboard. If the alias exists and the REL code produces no errors, you'll see the option to add this card to your deck. Tap **Add** and voilà!
 
-<img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/card-alias.jpg" alt="Adding Card" width="50%">
-
-If the alias exists and the REL code produces no errors, you'll see the option to add this card to your deck. Tap **Add** and voilà!
-
-<img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/actual-card.jpg" alt="Card on the Relevant App" width="50%">
-
+<img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/card-alias.jpg" alt="Adding Card" width="50%"> <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/actual-card.jpg" alt="Card on the Relevant App" width="50%">
 
 You can try adding this sample card `mo-mozafarian/reddit` immediately, before you create your own.
 
