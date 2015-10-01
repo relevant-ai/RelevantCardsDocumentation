@@ -16,7 +16,7 @@ Cards have an **Alias**, as displayed above. To test a card, simply type its ali
 
 <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/card-alias.jpg" alt="Adding Card" width="45%" align="top"> <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/actual-card.jpg" alt="Card on the Relevant App" width="45%">
 
-You may actually add this sample card `mo-mozafarian/reddit` before you create your own.
+You may actually add this sample card `mo-mozafarian/reddit` before you create your own. You may also [click here to view this card's source](https://gist.githubusercontent.com/mo-mozafarian/50ba05051bf5d140ac14/raw/867b02e30c22216f7ceab42fdbb8d6594736b2c9/reddit-card).
 
 ### Card Structure
 
