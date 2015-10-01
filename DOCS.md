@@ -277,26 +277,28 @@ let d = mergeArray([[1,2],[3,4],[5,6]]) // Produces [1,2,3,4,5,6]
 
 ```swift
 let l = ["x","y","z"].count // Produces 3
+let m = count(["x","y","z"]) // Same as above
 ```
 
 ### `append`
 
 ```swift
-let m = ["x","y","z"].append("aa") // Produces ["x","y","z","aa"]
+let n = ["x","y","z"].append("aa") // Produces ["x","y","z","aa"]
 ```
 
 ### `reverse`
 
 ```swift
-let n = ["x","y","z"].reverse // Produces ["z","y","x"]
+let p = ["x","y","z"].reverse // Produces ["z","y","x"]
+let q = reverse(["x","y","z"]) // Same as above
 ```
 
 ### `subarray`
 
 ```swift
-let p = ["t","u","v","w","x","y","z"].subarray(2,4) // Produces ["v","w","x"]
-let q = ["t","u","v","w","x","y","z"].subarray(4) // Produces ["t","u","v","w"]
-let r = ["t","u","v","w","x","y","z"].subarray(-4) // Produces ["w","x","y","z"]
+let j = ["t","u","v","w","x","y","z"].subarray(2,4) // Produces ["v","w","x"]
+let s = ["t","u","v","w","x","y","z"].subarray(4) // Produces ["t","u","v","w"]
+let k = ["t","u","v","w","x","y","z"].subarray(-4) // Produces ["w","x","y","z"]
 ```
 
 ### `group`
@@ -304,6 +306,15 @@ let r = ["t","u","v","w","x","y","z"].subarray(-4) // Produces ["w","x","y","z"]
 ```swift
 let g = ["t","u","v","w","x","y","z"].group(3) // Produces [["t","u","v"],["w","x","y"],["z"]] (groups 3 by 3)
 ```
+
+### `randomize`
+
+```swift
+let r = ["t","u","v","w","x","y","z"].randomize // Produces a random element in the array
+let r1 = ["t","u","v","w","x","y","z"].randomize // Same as above
+```
+
+**Warning:** Currently, `randomize` can only be used with a literal array argument.
 
 ### `loop` and `filter`
 
@@ -403,6 +414,14 @@ You may ommit any number of parameters at the end, for example;
 let a = get("some-fake-website.com/something.json") // Fetches the contents as a JSON variable
 ```
 
+### `yql`
+
+YQL is a powerful query language powered by Yahoo ([click here for YQL reference](https://developer.yahoo.com/yql)) that allows you to gather data accross the web. You can make YQL calls through REL using the `yql` function. For example;
+
+```swift
+let a = yql("select * from html where url='https://news.ycombinator.com' and xpath='//a'") // Produces an object with information about all links on https://news.ycombinator.com 
+```
+
 ## Device APIs (time and location)
 
 ### Date and Time
@@ -429,6 +448,16 @@ Furthermore, a date string can be parsed into a date object if the format of the
 
 ```swift
 let c = "2015-09-30, 12:05".dateObject("yyyy-MM-dd, HH:mm").timestamp // Produces 1443614700
+```
+
+### `ago`
+
+The `ago` method may be used to format dates as "some time ago". It may optionally take the parameter `"fb"` (Facebook-style date formatting), or `"min"` (minimalistic style), as follows;
+
+```swift
+var a = d.ago() // For example: "3 days ago"
+var b = d.ago("fb") // For example "1 hour ago" or "Wednesday"
+var c = d.ago("min") // For example "4s"
 ```
 
 ### User Location: `getLocation()` and `isLocationAvailable()`
@@ -712,6 +741,34 @@ Where;
 ```swift
 // ...
         "function":deeplink("http://www.nytimes.com") // Will open in the device's browser
+// ...
+```
+
+### `share`
+
+This function is used to share content natively from the device. It's format is as folows;
+
+```swift
+// ...
+      "function":share(<service>,<text>,<link>,<image>)
+// ...
+```
+
+Where;
+
+`<service>` is either `"twitter"`, `"facebook"`, or `"all"` (iOS action sheet).
+
+`<text>` is an optional string containing text to be shared.
+
+`<link>` is an optional URL to be shared.
+
+`<image>` is an optional URL to an image to be downloaded instantly and shared.
+
+`share` may also be used in method form on the `card` variable. This will result in a screenshot of the card being shared. For example;
+
+```swift
+// ...
+      "function":card.share("facebook","Relevant is awesome!")
 // ...
 ```
 
