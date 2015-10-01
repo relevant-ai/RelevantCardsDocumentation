@@ -764,6 +764,8 @@ The `"function"` parameter may be any REL function. This function may, among oth
 
 ### The `"actions"` (Hold Down Actions) Template
 
+<img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/action.png" alt="Hold Down Actions" width="40%">
+
 This template is not visible in the card. Instead it appears when the user holds down on a card for a second. It's syntax is exactly the same as the buttons template, except that you may include up to 5 actions into an `"actions"` template. See the [User Actions section](#user-actions) below to learn how to perform actions such as opening a map view or deeplinking to the device's browser.
 
 <!--
