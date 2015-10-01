@@ -54,7 +54,7 @@ The return of the `load` closure is the visible content of the card, which must 
   ]
 //...
 ```
-(Scroll all the way down or click here for a reference of all available templates. **TODO: LINK THIS**)
+([Click here for a reference to all available templates.](#relevant-card-templates))
 
 ## REL Variables and Basic Syntax
 
