@@ -14,7 +14,7 @@ You may create cards using our [**Relevant platform** wizard](http://platform.re
 
 Cards have an *alias*, as displayed above. To test a card, you just need to type its alias into the search box of the Relevant App, and then hit **Search** (or **Return**) on your keyboard.
 
-![Adding Card](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/card-alias.jpg)
+<img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/card-alias.jpg" alt="Adding Card" width="50%">
 
 If the alias exists and the REL code produces no errors, you'll see the option to add this card to your deck. Tap **Add** and voilà!
 
