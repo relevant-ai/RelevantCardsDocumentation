@@ -258,7 +258,7 @@ This function also has a method form `query.urlEncode`.
 ```swift
 let a = htmlEncode("Montréal") // Produces "Montr&eacute;al"
 let b = htmlDecode("Montr&eacute;al") // Produces "Montréal"
-``
+```
 
 These functions also have method forms, for example you may use `"Montréal".urlEncode`.
 
