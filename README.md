@@ -88,7 +88,7 @@ let guitar4 = d[path]
 
 ## Basic Operators, Functions and Methods
 
-REL comes equiped with an array of built-in functionality which will keep growing in future versions. This document does not intend to detail all of this functionality, but rather give a good enough preview for you to try it out.
+REL comes equipped with an array of built-in functionality which will keep growing in future versions. This document does not intend to detail all of this functionality, but rather give a good enough preview for you to try it out.
 
 ### Operators
 
@@ -131,7 +131,7 @@ In place of **if-then-else** statements, use the `then` method as follows;
 let a = 1==2 // Produces false
 let b = a.then("it's true!","it's false!") // Produces "it's false!"
 ```
-When the second argument is ommited, it falls back to `null`, so that `a.then("it's true")` simply produces `null`.
+When the second argument is omitted, it falls back to `null`, so that `a.then("it's true")` simply produces `null`.
 
 ### The `loop` Method
 
@@ -264,7 +264,7 @@ These functions also have method forms, for example you may use `"Montréal".url
 
 ### Rich Text
 
-Because the output of a REL function is often used for skinning user interfaces, we occasionally need to output rich text. For this purpose we may assume that all strings in REL have an abstract *default* font. The following methods simply apply transformatons to that font. The results of these methods are always rich text, and may fail to perform some string manipulation methods such as `join`. Other functions like `concat` or the `+` operator do work properly on rich text.
+Because the output of a REL function is often used for skinning user interfaces, we occasionally need to output rich text. For this purpose we may assume that all strings in REL have an abstract *default* font. The following methods simply apply transformations to that font. The results of these methods are always rich text, and may fail to perform some string manipulation methods such as `join`. Other functions like `concat` or the `+` operator do work properly on rich text.
 
 #### `small`
 
@@ -358,7 +358,7 @@ let a = array.contains(["a":"dictionary","this":"is"]) // Produces true (because
 
 ### `loop` and `filter`
 
-It is often necesary to `loop` an array. For this refer to the [Control-Flow section](#control-flow-if-then-else-and-for-loop) above. Similarly, you can filter elements of an array using the `filter` method:
+It is often necessary to `loop` an array. For this refer to the [Control-Flow section](#control-flow-if-then-else-and-for-loop) above. Similarly, you can filter elements of an array using the `filter` method:
 
 ```swift
 // The filter method - First example
@@ -493,7 +493,7 @@ let a = get("some-fake-website.com/something.json") // Fetches the contents as a
 
 ### `yql`
 
-YQL is a powerful query language powered by Yahoo ([click here for YQL reference](https://developer.yahoo.com/yql)) that allows you to gather data accross the web. You can make YQL calls through REL using the `yql` function. For example;
+YQL is a powerful query language powered by Yahoo ([click here for YQL reference](https://developer.yahoo.com/yql)) that allows you to gather data across the web. You can make YQL calls through REL using the `yql` function. For example;
 
 ```swift
 let a = yql("select * from html where url='https://news.ycombinator.com' and xpath='//a'") // Produces an object with information about all links on https://news.ycombinator.com 
@@ -541,7 +541,7 @@ let c = d.ago("min") // For example "4s"
 
 #### `getLocation` and `isLocationAvailable`
 
-Use `getLocation()` to get the user's current location in the format `["latitude":45.501262,"longitude":-73.560347]`. This method will return nil if the user does not allow Relevent to access their location. Use `isLocationAvailable()` to verify whether Relevant is allowed to access location for this user.
+Use `getLocation()` to get the user's current location in the format `["latitude":45.501262,"longitude":-73.560347]`. This method will return nil if the user does not allow Relevant to access their location. Use `isLocationAvailable()` to verify whether Relevant is allowed to access location for this user.
 
 #### `getDistance`
 
@@ -582,7 +582,7 @@ The `parameters in` header may be omitted to simplify a function's syntax. In th
 let f = { return $0*$0 + $1*$1 }
 ```
 
-Furthermore, the `return` keyword may be ommited, as REL functions always return the last statement in their closures:
+Furthermore, the `return` keyword may be omitted, as REL functions always return the last statement in their closures:
 
 ```swift
 // This function is equivalent to the one above
