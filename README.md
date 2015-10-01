@@ -37,7 +37,7 @@ load {
 }
 ```
 
-The actual REL code goes in the `load` *closure* (a *closure* is just a block of code inside curly brackets `{}`, we'll explain this later in more detail).
+The actual REL code goes in the `load` *closure* (a *closure* is just a block of code inside curly brackets `{}`, as we'll explain later in more detail).
 
 `card` is the input of the load function. This variable has some special powers, as you'll see in [The `card` Variable](#the-card-variable) section.
 
