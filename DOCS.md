@@ -659,17 +659,18 @@ As we said in the [Card Structure section](#card-structure), the `return` of the
 
 ```swift
 meta {
-  title = "My Card"
+  title = "Color Samples"
 }
+
 load {
   card in
-  
+
   let info = [
     ["name":"Red", "color":"red", "rgb-values":[231,76,60]],
     ["name":"Green", "color":"green", "rgb-values":[112,173,75]],
     ["name":"Blue", "color":"blue", "rgb-values":[41,128,185]]
   ]
-  
+
   return info.loop {
     item in
     
@@ -681,7 +682,7 @@ load {
       ],
       [ // Second template of each slide
         "description":[
-          "title":item["name"]
+          "title":item["name"],
           "body":"RGB: (" + ",".join(item["rgb-values"]) + ")"
         ]
       ],
@@ -694,12 +695,11 @@ load {
   }
 }
 ```
-**TODO: ADD SS IMAGE FOR THIS CARD**
-**TODO: test that card and put it in platform AND ASK TO TEST HERE!!!**
+![Color Samples](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/colors.png)
+
+You may test this card yourself by either copying this code into one of your Relevant platform cards' code, or by entering `wircho/colors` into the Relevant App search box.
 
 Observe that each template is a dictionary with **one single key**. This key is the template's name, and its value defines its parameters. Here is a list of some available templates:
-
-
 
 | Template        | Parameters <br/> Possible Values + Notes |
 | ------------- |-------------|
