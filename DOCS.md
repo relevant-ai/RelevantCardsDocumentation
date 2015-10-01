@@ -8,7 +8,7 @@ This document is a basic introduction to some of its features.
 
 ### How to Build and Test a Card
 
-You may create cards using our [**Relevant platform** wizard](http://platform.relevant.ai). Once you make a card in the step-by-step wizard, you will be able to view and edit the code by clicking on the <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/code.png" alt="View Code" width="40" align="middle"> button.
+You may create cards using our [**Relevant platform** wizard](http://platform.relevant.ai). Once you make a card in the step-by-step wizard, you will be able to view and edit the code by clicking on the <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/code.png" alt="View Code" width="25" align="center"> button.
 
 ![Card on the Relevant Platform](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/platform-card.png)
 
@@ -16,7 +16,7 @@ Cards have an **Alias**, as displayed above. To test a card, simply type its ali
 
 <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/card-alias.jpg" alt="Adding Card" width="45%" align="top"> <img src="https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/images/actual-card.jpg" alt="Card on the Relevant App" width="45%">
 
-You can try adding this sample card `mo-mozafarian/reddit` immediately, before you create your own.
+You can actually add this sample card `mo-mozafarian/reddit` before you create your own.
 
 Click here for an example of a full REL card which displays top content from Reddit.**TODO: DECIDE WHETHER REDDIT?**  **TODO: ADD LINK AND ADD TO PLATFORM, ASK TO TEST HERE**
 
