@@ -56,15 +56,13 @@ Cards created using the [**Relevant platform** wizard](http://platform.relevant.
 
 **TODO: ADD IMAGE**
 
-To test it, you just need to type the alias into the search box of the Relevant App, and then hit the **Search** (or **Return**) button, as shown below:
+To test it, you just need to type the alias into the search box of the Relevant App, and then hit the **Search** (or **Return**) button on your keyboard.
 
 **TODO: ADD IMAGE**
 
 If the alias exists and the REL code produces no errors, you'll see the option to add this card to your deck. Tap **Add** and voilà!
 
-**TODO: ADD IMAGE**
-
-You can try adding this sample card immediately: **TODO: ADD ALIAS** before you create your own.
+You can try adding this sample card `mo-mozafarian/reddit` immediately, before you create your own.
 
 ## REL Variables and Basic Syntax
 
@@ -279,26 +277,28 @@ let d = mergeArray([[1,2],[3,4],[5,6]]) // Produces [1,2,3,4,5,6]
 
 ```swift
 let l = ["x","y","z"].count // Produces 3
+let m = count(["x","y","z"]) // Same as above
 ```
 
 ### `append`
 
 ```swift
-let m = ["x","y","z"].append("aa") // Produces ["x","y","z","aa"]
+let n = ["x","y","z"].append("aa") // Produces ["x","y","z","aa"]
 ```
 
 ### `reverse`
 
 ```swift
-let n = ["x","y","z"].reverse // Produces ["z","y","x"]
+let p = ["x","y","z"].reverse // Produces ["z","y","x"]
+let q = reverse(["x","y","z"]) // Same as above
 ```
 
 ### `subarray`
 
 ```swift
-let p = ["t","u","v","w","x","y","z"].subarray(2,4) // Produces ["v","w","x"]
-let q = ["t","u","v","w","x","y","z"].subarray(4) // Produces ["t","u","v","w"]
-let r = ["t","u","v","w","x","y","z"].subarray(-4) // Produces ["w","x","y","z"]
+let j = ["t","u","v","w","x","y","z"].subarray(2,4) // Produces ["v","w","x"]
+let s = ["t","u","v","w","x","y","z"].subarray(4) // Produces ["t","u","v","w"]
+let k = ["t","u","v","w","x","y","z"].subarray(-4) // Produces ["w","x","y","z"]
 ```
 
 ### `group`
@@ -306,6 +306,15 @@ let r = ["t","u","v","w","x","y","z"].subarray(-4) // Produces ["w","x","y","z"]
 ```swift
 let g = ["t","u","v","w","x","y","z"].group(3) // Produces [["t","u","v"],["w","x","y"],["z"]] (groups 3 by 3)
 ```
+
+### `randomize`
+
+```swift
+let r = ["t","u","v","w","x","y","z"].randomize // Produces a random element in the array
+let r1 = ["t","u","v","w","x","y","z"].randomize // Same as above
+```
+
+**Warning:** Currently, `randomize` can only be used with a literal array argument.
 
 ### `loop` and `filter`
 
@@ -366,6 +375,43 @@ Just like arrays can be merged together with the `merge` and `mergeArray` method
 let a = blend(["a":1,"b":2],["c":3]) // Produces ["a":1,"b":2,"c":3]
 let b = blendArray([["a":1,"b":2],["c":3]]) // Produces ["a":1,"b":2,"c":3]
 ```
+
+## Converting/casting between types
+
+### `toNumber`
+
+Some API's may provide, for example, a `latitude` value as a string. This is impractical if you would like to perform mathematical operations such as addition on it, because the addition of a string with any other object produces a string.
+
+In JavaScript some developers write `--latitude`. However, double-prefixes such as `--` are not allowed in REL to prevent unexpected results from typos. Instead you would write `-(-latitude)`, which does convert the string to a number.
+
+An even better solution is to use the `toNumber` method. As follows:
+
+```string
+let latitude = "43.1835"
+let l = latitude + 3.1 // BAD: Produces "43.18353.1"
+let m = latitude.toNumber + 3.1 // GOOD: Produces "46.2835"
+```
+
+Numbers are returned intact by the `toNumber` method. For arrays, dictionaries, `null`, and other values, the `toNumber` method produces `0`.
+
+`toNumber` has an equivalent function form `toNumber(latitude)`.
+
+### `toString`
+
+This method converts strings, booleans and numbers to strings, and any other values to the empty string `""`. It has an equivalent function form `toString(...)`.
+
+### `toBoolean`
+
+This method converts strings, numbers, and booleans to booleans; `null` to `false`; and any other value to `true`. It has an equivalent function form `toBoolean(...)`.
+
+### `toArray`
+
+This method keeps arrays intact and converts any other value to an empty array `[]`.  It has an equivalent function form `toArray(...)`.
+
+### `toDictionary`
+
+This method keeps dictionaries intact and converts any other value to an empty dictionary.  It has an equivalent function form `toDictionary(...)`.
+
 ## Web APIs
 
 These functions allow you to communicate with web services and API's.
@@ -405,6 +451,14 @@ You may ommit any number of parameters at the end, for example;
 let a = get("some-fake-website.com/something.json") // Fetches the contents as a JSON variable
 ```
 
+### `yql`
+
+YQL is a powerful query language powered by Yahoo ([click here for YQL reference](https://developer.yahoo.com/yql)) that allows you to gather data accross the web. You can make YQL calls through REL using the `yql` function. For example;
+
+```swift
+let a = yql("select * from html where url='https://news.ycombinator.com' and xpath='//a'") // Produces an object with information about all links on https://news.ycombinator.com 
+```
+
 ## Device APIs (time and location)
 
 ### Date and Time
@@ -431,6 +485,16 @@ Furthermore, a date string can be parsed into a date object if the format of the
 
 ```swift
 let c = "2015-09-30, 12:05".dateObject("yyyy-MM-dd, HH:mm").timestamp // Produces 1443614700
+```
+
+### `ago`
+
+The `ago` method may be used to format dates as "some time ago". It may optionally take the parameter `"fb"` (Facebook-style date formatting), or `"min"` (minimalistic style), as follows;
+
+```swift
+var a = d.ago() // For example: "3 days ago"
+var b = d.ago("fb") // For example "1 hour ago" or "Wednesday"
+var c = d.ago("min") // For example "4s"
 ```
 
 ### User Location: `getLocation()` and `isLocationAvailable()`
@@ -588,11 +652,12 @@ load {
   }
 }
 ```
+**TODO: ADD SS IMAGE FOR THIS CARD**
 **TODO: test that card and put it in platform AND ASK TO TEST HERE!!!**
 
 Observe that each template is a dictionary with **one single key**. This key is the template's name, and its value defines its parameters. Here is a list of some available templates:
 
-**TODO: ADD IMAGES BELOW**
+
 
 | Template        | Parameters <br/> Possible Values + Notes |
 | ------------- |-------------|
@@ -607,7 +672,6 @@ Observe that each template is a dictionary with **one single key**. This key is 
 
 ### The `"buttons"` Template
 
-**TODO: ADD IMAGE**
 
 Instead of a dictionary, this template is defined by an array of one, two of three buttons. Each button is a dictionary with optional keys `"caption"`, `"icon"`, `"color"`, and `"function"`, where `"function"` is a closure that gets executed when the button is tapped. For example:
 
@@ -640,7 +704,17 @@ Instead of a dictionary, this template is defined by an array of one, two of thr
 
 The `"icon"` parameter may take any of the values in the following table;
 
-| ""
+| Value       | Image | Value | Image | Value | Image |
+| ------------- |-------------|----------|-----------|----------|-----------|
+| `"done-icon"` | ![done-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/done-icon.png) | `"eye-icon"` | ![eye-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/eye-icon.png) | `"fav-icon"` | ![fav-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/fav-icon.png) | `"heart-icon"` | ![heart-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/heart-icon.png) |
+| `"refresh-icon"` | ![refresh-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/refresh-icon.png) | `"repost-icon"` | ![repost-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/repost-icon.png) | `"share-icon"` | ![share-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/share-icon.png) | `"source-icon"` | ![source-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/source-icon.png) |
+| `"time-icon"` | ![time-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/time-icon.png) | `"downvote-icon"` | ![downvote-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/downvote-icon.png) | `"map-icon"` | ![map-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/map-icon.png) | `"upvote-icon"` | ![upvote-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/upvote-icon.png) |
+| `"call-icon"` | ![call-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/call-icon.png) | `"do-icon"` | ![do-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/do-icon.png) | `"log-icon"` | ![log-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/log-icon.png) | `"more-icon"` | ![more-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/more-icon.png) |
+| `"play-icon"` | ![play-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/play-icon.png) | `"read-icon"` | ![read-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/read-icon.png) | `"reorder-icon"` | ![reorder-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/reorder-icon.png) | `"twitter-icon"` | ![twitter-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/twitter-icon.png) |
+| `"facebook-icon"` | ![facebook-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/facebook-icon.png) | `"gear-icon"` | ![gear-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/gear-icon.png) | `"search-icon"` | ![search-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/search-icon.png) | `"sync-icon"` | ![sync-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/sync-icon.png) |
+| `"chat-icon"` | ![chat-icon](https://raw.githubusercontent.com/relevant-ai/RelevantCardsDocumentation/master/icons/chat-icon.png) |
+
+
 
 The `"function"` may be any REL function, and it may open web views, map views, or deeplink to a website in the browser, as well as refresh the card to show new content. See the User Actions section **TODO: LINK HERE** below to learn how to perform these actions.
 
@@ -704,6 +778,34 @@ Where;
 ```swift
 // ...
         "function":deeplink("http://www.nytimes.com") // Will open in the device's browser
+// ...
+```
+
+### `share`
+
+This function is used to share content natively from the device. It's format is as folows;
+
+```swift
+// ...
+      "function":share(<service>,<text>,<link>,<image>)
+// ...
+```
+
+Where;
+
+`<service>` is either `"twitter"`, `"facebook"`, or `"all"` (iOS action sheet).
+
+`<text>` is an optional string containing text to be shared.
+
+`<link>` is an optional URL to be shared.
+
+`<image>` is an optional URL to an image to be downloaded instantly and shared.
+
+`share` may also be used in method form on the `card` variable. This will result in a screenshot of the card being shared. For example;
+
+```swift
+// ...
+      "function":card.share("facebook","Relevant is awesome!")
 // ...
 ```
 
