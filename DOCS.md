@@ -354,7 +354,7 @@ let a = array.contains(["a":"dictionary","this":"is"]) // Produces true (because
 
 ### `loop` and `filter`
 
-It is often necesary to `loop` an array. For this refer to the Control-Flow section above **TODO: LINK THIS**. Similarly, you can filter elements of an array using the `filter` method:
+It is often necesary to `loop` an array. For this refer to the [Control-Flow section](#control-flow) above. Similarly, you can filter elements of an array using the `filter` method:
 
 ```swift
 // The filter method - First example
